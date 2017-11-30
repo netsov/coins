@@ -5,7 +5,7 @@ function getPositionsFromLocalStorage() {
   const storage = window.localStorage;
   let positions = storage.getItem('positions');
   positions = positions ? JSON.parse(positions) : [];
-  return positions
+  return positions;
 }
 
 function savePositionsToLocalStorage(positions) {
@@ -17,29 +17,30 @@ export const getPositions = () => {
   const positions = getPositionsFromLocalStorage();
   return {
     type: GET_STORED_POSITIONS,
-    positions
+    positions,
   };
 };
 
-export const savePosition = (position) => {
-  let positions = getPositionsFromLocalStorage();
-  positions = positions.filter(p => p.__id !== position.__id);
-  savePositionsToLocalStorage([position, ...positions]);
+export const savePosition = position => {
+  const positions = [
+    position,
+    ...getPositionsFromLocalStorage().filter(p => p.__id !== position.__id),
+  ];
+  savePositionsToLocalStorage(positions);
 
   return {
     type: STORE_POSITION,
-    positions
+    positions,
   };
 };
 
-export const deletePosition = (positionId) => {
+export const deletePosition = positionId => {
   let positions = getPositionsFromLocalStorage();
   positions = positions.filter(p => p.__id !== positionId);
   savePositionsToLocalStorage(positions);
 
   return {
     type: STORE_POSITION,
-    positions
+    positions,
   };
 };
-

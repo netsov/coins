@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './components/Editor/style.css';
 
-import Editor from './components/Editor';
 import Positions from './containers/Positions';
+import Editor from './containers/Editor';
 
 class App extends Component {
   async componentDidMount() {}

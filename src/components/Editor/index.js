@@ -71,11 +71,6 @@ class Editor extends Component {
   handleCancel = () => {};
 
   handleSave = () => {
-    const storage = window.localStorage;
-
-    let positions = storage.getItem('positions');
-    positions = positions ? JSON.parse(positions) : [];
-
     const { symbol, tradeDate, tradePrice, currency, quantity } = this.state;
 
     const newPosition = {
@@ -87,7 +82,7 @@ class Editor extends Component {
       quantity,
     };
 
-    storage.setItem('positions', JSON.stringify([newPosition, ...positions]));
+    this.props.savePosition(newPosition);
   };
 
   render() {

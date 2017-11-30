@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import Positions from '../components/Positions';
-import { getPositions } from '../actions';
+import { getPositions, deletePosition } from '../actions';
 
 const mapStateToProps = state => {
   return {
@@ -10,5 +10,6 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  getPositions
+  getPositions,
+  deletePosition
 })(Positions);
