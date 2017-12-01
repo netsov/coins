@@ -5,6 +5,9 @@ import ActionButton from '../ActionButton';
 import Elevation from '../Elevation';
 
 import Chart from 'chart.js';
+import moment from 'moment';
+
+import { hysto } from '../../mocks';
 
 class Position extends Component {
   constructor(ctx) {
@@ -16,17 +19,17 @@ class Position extends Component {
     new Chart(this.chart, {
       type: 'line',
       data: {
-        labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+        labels: hysto.Data.map(d => {
+          // const dd = new Date(d.time * 1000);
+          // return `${dd.getHours()}:${dd.getMinutes()}`;
+
+          return moment(d.time * 1000).format('HH:mm');
+        }),
         datasets: [
           {
-            label: 'apples',
-            data: [12, 19, 3, 17, 6, 3, 7],
+            // label: 'apples',
+            data: hysto.Data.map(d => d.close),
             // backgroundColor: 'blue',
-          },
-          {
-            label: 'oranges',
-            data: [2, 29, 5, 5, 2, 3, 10],
-            // backgroundColor: 'rgba(255,153,0,0.4)',
           },
         ],
       },
@@ -34,13 +37,25 @@ class Position extends Component {
   }
 
   handleDelete = positionId => () => this.props.deletePosition(positionId);
+
   render() {
     const { position } = this.props;
     return (
       <Fragment>
-        <Elevation>
+        <Elevation ripple={true}>
           <section>
             <h2>{position.symbol}</h2>
+
+            <div className="position-zoom-container">
+              <ActionButton raised={true} secondary={true}>
+                1d
+              </ActionButton>
+              <ActionButton raised={true}>7d</ActionButton>
+              <ActionButton raised={true}>1m</ActionButton>
+              <ActionButton raised={true}>3m</ActionButton>
+              <ActionButton raised={true}>1y</ActionButton>
+            </div>
+
             <ActionButton handleClick={this.handleDelete(position.__id)}>
               Delete
             </ActionButton>

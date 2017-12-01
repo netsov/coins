@@ -2,13 +2,14 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    padding: 10px;
 }
 
 div.my-elevation {
     /*width: 30%;*/
     width: 600px;
     height: 400px;
-    margin: 10px;
+    margin: 0 10px 10px 0
 }
 
 canvas {
@@ -19,4 +20,8 @@ canvas {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.position-zoom-container button {
+    margin-right: 5px;
 }
