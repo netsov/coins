@@ -1,0 +1,10 @@
+.my-elevation {
+    padding: 16px;
+    margin: 0 auto;
+    background-color: white;
+}
+
+.my-elevation-ripple:hover {
+    transform: scale(1.005);
+    transition: transform 0.3s;
+}

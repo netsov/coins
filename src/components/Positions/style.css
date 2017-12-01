@@ -1,0 +1,22 @@
+.positions-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+div.my-elevation {
+    /*width: 30%;*/
+    width: 600px;
+    height: 400px;
+    margin: 10px;
+}
+
+canvas {
+    /*width: 30% !important;*/
+}
+
+.positions-container section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
