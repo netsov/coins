@@ -10,6 +10,7 @@ const ActionButton = ({
   children,
   raised,
   secondary,
+  dense,
 }) => {
   return (
     <button
@@ -17,6 +18,7 @@ const ActionButton = ({
         'mdc-button': true,
         'mdc-button--raised': raised,
         'secondary-filled-button': secondary, // TODO: doesn't work
+        'mdc-button--dense': dense,
       })}
       onClick={(!disabled && handleClick) || undefined}
       disabled={disabled}

@@ -9,12 +9,15 @@ import moment from 'moment';
 
 import { hysto } from '../../mocks';
 
+const zoomValues = ['1d', '7d', '1m', '3m', '1y', 'all'];
+
 class Position extends Component {
   constructor(ctx) {
     super(ctx);
 
     this.chart = null;
   }
+
   async componentDidMount() {
     new Chart(this.chart, {
       type: 'line',
@@ -36,7 +39,9 @@ class Position extends Component {
     });
   }
 
-  handleDelete = positionId => () => this.props.deletePosition(positionId);
+  handleDelete = () => this.props.deletePosition(this.props.position.__id);
+  handleZoom = zoom => () =>
+    this.props.savePosition({ ...this.props.position, zoom });
 
   render() {
     const { position } = this.props;
@@ -47,18 +52,19 @@ class Position extends Component {
             <h2>{position.symbol}</h2>
 
             <div className="position-zoom-container">
-              <ActionButton raised={true} secondary={true}>
-                1d
-              </ActionButton>
-              <ActionButton raised={true}>7d</ActionButton>
-              <ActionButton raised={true}>1m</ActionButton>
-              <ActionButton raised={true}>3m</ActionButton>
-              <ActionButton raised={true}>1y</ActionButton>
+              {zoomValues.map(z => (
+                <ActionButton
+                  handleClick={this.handleZoom(z)}
+                  secondary={z === position.zoom}
+                  raised={true}
+                  dense={true}
+                >
+                  {z}
+                </ActionButton>
+              ))}
             </div>
 
-            <ActionButton handleClick={this.handleDelete(position.__id)}>
-              Delete
-            </ActionButton>
+            <ActionButton handleClick={this.handleDelete}>Delete</ActionButton>
           </section>
           <canvas ref={ref => (this.chart = ref)} />
           {/*{JSON.stringify(position)}*/}
@@ -74,7 +80,7 @@ class Positions extends Component {
   }
 
   render() {
-    const { positions, deletePosition } = this.props;
+    const { positions, deletePosition, savePosition } = this.props;
     return (
       <div className="positions-container">
         {positions.map(position => (
@@ -82,6 +88,7 @@ class Positions extends Component {
             key={position.__id}
             position={position}
             deletePosition={deletePosition}
+            savePosition={savePosition}
           />
         ))}
       </div>
