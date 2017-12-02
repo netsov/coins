@@ -78,13 +78,67 @@ class Position extends Component {
     const zoom = ZOOM_INDEX[position.zoom];
     if (!zoom) return;
     // const { symbol, zoom } = position;
-    // const response = await (await fetch(
+    // const responseUSD = await (await fetch(
     //   zoom.url(position.symbol, 'USD', zoom.limit)
     // )).json();
 
-    const response = cache[position.symbol];
+    const responseUSD = cache[position.symbol];
 
-    const data = response.Data;
+    const dataUSD = responseUSD.Data;
+
+    const yAxes = [
+      {
+        id: 'y-axis-USD',
+        display: true,
+        position: 'right',
+        scaleLabel: {
+          display: true,
+          labelString: 'Price (USD)',
+        },
+        ticks: {
+          callback: (_, index) => `$${dataUSD[index].close}`,
+        },
+      },
+    ];
+
+    const datasets = [
+      {
+        data: dataUSD.map(d => d.close),
+        pointRadius: 0,
+        fill: false,
+        yAxisID: 'y-axis-USD',
+      },
+    ];
+
+    if (position.symbol !== 'BTC') {
+      const responseBTC = await (await fetch(
+        zoom.url(position.symbol, 'BTC', zoom.limit)
+      )).json();
+      const dataBTC = responseBTC.Data;
+
+      yAxes.push({
+        id: 'y-axis-BTC',
+        display: true,
+        position: 'right',
+        scaleLabel: {
+          display: true,
+          labelString: 'Price (BTC)',
+        },
+        ticks: {
+          callback: (_, index) => `${dataBTC[index].close} BTC`,
+        },
+        gridLines: {
+          drawOnChartArea: false,
+        },
+      });
+
+      datasets.push({
+        data: dataBTC.map(d => d.close),
+        pointRadius: 0,
+        fill: false,
+        yAxisID: 'y-axis-BTC',
+      });
+    }
 
     if (this.chart) this.chart.destroy();
     this.chart = new Chart(this.chartRef, {
@@ -93,24 +147,23 @@ class Position extends Component {
         legend: {
           display: false,
         },
+        tooltips: {
+          intersect: false,
+        },
+        scales: {
+          yAxes,
+        },
       },
+
       data: {
-        labels: data.map(d => {
+        labels: dataUSD.map(d => {
           // const dd = new Date(d.time * 1000);
           // return `${dd.getHours()}:${dd.getMinutes()}`;
 
           return moment(d.time * 1000).format(zoom.format);
           // return moment(d.time * 1000).format('HH:mm');
         }),
-        datasets: [
-          {
-            // label: 'apples',
-            data: data.map(d => d.close),
-            // backgroundColor: 'blue',
-            // pointHitRadius: 0,
-            pointRadius: 1,
-          },
-        ],
+        datasets,
       },
     });
   }
@@ -123,7 +176,7 @@ class Position extends Component {
     const { position } = this.props;
     return (
       <Fragment>
-        <Elevation ripple={true}>
+        <Elevation ripple={false}>
           <section>
             <h2>{position.symbol}</h2>
 
