@@ -1,22 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import './components/Editor/style.css';
 
-import Positions from './containers/Positions';
-import Editor from './containers/Editor';
+import { PositionsContainer } from './containers/PositionsContainer';
+import { EditorContainer } from './containers/EditorContainer';
 
-class App extends Component {
-  async componentDidMount() {}
-
-  async componentWillUpdate(nextProps, nextState) {}
-
+export class App extends Component {
   render() {
     return (
       <Fragment>
-        <Positions />
-        <Editor />
+        <PositionsContainer />
+        <EditorContainer />
       </Fragment>
     );
   }
 }
-
-export default App;

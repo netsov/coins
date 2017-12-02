@@ -1,13 +1,24 @@
 import React, { Component, Fragment } from 'react';
 import './style.css';
 
-import ActionButton from '../ActionButton';
-import Elevation from '../Elevation';
+import { ActionButton } from '../ActionButton';
+import { Elevation } from '../Elevation';
 
-import Chart from 'chart.js';
 import moment from 'moment';
 
-import { cache } from '../../mocks';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Label,
+} from 'recharts';
+
+import { getFromCache } from '../../utils';
 
 const HYSTO_HOUR = (fsym, tsym, limit) =>
   `https://min-api.cryptocompare.com/data/histohour?fsym=${fsym}&tsym=${
@@ -25,30 +36,35 @@ const ZOOM = [
     url: HYSTO_HOUR,
     format: 'HH:mm',
     limit: 24,
+    interval: 1,
   },
   {
     name: '7d',
     url: HYSTO_HOUR,
-    format: 'DD HH:mm',
+    format: 'MMM D',
     limit: 7 * 24,
+    interval: 24,
   },
   {
     name: '1m',
     url: HYSTO_DAY,
-    format: 'MMM Do',
+    format: 'MMM D',
     limit: 30,
+    interval: 1,
   },
   {
     name: '3m',
     url: HYSTO_DAY,
-    format: 'MMM Do',
+    format: 'MMM D',
     limit: 90,
+    interval: 7,
   },
   {
     name: '1y',
     url: HYSTO_DAY,
-    format: 'MMM Do',
+    format: 'MMM D',
     limit: 360,
+    interval: 30,
   },
 ];
 
@@ -58,115 +74,116 @@ const ZOOM_INDEX = ZOOM.reduce(
 );
 
 class Position extends Component {
-  constructor(ctx) {
-    super(ctx);
-
-    this.chart = null;
-    this.chartRef = null;
-  }
+  state = {
+    data: null,
+  };
 
   async componentDidMount() {
-    await this.drawChart(this.props.position);
+    await this.fetchData();
+  }
+
+  async fetchData() {
+    const { position } = this.props;
+    const zoom = ZOOM_INDEX[position.zoom];
+    if (!zoom) return;
+
+    const responseUSD = await getFromCache(
+      zoom.url(position.symbol, 'USD', zoom.limit)
+    );
+
+    let data = responseUSD.Data.map(item => ({
+      time: moment(item.time * 1000).format(zoom.format),
+      usd: item.close,
+    }));
+
+    if (position.symbol !== 'BTC') {
+      const responseBTC = await getFromCache(
+        zoom.url(position.symbol, 'BTC', zoom.limit)
+      );
+      data = data.map((item, index) => ({
+        ...item,
+        btc: responseBTC.Data[index].close,
+      }));
+    }
+
+    this.setState({ data });
   }
 
   async componentDidUpdate(prevProps) {
     if (prevProps.position.zoom !== this.props.position.zoom)
-      await this.drawChart(this.props.position);
+      await this.fetchData();
   }
 
-  async drawChart(position) {
+  renderChart = () => {
+    const { data } = this.state;
+    if (!data) return;
+    const btcLine = !!data[0].btc;
+
+    const { position } = this.props;
     const zoom = ZOOM_INDEX[position.zoom];
-    if (!zoom) return;
-    // const { symbol, zoom } = position;
-    // const responseUSD = await (await fetch(
-    //   zoom.url(position.symbol, 'USD', zoom.limit)
-    // )).json();
 
-    const responseUSD = cache[position.symbol];
-
-    const dataUSD = responseUSD.Data;
-
-    const yAxes = [
-      {
-        id: 'y-axis-USD',
-        display: true,
-        position: 'right',
-        scaleLabel: {
-          display: true,
-          labelString: 'Price (USD)',
-        },
-        ticks: {
-          callback: (_, index) => `$${dataUSD[index].close}`,
-        },
-      },
-    ];
-
-    const datasets = [
-      {
-        data: dataUSD.map(d => d.close),
-        pointRadius: 0,
-        fill: false,
-        yAxisID: 'y-axis-USD',
-      },
-    ];
-
-    if (position.symbol !== 'BTC') {
-      const responseBTC = await (await fetch(
-        zoom.url(position.symbol, 'BTC', zoom.limit)
-      )).json();
-      const dataBTC = responseBTC.Data;
-
-      yAxes.push({
-        id: 'y-axis-BTC',
-        display: true,
-        position: 'right',
-        scaleLabel: {
-          display: true,
-          labelString: 'Price (BTC)',
-        },
-        ticks: {
-          callback: (_, index) => `${dataBTC[index].close} BTC`,
-        },
-        gridLines: {
-          drawOnChartArea: false,
-        },
-      });
-
-      datasets.push({
-        data: dataBTC.map(d => d.close),
-        pointRadius: 0,
-        fill: false,
-        yAxisID: 'y-axis-BTC',
-      });
-    }
-
-    if (this.chart) this.chart.destroy();
-    this.chart = new Chart(this.chartRef, {
-      type: 'line',
-      options: {
-        legend: {
-          display: false,
-        },
-        tooltips: {
-          intersect: false,
-        },
-        scales: {
-          yAxes,
-        },
-      },
-
-      data: {
-        labels: dataUSD.map(d => {
-          // const dd = new Date(d.time * 1000);
-          // return `${dd.getHours()}:${dd.getMinutes()}`;
-
-          return moment(d.time * 1000).format(zoom.format);
-          // return moment(d.time * 1000).format('HH:mm');
-        }),
-        datasets,
-      },
-    });
-  }
+    return (
+      <ResponsiveContainer minWidth={600} minHeight={600}>
+        <LineChart
+          // width="100%"
+          // width={730}
+          // height={250}
+          data={this.state.data}
+          margin={{ left: 40, right: 30 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="time" interval={zoom.interval} />
+          <YAxis dataKey="usd" yAxisId="usd" orientation="right">
+            <Label
+              angle={90}
+              position="insideLeft"
+              style={{ textAnchor: 'middle' }}
+              offset={70}
+            >
+              Price (USD)
+            </Label>
+          </YAxis>
+          {btcLine && (
+            <YAxis
+              dataKey="btc"
+              yAxisId="btc"
+              orientation="left"
+              padding={{ left: 50, right: 50 }}
+            >
+              <Label
+                angle={-90}
+                position="insideRight"
+                style={{ textAnchor: 'middle' }}
+                offset={80}
+              >
+                Price (BTC)
+              </Label>
+            </YAxis>
+          )}
+          <Tooltip />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="usd"
+            stroke="#8884d8"
+            yAxisId="usd"
+            dot={false}
+            activeDot={{ strokeWidth: 1, r: 4 }}
+          />
+          {btcLine && (
+            <Line
+              type="monotone"
+              dataKey="btc"
+              stroke="#82ca9d"
+              yAxisId="btc"
+              dot={false}
+              activeDot={{ strokeWidth: 1, r: 4 }}
+            />
+          )}
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  };
 
   handleDelete = () => this.props.deletePosition(this.props.position.__id);
   handleZoom = zoom => () =>
@@ -196,15 +213,14 @@ class Position extends Component {
 
             <ActionButton handleClick={this.handleDelete}>Delete</ActionButton>
           </section>
-          <canvas ref={ref => (this.chartRef = ref)} />
-          {/*{JSON.stringify(position)}*/}
+          {this.renderChart()}
         </Elevation>
       </Fragment>
     );
   }
 }
 
-class Positions extends Component {
+export class Positions extends Component {
   async componentDidMount() {
     this.props.getPositions();
   }
@@ -225,5 +241,3 @@ class Positions extends Component {
     );
   }
 }
-
-export default Positions;

@@ -3,7 +3,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
 // import { routerReducer } from 'react-router-redux';
 
-import reducers from './reducers';
+import {reducers} from './reducers';
 
 const configureStore = () => {
   const middlewares = [];
@@ -16,4 +16,4 @@ const configureStore = () => {
   return createStore(combineReducers({ ...reducers }), middleware);
 };
 
-export default configureStore();
+export const store = configureStore();

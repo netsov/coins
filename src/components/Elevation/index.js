@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import './style.css';
 import '@material/elevation/dist/mdc.elevation.css';
 
-export default class Elevation extends Component {
+export class Elevation extends Component {
   state = {
     hovered: false
   };

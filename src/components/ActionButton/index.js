@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import './style.css';
 import '@material/button/dist/mdc.button.css';
 
-const ActionButton = ({
+export const ActionButton = ({
   disabled,
   handleClick,
   children,
@@ -28,5 +28,3 @@ const ActionButton = ({
     </button>
   );
 };
-
-export default ActionButton;

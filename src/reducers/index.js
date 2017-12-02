@@ -11,6 +11,6 @@ const positions = (state = [], action) => {
   }
 };
 
-export default {
+export const reducers = {
   positions,
 };

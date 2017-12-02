@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './style.css';
 
-import ActionButton from '../ActionButton';
-import InputField from '../InputField';
-import Card from '../Card';
+import { ActionButton } from '../ActionButton';
+import { InputField } from '../InputField';
+import { Card } from '../Card';
 
-import { symbolsMock } from '../../mocks';
+import { getFromCache } from '../../utils';
 
 const SYMBOLS = 'https://min-api.cryptocompare.com/data/all/coinlist';
 const TRADING_PAIRS = fsym =>
@@ -13,8 +13,7 @@ const TRADING_PAIRS = fsym =>
 const PRICE = (fsym, tsym) =>
   `https://min-api.cryptocompare.com/data/price?fsym=${fsym}&tsyms=${tsym}`;
 
-
-class Editor extends Component {
+export class Editor extends Component {
   state = {
     symbols: [],
     toSymbols: [],
@@ -26,22 +25,17 @@ class Editor extends Component {
   };
 
   async componentDidMount() {
-    // const response = await (await fetch(SYMBOLS)).json();
-    // console.log();
-    const symbols = Object.values(symbolsMock.Data).sort(
+    const response = await getFromCache(SYMBOLS);
+    const symbols = Object.values(response.Data).sort(
       (a, b) => parseInt(a.SortOrder, 10) - parseInt(b.SortOrder, 10)
     );
-
-    // console.log(symbolsMock.Data.BTC);
 
     this.setState({ symbols });
   }
 
   async componentWillUpdate(nextProps, nextState) {
     if (nextState.symbol !== this.state.symbol && nextState.symbol) {
-      const response = await (await fetch(
-        TRADING_PAIRS(nextState.symbol)
-      )).json();
+      const response = await getFromCache(TRADING_PAIRS(nextState.symbol));
       const toSymbols = response.Data.map(pair => pair.toSymbol);
       this.setState({
         currency: '',
@@ -54,9 +48,9 @@ class Editor extends Component {
       nextState.currency &&
       this.state.toSymbols.indexOf(nextState.currency) !== -1
     ) {
-      const response = await (await fetch(
+      const response = await getFromCache(
         PRICE(nextState.symbol, nextState.currency)
-      )).json();
+      );
       const tradePrice = response[nextState.currency];
       if (tradePrice)
         this.setState({
@@ -183,5 +177,3 @@ class Editor extends Component {
     );
   }
 }
-
-export default Editor;

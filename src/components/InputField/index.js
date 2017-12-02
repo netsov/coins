@@ -5,7 +5,7 @@ import './style.css';
 import classNames from 'classnames';
 import '@material/textfield/dist/mdc.textfield.css';
 
-export default class InputField extends React.Component {
+export class InputField extends React.Component {
   // state = {
   //   value: '',
   // };

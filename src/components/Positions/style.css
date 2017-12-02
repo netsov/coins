@@ -7,11 +7,12 @@
 }
 
 div.my-elevation {
+    /*height: 100%;*/
     /*width: 45vw;*/
     width: 100vw;
     /*width: 30%;*/
     min-width: 600px;
-    /*height: 400px;*/
+    min-height: 400px;
     margin: 0 10px 10px 0
 }
 
