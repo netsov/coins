@@ -18,7 +18,7 @@ ReactDOM.render(
 
 if (module.hot) {
   module.hot.accept('./App', () => {
-    const NextRoot = require('./App').default;
+    const NextRoot = require('./App').App;
     ReactDOM.render(
       <Provider store={store}>
         <NextRoot />
