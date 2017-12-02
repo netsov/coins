@@ -73,8 +73,12 @@ const ZOOM_INDEX = ZOOM.reduce(
   {}
 );
 
-const calcYLabelOffset = (data, key) => (key === 'usd' ? 70 : 90);
-// Math.max(...data.map(i => i[key].toString().length)) * 10;
+const colors = {
+  // btc: '#8884d8',
+  btc: '#f7921a',
+  // usd: '#82ca9d',
+  usd: '#009833',
+};
 
 export class Position extends Component {
   state = {
@@ -126,16 +130,25 @@ export class Position extends Component {
     const zoom = ZOOM_INDEX[position.zoom];
 
     return (
-      <ResponsiveContainer minWidth={600} minHeight={600}>
-        <LineChart data={this.state.data} margin={{ left: 50, right: 40 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="time" interval={zoom.interval} />
-          <YAxis dataKey="usd" yAxisId="usd" orientation="right">
+      <ResponsiveContainer minWidth={600} minHeight={200} height="100%">
+        <LineChart data={this.state.data} margin={{ left: 30 }}>
+          <CartesianGrid vertical={false} />
+          <XAxis dataKey="time" interval={zoom.interval * 3.5} />
+          <YAxis
+            dataKey="usd"
+            yAxisId="usd"
+            orientation="right"
+            stroke={colors.usd}
+            width={100}
+            tickFormatter={v => `$${v % 1 ? v.toFixed(2) : v}`}
+          >
             <Label
               angle={90}
-              position="insideLeft"
+              position="insideRight"
               style={{ textAnchor: 'middle' }}
-              offset={calcYLabelOffset(data, 'usd')}
+              stroke={colors.usd}
+              fill={colors.usd}
+              offset={30}
             >
               Price (USD)
             </Label>
@@ -144,14 +157,19 @@ export class Position extends Component {
             <YAxis
               dataKey="btc"
               yAxisId="btc"
-              orientation="left"
-              padding={{ left: 50, right: 50 }}
+              orientation="right"
+              stroke={colors.btc}
+              width={140}
+              margin={{ left: 50 }}
+              tickFormatter={v => `${v.toFixed(6)} BTC`}
             >
               <Label
-                angle={-90}
+                angle={90}
                 position="insideRight"
                 style={{ textAnchor: 'middle' }}
-                offset={calcYLabelOffset(data, 'btc')}
+                stroke={colors.btc}
+                fill={colors.btc}
+                offset={10}
               >
                 Price (BTC)
               </Label>
@@ -162,19 +180,21 @@ export class Position extends Component {
           <Line
             type="monotone"
             dataKey="usd"
-            stroke="#8884d8"
+            stroke={colors.usd}
             yAxisId="usd"
             dot={false}
             activeDot={{ strokeWidth: 1, r: 4 }}
+            strokeWidth={2}
           />
           {btcLine && (
             <Line
               type="monotone"
               dataKey="btc"
-              stroke="#82ca9d"
+              stroke={colors.btc}
               yAxisId="btc"
               dot={false}
               activeDot={{ strokeWidth: 1, r: 4 }}
+              strokeWidth={2}
             />
           )}
         </LineChart>

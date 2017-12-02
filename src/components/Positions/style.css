@@ -6,11 +6,8 @@
     padding: 10px;
 }
 
-div.my-elevation {
-    width: 100vw;
-    min-width: 600px;
-    min-height: 400px;
-    margin: 0 10px 10px 0
+.positions-container div.my-elevation {
+    margin: 0 7px 7px 0
 }
 
 
