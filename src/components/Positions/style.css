@@ -7,15 +7,14 @@
 }
 
 div.my-elevation {
+    /*width: 45vw;*/
+    /*width: 100vw;*/
     /*width: 30%;*/
-    width: 600px;
-    height: 400px;
+    min-width: 600px;
+    /*height: 400px;*/
     margin: 0 10px 10px 0
 }
 
-canvas {
-    /*width: 30% !important;*/
-}
 
 .positions-container section {
     display: flex;

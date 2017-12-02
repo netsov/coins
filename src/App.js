@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './components/Editor/style.css';
 
 import Positions from './containers/Positions';
@@ -11,10 +11,10 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <Positions />
         <Editor />
-      </div>
+      </Fragment>
     );
   }
 }

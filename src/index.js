@@ -15,3 +15,15 @@ ReactDOM.render(
   document.getElementById('root')
 );
 // registerServiceWorker();
+
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    const NextRoot = require('./App').default;
+    ReactDOM.render(
+      <Provider store={store}>
+        <NextRoot />
+      </Provider>,
+      document.getElementById('root')
+    );
+  });
+}

@@ -7,7 +7,7 @@ import Elevation from '../Elevation';
 import Chart from 'chart.js';
 import moment from 'moment';
 
-// import { hysto } from '../../mocks';
+import { cache } from '../../mocks';
 
 const HYSTO_HOUR = (fsym, tsym, limit) =>
   `https://min-api.cryptocompare.com/data/histohour?fsym=${fsym}&tsym=${
@@ -78,9 +78,11 @@ class Position extends Component {
     const zoom = ZOOM_INDEX[position.zoom];
     if (!zoom) return;
     // const { symbol, zoom } = position;
-    const response = await (await fetch(
-      zoom.url(position.symbol, 'USD', zoom.limit)
-    )).json();
+    // const response = await (await fetch(
+    //   zoom.url(position.symbol, 'USD', zoom.limit)
+    // )).json();
+
+    const response = cache[position.symbol];
 
     const data = response.Data;
 

@@ -13,6 +13,7 @@ const TRADING_PAIRS = fsym =>
 const PRICE = (fsym, tsym) =>
   `https://min-api.cryptocompare.com/data/price?fsym=${fsym}&tsyms=${tsym}`;
 
+
 class Editor extends Component {
   state = {
     symbols: [],
@@ -80,6 +81,7 @@ class Editor extends Component {
       tradeDate,
       currency,
       quantity,
+      zoom: '1d',
     };
 
     this.props.savePosition(newPosition);
