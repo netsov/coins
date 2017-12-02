@@ -22,10 +22,11 @@ export const getPositions = () => {
 };
 
 export const savePosition = position => {
-  const positions = [
-    position,
-    ...getPositionsFromLocalStorage().filter(p => p.__id !== position.__id),
-  ];
+  let positions = getPositionsFromLocalStorage();
+  const existing = positions.find(p => p.__id === position.__id);
+  positions = existing
+    ? positions.map(p => (p.__id === position.__id ? position : p))
+    : [position, ...positions];
   savePositionsToLocalStorage(positions);
 
   return {
