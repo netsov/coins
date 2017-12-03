@@ -4,19 +4,8 @@ import './style.css';
 import { ActionButton } from '../ActionButton';
 import { Elevation } from '../Elevation';
 
-import moment from 'moment';
-
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  Label,
-} from 'recharts';
+import ReactHighstock from 'react-highcharts/ReactHighstock.src';
+// import Highlight from 'react-highlight';
 
 import { getFromCache } from '../../utils';
 
@@ -98,19 +87,29 @@ export class Position extends Component {
       zoom.url(position.symbol, 'USD', zoom.limit)
     );
 
-    let data = responseUSD.Data.map(item => ({
-      time: moment(item.time * 1000).format(zoom.format),
-      usd: item.close,
-    }));
+    const data = {};
 
+    // let data = responseUSD.Data.map(item => ({
+    //   time: moment(item.time * 1000).format(zoom.format),
+    //   usd: item.close,
+    // }));
+
+    // if (position.symbol !== 'BTC') {
+    //   const responseBTC = await getFromCache(
+    //     zoom.url(position.symbol, 'BTC', zoom.limit)
+    //   );
+    //   data = data.map((item, index) => ({
+    //     ...item,
+    //     btc: responseBTC.Data[index].close,
+    //   }));
+    // }
+
+    data.usd = responseUSD.Data.map(item => [item.time * 1000, item.close]);
     if (position.symbol !== 'BTC') {
       const responseBTC = await getFromCache(
         zoom.url(position.symbol, 'BTC', zoom.limit)
       );
-      data = data.map((item, index) => ({
-        ...item,
-        btc: responseBTC.Data[index].close,
-      }));
+      data.btc = responseBTC.Data.map(item => [item.time * 1000, item.close]);
     }
 
     this.setState({ data });
@@ -121,83 +120,121 @@ export class Position extends Component {
       await this.fetchData();
   }
 
-  renderChart = () => {
+  renderChart2 = () => {
     const { data } = this.state;
     if (!data) return;
-    const btcLine = !!data[0].btc;
 
-    const { position } = this.props;
-    const zoom = ZOOM_INDEX[position.zoom];
+    const series = [
+      {
+        yAxis: 0,
+        name: 'Price (USD)',
+        color: colors.usd,
+        data: data.usd,
+        tooltip: {
+          valueDecimals: 2,
+        },
+      },
+    ];
 
-    return (
-      <ResponsiveContainer minWidth={600} minHeight={200} height="100%">
-        <LineChart data={this.state.data} margin={{ left: 30 }}>
-          <CartesianGrid vertical={false} />
-          <XAxis dataKey="time" interval={zoom.interval * 3.5} />
-          <YAxis
-            dataKey="usd"
-            yAxisId="usd"
-            orientation="right"
-            stroke={colors.usd}
-            width={100}
-            tickFormatter={v => `$${v % 1 ? v.toFixed(2) : v}`}
-          >
-            <Label
-              angle={90}
-              position="insideRight"
-              style={{ textAnchor: 'middle' }}
-              fill={colors.usd}
-              offset={30}
-            >
-              Price (USD)
-            </Label>
-          </YAxis>
-          {btcLine && (
-            <YAxis
-              dataKey="btc"
-              yAxisId="btc"
-              orientation="right"
-              stroke={colors.btc}
-              width={140}
-              margin={{ left: 50 }}
-              tickFormatter={v => `${v.toFixed(6)} BTC`}
-            >
-              <Label
-                angle={90}
-                position="insideRight"
-                style={{ textAnchor: 'middle' }}
-                fill={colors.btc}
-                offset={10}
-              >
-                Price (BTC)
-              </Label>
-            </YAxis>
-          )}
-          <Tooltip />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="usd"
-            stroke={colors.usd}
-            yAxisId="usd"
-            dot={false}
-            activeDot={{ strokeWidth: 1, r: 4 }}
-            strokeWidth={2}
-          />
-          {btcLine && (
-            <Line
-              type="monotone"
-              dataKey="btc"
-              stroke={colors.btc}
-              yAxisId="btc"
-              dot={false}
-              activeDot={{ strokeWidth: 1, r: 4 }}
-              strokeWidth={2}
-            />
-          )}
-        </LineChart>
-      </ResponsiveContainer>
+    const yAxis = [
+      {
+        labels: {
+          format: '${value}',
+          style: {
+            color: colors.usd,
+          },
+        },
+        title: {
+          text: 'Price (USD)',
+          style: {
+            color: colors.usd,
+          },
+        },
+        opposite: true,
+        offset: 30,
+      },
+    ];
+
+    if (data.btc) {
+      series.push({
+        yAxis: 1,
+        name: 'Price (BTC)',
+        data: data.btc,
+        color: colors.btc,
+        tooltip: {
+          valueDecimals: 6,
+        },
+      });
+
+      yAxis.push({
+        labels: {
+          format: '{value}BTC',
+          style: {
+            color: colors.btc,
+          },
+        },
+        title: {
+          text: 'Price (BTC)',
+          style: {
+            color: colors.btc,
+          },
+        },
+        opposite: true,
+      });
+    }
+
+    const rangeSelector = {
+      allButtonsEnabled: true,
+      buttons: [
+        {
+          type: 'day',
+          count: 1,
+          text: '1d',
+        },
+        {
+          type: 'day',
+          count: 7,
+          text: '7d',
+        },
+        {
+          type: 'month',
+          count: 1,
+          text: '1m',
+        },
+        {
+          type: 'month',
+          count: 3,
+          text: '3m',
+        },
+        {
+          type: 'year',
+          count: 1,
+          text: '1y',
+        },
+      ],
+    };
+
+    rangeSelector.buttons = rangeSelector.buttons.map(b => ({
+      ...b,
+      events: {
+        click: this.handleZoom(b.text),
+      },
+    }));
+
+    rangeSelector.selected = rangeSelector.buttons.findIndex(
+      b => b.text === this.props.position.zoom
     );
+
+    const config = {
+      rangeSelector,
+      // title: {
+      //   text: this.props.position.symbol,
+      // },
+      series,
+      yAxis,
+    };
+
+    return <ReactHighstock config={config} />;
   };
 
   handleDelete = () => this.props.deletePosition(this.props.position.__id);
@@ -212,23 +249,23 @@ export class Position extends Component {
           <section>
             <h2>{position.symbol}</h2>
 
-            <div className="position-zoom-container">
-              {ZOOM.map(z => (
-                <ActionButton
-                  key={z.name}
-                  handleClick={this.handleZoom(z.name)}
-                  secondary={z.name === position.zoom}
-                  raised={true}
-                  dense={true}
-                >
-                  {z.name}
-                </ActionButton>
-              ))}
-            </div>
+            {/*<div className="position-zoom-container">*/}
+            {/*{ZOOM.map(z => (*/}
+            {/*<ActionButton*/}
+            {/*key={z.name}*/}
+            {/*handleClick={this.handleZoom(z.name)}*/}
+            {/*secondary={z.name === position.zoom}*/}
+            {/*raised={true}*/}
+            {/*dense={true}*/}
+            {/*>*/}
+            {/*{z.name}*/}
+            {/*</ActionButton>*/}
+            {/*))}*/}
+            {/*</div>*/}
 
             <ActionButton handleClick={this.handleDelete}>Delete</ActionButton>
           </section>
-          {this.renderChart()}
+          {this.renderChart2()}
         </Elevation>
       </Fragment>
     );
