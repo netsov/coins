@@ -146,7 +146,6 @@ export class Position extends Component {
               angle={90}
               position="insideRight"
               style={{ textAnchor: 'middle' }}
-              stroke={colors.usd}
               fill={colors.usd}
               offset={30}
             >
@@ -167,7 +166,6 @@ export class Position extends Component {
                 angle={90}
                 position="insideRight"
                 style={{ textAnchor: 'middle' }}
-                stroke={colors.btc}
                 fill={colors.btc}
                 offset={10}
               >

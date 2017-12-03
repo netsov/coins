@@ -6,7 +6,7 @@ import '@material/elevation/dist/mdc.elevation.css';
 
 export class Elevation extends Component {
   state = {
-    hovered: false
+    hovered: false,
   };
   toggleHovered = hovered => () => {
     this.props.ripple && this.setState({ hovered });
@@ -14,16 +14,16 @@ export class Elevation extends Component {
   };
 
   render() {
-    const { children, ripple } = this.props;
+    const { children, ripple, zIndex = 4 } = this.props;
     const { hovered } = this.state;
     return (
       <div
-        onMouseOver={this.toggleHovered(true)}
-        onMouseLeave={this.toggleHovered(false)}
+        onMouseOver={ripple ? this.toggleHovered(true) : undefined}
+        onMouseLeave={ripple ? this.toggleHovered(false) : undefined}
         className={classNames(
-          `my-elevation mdc-elevation--z${hovered ? 8 : 4}`,
+          `my-elevation mdc-elevation--z${hovered ? zIndex * 2 : zIndex}`,
           {
-            'my-elevation-ripple': ripple
+            'my-elevation-ripple': ripple,
           }
         )}
       >
