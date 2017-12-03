@@ -5,13 +5,7 @@ import { ActionButton } from '../ActionButton';
 import { InputField } from '../InputField';
 import { Card } from '../Card';
 
-import { getFromCache } from '../../utils';
-
-const SYMBOLS = 'https://min-api.cryptocompare.com/data/all/coinlist';
-const TRADING_PAIRS = fsym =>
-  `https://min-api.cryptocompare.com/data/top/pairs?fsym=${fsym}&limit=100`;
-const PRICE = (fsym, tsym) =>
-  `https://min-api.cryptocompare.com/data/price?fsym=${fsym}&tsyms=${tsym}`;
+import { getFromCache, SYMBOLS, PRICE, TRADING_PAIRS } from '../../utils';
 
 export class Editor extends Component {
   state = {

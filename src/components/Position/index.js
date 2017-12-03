@@ -6,17 +6,7 @@ import { Elevation } from '../Elevation';
 
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
 
-import { getFromCache } from '../../utils';
-
-const HYSTO_HOUR = (fsym, tsym, limit) =>
-  `https://min-api.cryptocompare.com/data/histohour?fsym=${fsym}&tsym=${
-    tsym
-  }&limit=${limit}`;
-
-const HYSTO_DAY = (fsym, tsym, limit) =>
-  `https://min-api.cryptocompare.com/data/histoday?fsym=${fsym}&tsym=${tsym}&${
-    limit ? `limit=${limit}` : 'allData=true'
-  }`;
+import { getFromCache, HYSTO_DAY, HYSTO_HOUR, PRICE } from '../../utils';
 
 const ZOOM = [
   {
@@ -49,11 +39,6 @@ const ZOOM = [
     format: 'MMM D',
     limit: 365,
   },
-  // {
-  //   name: 'all',
-  //   url: HYSTO_DAY,
-  //   format: 'MMM D',
-  // },
 ];
 
 const ZOOM_INDEX = ZOOM.reduce(
@@ -71,6 +56,7 @@ const colors = {
 export class Position extends Component {
   state = {
     data: null,
+    priceResponse: {},
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -83,7 +69,17 @@ export class Position extends Component {
   }
 
   async componentDidMount() {
+    await this.fetchPrice();
     await this.fetchData();
+  }
+
+  async fetchPrice() {
+    const priceResponse = await getFromCache(
+      PRICE(this.props.position.symbol, 'USD,BTC')
+    );
+    this.setState({
+      priceResponse,
+    });
   }
 
   async fetchData() {
@@ -96,21 +92,6 @@ export class Position extends Component {
     );
 
     const data = { zoom: position.zoom };
-
-    // let data = responseUSD.Data.map(item => ({
-    //   time: moment(item.time * 1000).format(zoomMeta.format),
-    //   usd: item.close,
-    // }));
-
-    // if (position.symbol !== 'BTC') {
-    //   const responseBTC = await getFromCache(
-    //     zoomMeta.url(position.symbol, 'BTC', zoomMeta.limit)
-    //   );
-    //   data = data.map((item, index) => ({
-    //     ...item,
-    //     btc: responseBTC.Data[index].close,
-    //   }));
-    // }
 
     data.usd = responseUSD.Data.map(item => [item.time * 1000, item.close]);
     if (position.symbol !== 'BTC') {
@@ -131,6 +112,8 @@ export class Position extends Component {
   renderChart = () => {
     const { data } = this.state;
     if (!data) return;
+
+    const { symbol, zoom } = this.props.position;
 
     const series = [
       {
@@ -231,26 +214,30 @@ export class Position extends Component {
     }));
 
     rangeSelector.selected = rangeSelector.buttons.findIndex(
-      b => b.text === this.props.position.zoom
+      b => b.text === zoom
     );
+
+    let subtitle = `<span>$${this.state.priceResponse.USD}</span>`;
+    if (symbol !== 'BTC')
+      subtitle += `<br/><span>${this.state.priceResponse.BTC} BTC</span>`;
 
     const config = {
       rangeSelector,
-      // title: {
-      //   text: this.props.position.symbol,
-      // },
+      title: {
+        // align: 'left',
+        text: symbol,
+        style: { fontSize: '22px' },
+      },
+      subtitle: {
+        // align: 'left',
+        text: subtitle,
+        style: { fontSize: '16px' },
+      },
       series,
       yAxis,
     };
 
-    return (
-      <ReactHighstock
-        config={config}
-        callback={chart => {
-          this.chart = chart;
-        }}
-      />
-    );
+    return <ReactHighstock config={config} />;
   };
 
   handleDelete = () => this.props.deletePosition(this.props.position.__id);
@@ -269,28 +256,7 @@ export class Position extends Component {
     console.log(position.symbol, 'rendered');
     return (
       <Fragment>
-        <Elevation ripple={false}>
-          <section>
-            <h2>{position.symbol}</h2>
-
-            {/*<div className="position-zoom-container">*/}
-            {/*{ZOOM.map(z => (*/}
-            {/*<ActionButton*/}
-            {/*key={z.name}*/}
-            {/*handleClick={this.handleZoom(z.name)}*/}
-            {/*secondary={z.name === position.zoom}*/}
-            {/*raised={true}*/}
-            {/*dense={true}*/}
-            {/*>*/}
-            {/*{z.name}*/}
-            {/*</ActionButton>*/}
-            {/*))}*/}
-            {/*</div>*/}
-
-            <ActionButton handleClick={this.handleDelete}>Delete</ActionButton>
-          </section>
-          {this.renderChart()}
-        </Elevation>
+        <Elevation ripple={false}>{this.renderChart()}</Elevation>
       </Fragment>
     );
   }
