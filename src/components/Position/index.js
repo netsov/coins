@@ -5,7 +5,6 @@ import { ActionButton } from '../ActionButton';
 import { Elevation } from '../Elevation';
 
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
-// import Highlight from 'react-highlight';
 
 import { getFromCache } from '../../utils';
 
@@ -48,7 +47,7 @@ const ZOOM = [
     name: '1y',
     url: HYSTO_DAY,
     format: 'MMM D',
-    limit: 360,
+    limit: 365,
   },
   // {
   //   name: 'all',
@@ -129,7 +128,7 @@ export class Position extends Component {
       await this.fetchData();
   }
 
-  renderChart2 = () => {
+  renderChart = () => {
     const { data } = this.state;
     if (!data) return;
 
@@ -194,6 +193,7 @@ export class Position extends Component {
 
     const rangeSelector = {
       allButtonsEnabled: true,
+      inputEnabled: false,
       buttons: [
         {
           type: 'day',
@@ -220,22 +220,18 @@ export class Position extends Component {
           count: 1,
           text: '1y',
         },
-        // {
-        //   type: 'all',
-        //   text: 'All',
-        // },
       ],
     };
 
     rangeSelector.buttons = rangeSelector.buttons.map(b => ({
       ...b,
       events: {
-        click: this.handleZoom(b.text.toLowerCase()),
+        click: this.handleZoom(b.text),
       },
     }));
 
     rangeSelector.selected = rangeSelector.buttons.findIndex(
-      b => b.text === this.props.position.zoom.toLowerCase()
+      b => b.text === this.props.position.zoom
     );
 
     const config = {
@@ -247,16 +243,30 @@ export class Position extends Component {
       yAxis,
     };
 
-    return <ReactHighstock config={config} />;
+    return (
+      <ReactHighstock
+        config={config}
+        callback={chart => {
+          this.chart = chart;
+        }}
+      />
+    );
   };
 
   handleDelete = () => this.props.deletePosition(this.props.position.__id);
-  handleZoom = zoom => () =>
-    this.props.savePosition({ ...this.props.position, zoom });
+
+  handleZoom = zoom => () => {
+    // https://github.com/highcharts/highcharts/issues/2775
+    setTimeout(
+      () => this.props.savePosition({ ...this.props.position, zoom }),
+      1
+    );
+    return false;
+  };
 
   render() {
     const { position } = this.props;
-    console.log('position', position.symbol, 'rendered');
+    console.log(position.symbol, 'rendered');
     return (
       <Fragment>
         <Elevation ripple={false}>
@@ -279,7 +289,7 @@ export class Position extends Component {
 
             <ActionButton handleClick={this.handleDelete}>Delete</ActionButton>
           </section>
-          {this.renderChart2()}
+          {this.renderChart()}
         </Elevation>
       </Fragment>
     );
