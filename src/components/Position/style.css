@@ -1,3 +1,7 @@
+div.my-elevation {
+    position: relative;
+}
+
 div.my-elevation section {
     display: flex;
     /*flex-direction: column;*/

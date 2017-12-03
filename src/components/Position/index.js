@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import './style.css';
 
-import { ActionButton } from '../ActionButton';
+// import { ActionButton } from '../ActionButton';
 import { Elevation } from '../Elevation';
+import { Progress } from '../Progress';
 
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
 
@@ -278,6 +279,7 @@ export class Position extends Component {
     return (
       <Fragment>
         <Elevation ripple={false}>
+          <Progress show={false} />
           {this.renderHeader()}
           {this.renderChart()}
         </Elevation>
