@@ -58,8 +58,8 @@ export class Editor extends Component {
     }
   }
 
-  handleChange = field => e => {
-    this.setState({ [field]: e.target.value });
+  handleChange = field => value => {
+    this.setState({ [field]: value });
   };
 
   handleCancel = () => {};
@@ -82,7 +82,7 @@ export class Editor extends Component {
       currency,
       quantity,
       zoom: '1d',
-      coin: coinList.find( c => c.Name === symbol)
+      coin: coinList.find(c => c.Name === symbol),
     };
 
     this.props.savePosition(newPosition);
@@ -111,8 +111,8 @@ export class Editor extends Component {
               list="coinList"
               required={true}
               name="Symbol"
-              value={this.state.symbol}
-              onChange={this.handleChange('symbol')}
+              initialValue={this.state.symbol}
+              handleChange={this.handleChange('symbol')}
               placeholder="e.g. BTC, ETH, LTC"
             />
           </div>
@@ -122,8 +122,8 @@ export class Editor extends Component {
               type="number"
               step={0.00000001}
               min={0}
-              value={this.state.quantity}
-              onChange={this.handleChange('quantity')}
+              initialValue={this.state.quantity}
+              handleChange={this.handleChange('quantity')}
               name="Quantity"
               placeholder="e.g. 0.001"
               rtl={false}
@@ -140,8 +140,8 @@ export class Editor extends Component {
             <InputField
               list="toSymbols"
               required={true}
-              value={this.state.currency}
-              onChange={this.handleChange('currency')}
+              initialValue={this.state.currency}
+              handleChange={this.handleChange('currency')}
               name="Currency"
               placeholder="e.g. USD, BTC"
             />
@@ -154,8 +154,8 @@ export class Editor extends Component {
               step={0.00000001}
               min={0}
               name="Trade Price"
-              value={this.state.tradePrice}
-              onChange={this.handleChange('tradePrice')}
+              initialValue={this.state.tradePrice}
+              handleChange={this.handleChange('tradePrice')}
               placeholder="Trade Price"
               rtl={false}
             />
@@ -163,8 +163,8 @@ export class Editor extends Component {
           <div className="row">
             <InputField
               type="date"
-              value={this.state.tradeDate}
-              onChange={this.handleChange('tradeDate')}
+              initialValue={this.state.tradeDate}
+              handleChange={this.handleChange('tradeDate')}
               name="Trade Date"
             />
           </div>

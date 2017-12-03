@@ -6,33 +6,38 @@ import classNames from 'classnames';
 import '@material/textfield/dist/mdc.textfield.css';
 
 export class InputField extends React.Component {
-  // state = {
-  //   value: '',
-  // };
+  constructor(ctx) {
+    super(ctx);
 
-  static defaultProps = {
-    // reset: true,
-  };
-
-  // componentWillMount() {
-  //   console.log('componentWillMount');
-  //   this.setState({ value: this.props.value });
-  // }
+    this.state = {
+      value: this.props.initialValue || '',
+    };
+  }
 
   handleKeyPress = e => {
     if (e.key === 'Enter' && this.state.value) {
-      this.props.onEnter(this.state.value);
-      // if (this.props.reset) this.setState({ value: '' });
+      this.props.handleChange(this.state.value);
     }
   };
+
+  handleChange = e => {
+    this.setState({ value: e.target.value });
+  };
+
+  handleBlur = () => {
+    this.props.handleChange(this.state.value);
+  };
+
   render() {
     const {
-      value,
+      // value,
       name,
       rtl,
       fullWidth = true,
       required,
       validationText,
+      handleChange,
+      initialValue,
       ...rest
     } = this.props;
     return (
@@ -43,10 +48,10 @@ export class InputField extends React.Component {
             'mdc-text-field__input': true,
             'mdc-text-field--fullwidth': fullWidth,
           })}
-          // value={this.state.value}
-          value={value}
-          // onChange={this.handleChange}
-          // onKeyPress={this.handleKeyPress}
+          value={this.state.value}
+          onChange={this.handleChange}
+          onBlur={this.handleBlur}
+          onKeyPress={this.handleKeyPress}
           aria-label={name}
         />
         <label
