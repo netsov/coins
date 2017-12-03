@@ -6,7 +6,13 @@ import { Elevation } from '../Elevation';
 
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
 
-import { getFromCache, HYSTO_DAY, HYSTO_HOUR, PRICE } from '../../utils';
+import {
+  getFromCache,
+  HYSTO_DAY,
+  HYSTO_HOUR,
+  COIN_PRICE,
+  COIN_IMG_URL,
+} from '../../utils';
 
 const ZOOM = [
   {
@@ -75,7 +81,7 @@ export class Position extends Component {
 
   async fetchPrice() {
     const priceResponse = await getFromCache(
-      PRICE(this.props.position.symbol, 'USD,BTC')
+      COIN_PRICE(this.props.position.symbol, 'USD,BTC')
     );
     this.setState({
       priceResponse,
@@ -142,7 +148,7 @@ export class Position extends Component {
           },
         },
         opposite: true,
-        offset: 30,
+        offset: 50,
       },
     ];
 
@@ -223,16 +229,7 @@ export class Position extends Component {
 
     const config = {
       rangeSelector,
-      title: {
-        // align: 'left',
-        text: symbol,
-        style: { fontSize: '22px' },
-      },
-      subtitle: {
-        // align: 'left',
-        text: subtitle,
-        style: { fontSize: '16px' },
-      },
+
       series,
       yAxis,
     };
@@ -251,12 +248,39 @@ export class Position extends Component {
     return false;
   };
 
+  renderHeader = () => {
+    const { symbol, coin } = this.props.position;
+
+    return (
+      <section>
+        <div className="symbol-container">
+          <img
+            src={COIN_IMG_URL(coin.ImageUrl)}
+            height="32"
+            width="32"
+            alt=""
+          />
+          <span>{coin.FullName}</span>
+        </div>
+        <div className="prices-container">
+          <span>${this.state.priceResponse.USD}</span>
+          {symbol === 'BTC' ? null : (
+            <span>{this.state.priceResponse.BTC} BTC</span>
+          )}
+        </div>
+      </section>
+    );
+  };
+
   render() {
     const { position } = this.props;
     console.log(position.symbol, 'rendered');
     return (
       <Fragment>
-        <Elevation ripple={false}>{this.renderChart()}</Elevation>
+        <Elevation ripple={false}>
+          {this.renderHeader()}
+          {this.renderChart()}
+        </Elevation>
       </Fragment>
     );
   }

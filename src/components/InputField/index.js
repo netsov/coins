@@ -20,7 +20,6 @@ export class InputField extends React.Component {
   // }
 
   handleKeyPress = e => {
-    console.log('handleKeyPress', e.target.value);
     if (e.key === 'Enter' && this.state.value) {
       this.props.onEnter(this.state.value);
       // if (this.props.reset) this.setState({ value: '' });

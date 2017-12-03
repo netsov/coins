@@ -5,11 +5,16 @@ import { ActionButton } from '../ActionButton';
 import { InputField } from '../InputField';
 import { Card } from '../Card';
 
-import { getFromCache, SYMBOLS, PRICE, TRADING_PAIRS } from '../../utils';
+import {
+  getFromCache,
+  COIN_LIST,
+  COIN_PRICE,
+  TRADING_PAIRS,
+} from '../../utils';
 
 export class Editor extends Component {
   state = {
-    symbols: [],
+    coinList: [],
     toSymbols: [],
     symbol: '',
     tradePrice: '',
@@ -19,12 +24,12 @@ export class Editor extends Component {
   };
 
   async componentDidMount() {
-    const response = await getFromCache(SYMBOLS);
-    const symbols = Object.values(response.Data).sort(
+    const response = await getFromCache(COIN_LIST);
+    const coinList = Object.values(response.Data).sort(
       (a, b) => parseInt(a.SortOrder, 10) - parseInt(b.SortOrder, 10)
     );
 
-    this.setState({ symbols });
+    this.setState({ coinList });
   }
 
   async componentWillUpdate(nextProps, nextState) {
@@ -43,7 +48,7 @@ export class Editor extends Component {
       this.state.toSymbols.indexOf(nextState.currency) !== -1
     ) {
       const response = await getFromCache(
-        PRICE(nextState.symbol, nextState.currency)
+        COIN_PRICE(nextState.symbol, nextState.currency)
       );
       const tradePrice = response[nextState.currency];
       if (tradePrice)
@@ -60,7 +65,14 @@ export class Editor extends Component {
   handleCancel = () => {};
 
   handleSave = () => {
-    const { symbol, tradeDate, tradePrice, currency, quantity } = this.state;
+    const {
+      symbol,
+      tradeDate,
+      tradePrice,
+      currency,
+      quantity,
+      coinList,
+    } = this.state;
 
     const newPosition = {
       __id: new Date().valueOf(),
@@ -70,6 +82,7 @@ export class Editor extends Component {
       currency,
       quantity,
       zoom: '1d',
+      coin: coinList.find( c => c.Name === symbol)
     };
 
     this.props.savePosition(newPosition);
@@ -87,15 +100,15 @@ export class Editor extends Component {
       >
         <div className="CardContent">
           <div className="row">
-            <datalist id="symbols">
-              {this.state.symbols.map(coin => (
+            <datalist id="coinList">
+              {this.state.coinList.map(coin => (
                 <option key={coin.Name} value={coin.Name}>
                   {coin.FullName}
                 </option>
               ))}
             </datalist>
             <InputField
-              list="symbols"
+              list="coinList"
               required={true}
               name="Symbol"
               value={this.state.symbol}

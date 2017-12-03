@@ -1,0 +1,25 @@
+div.my-elevation section {
+    display: flex;
+    /*flex-direction: column;*/
+    color: #333333;
+}
+
+.symbol-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.symbol-container span {
+    margin-left: 10px;
+    font-size: 22px;
+}
+
+.prices-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+
+}

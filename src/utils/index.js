@@ -26,10 +26,12 @@ export const HYSTO_DAY = (fsym, tsym, limit) =>
     limit ? `limit=${limit}` : 'allData=true'
     }`;
 
-export const SYMBOLS = 'https://min-api.cryptocompare.com/data/all/coinlist';
+export const COIN_LIST = 'https://min-api.cryptocompare.com/data/all/coinlist';
 
 export const TRADING_PAIRS = fsym =>
   `https://min-api.cryptocompare.com/data/top/pairs?fsym=${fsym}&limit=100`;
 
-export const PRICE = (fsym, tsym) =>
+export const COIN_PRICE = (fsym, tsym) =>
   `https://min-api.cryptocompare.com/data/price?fsym=${fsym}&tsyms=${tsym}`;
+
+export const COIN_IMG_URL = (url) => `https://www.cryptocompare.com/${url}`;
