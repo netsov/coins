@@ -15,9 +15,9 @@ const HYSTO_HOUR = (fsym, tsym, limit) =>
   }&limit=${limit}`;
 
 const HYSTO_DAY = (fsym, tsym, limit) =>
-  `https://min-api.cryptocompare.com/data/histoday?fsym=${fsym}&tsym=${
-    tsym
-  }&limit=${limit}`;
+  `https://min-api.cryptocompare.com/data/histoday?fsym=${fsym}&tsym=${tsym}&${
+    limit ? `limit=${limit}` : 'allData=true'
+  }`;
 
 const ZOOM = [
   {
@@ -25,36 +25,36 @@ const ZOOM = [
     url: HYSTO_HOUR,
     format: 'HH:mm',
     limit: 24,
-    interval: 1,
   },
   {
     name: '7d',
     url: HYSTO_HOUR,
     format: 'MMM D',
     limit: 7 * 24,
-    interval: 24,
   },
   {
     name: '1m',
     url: HYSTO_DAY,
     format: 'MMM D',
     limit: 30,
-    interval: 1,
   },
   {
     name: '3m',
     url: HYSTO_DAY,
     format: 'MMM D',
     limit: 90,
-    interval: 7,
   },
   {
     name: '1y',
     url: HYSTO_DAY,
     format: 'MMM D',
     limit: 360,
-    interval: 30,
   },
+  // {
+  //   name: 'all',
+  //   url: HYSTO_DAY,
+  //   format: 'MMM D',
+  // },
 ];
 
 const ZOOM_INDEX = ZOOM.reduce(
@@ -74,29 +74,38 @@ export class Position extends Component {
     data: null,
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const positionChanged = Object.entries(nextProps.position)
+      .map(([key, value]) => value !== this.props.position[key])
+      .some(Boolean);
+    const dataChanged =
+      !this.state.data || this.state.data.zoom !== nextState.data.zoom;
+    return positionChanged || dataChanged;
+  }
+
   async componentDidMount() {
     await this.fetchData();
   }
 
   async fetchData() {
     const { position } = this.props;
-    const zoom = ZOOM_INDEX[position.zoom];
-    if (!zoom) return;
+    const zoomMeta = ZOOM_INDEX[position.zoom];
+    if (!zoomMeta) return;
 
     const responseUSD = await getFromCache(
-      zoom.url(position.symbol, 'USD', zoom.limit)
+      zoomMeta.url(position.symbol, 'USD', zoomMeta.limit)
     );
 
-    const data = {};
+    const data = { zoom: position.zoom };
 
     // let data = responseUSD.Data.map(item => ({
-    //   time: moment(item.time * 1000).format(zoom.format),
+    //   time: moment(item.time * 1000).format(zoomMeta.format),
     //   usd: item.close,
     // }));
 
     // if (position.symbol !== 'BTC') {
     //   const responseBTC = await getFromCache(
-    //     zoom.url(position.symbol, 'BTC', zoom.limit)
+    //     zoomMeta.url(position.symbol, 'BTC', zoomMeta.limit)
     //   );
     //   data = data.map((item, index) => ({
     //     ...item,
@@ -107,7 +116,7 @@ export class Position extends Component {
     data.usd = responseUSD.Data.map(item => [item.time * 1000, item.close]);
     if (position.symbol !== 'BTC') {
       const responseBTC = await getFromCache(
-        zoom.url(position.symbol, 'BTC', zoom.limit)
+        zoomMeta.url(position.symbol, 'BTC', zoomMeta.limit)
       );
       data.btc = responseBTC.Data.map(item => [item.time * 1000, item.close]);
     }
@@ -211,18 +220,22 @@ export class Position extends Component {
           count: 1,
           text: '1y',
         },
+        // {
+        //   type: 'all',
+        //   text: 'All',
+        // },
       ],
     };
 
     rangeSelector.buttons = rangeSelector.buttons.map(b => ({
       ...b,
       events: {
-        click: this.handleZoom(b.text),
+        click: this.handleZoom(b.text.toLowerCase()),
       },
     }));
 
     rangeSelector.selected = rangeSelector.buttons.findIndex(
-      b => b.text === this.props.position.zoom
+      b => b.text === this.props.position.zoom.toLowerCase()
     );
 
     const config = {
@@ -243,6 +256,7 @@ export class Position extends Component {
 
   render() {
     const { position } = this.props;
+    console.log('position', position.symbol, 'rendered');
     return (
       <Fragment>
         <Elevation ripple={false}>
