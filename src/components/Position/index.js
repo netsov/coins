@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import './style.css';
 
 // import { ActionButton } from '../ActionButton';
-import { Elevation } from '../Elevation';
-import { Progress } from '../Progress';
+import { Elevation } from '../material/Elevation';
+import { Progress } from '../material/Progress';
 
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
 

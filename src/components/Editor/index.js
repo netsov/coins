@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './style.css';
 
-import { ActionButton } from '../ActionButton';
-import { InputField } from '../InputField';
-import { Card } from '../Card';
+import { ActionButton } from '../material/ActionButton';
+import { InputField } from '../material/InputField';
+import { Card } from '../material/Card';
 
 import {
   getFromCache,

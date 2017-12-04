@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import './style.css';
+import classNames from 'classnames';
 
+import './style.css';
 import { Position } from '../Position';
 
 export class Positions extends Component {
@@ -11,7 +12,12 @@ export class Positions extends Component {
   render() {
     const { positions, deletePosition, savePosition } = this.props;
     return (
-      <div className="positions-container">
+      <div
+        className={classNames({
+          'positions-container': true,
+          'positions-container--compact': true,
+        })}
+      >
         {positions.map(position => (
           <Position
             key={position.__id}
