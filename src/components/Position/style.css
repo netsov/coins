@@ -24,5 +24,10 @@ div.my-elevation section {
     flex-direction: column;
     flex: 1;
     align-items: center;
+}
 
+.select-icon svg {
+    position: absolute;
+    top: 15px;
+    right: 15px;
 }

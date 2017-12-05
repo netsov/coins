@@ -9,8 +9,9 @@ export class Elevation extends Component {
     hovered: false,
   };
   toggleHovered = hovered => () => {
-    this.props.ripple && this.setState({ hovered });
-    this.props.onHoverChange && this.props.onHoverChange(hovered);
+    const { ripple, onHoverChange } = this.props;
+    ripple && this.setState({ hovered });
+    onHoverChange && onHoverChange(hovered);
   };
 
   render() {
@@ -18,8 +19,8 @@ export class Elevation extends Component {
     const { hovered } = this.state;
     return (
       <div
-        onMouseOver={ripple ? this.toggleHovered(true) : undefined}
-        onMouseLeave={ripple ? this.toggleHovered(false) : undefined}
+        onMouseOver={this.toggleHovered(true)}
+        onMouseLeave={this.toggleHovered(false)}
         className={classNames(
           `my-elevation mdc-elevation--z${hovered ? zIndex * 2 : zIndex}`,
           {

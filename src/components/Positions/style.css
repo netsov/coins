@@ -1,3 +1,9 @@
+ul, li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 .positions-container {
     display: flex;
     flex-wrap: wrap;
@@ -5,17 +11,6 @@
     justify-content: flex-start;
     /*padding: 5px;*/
 }
-
-.positions-container div.my-elevation {
-    /*width: 600px;*/
-    /*width: 100%;*/
-    /*width: 48vw;*/
-    /*min-width: 600px;*/
-    /*width: 48%;*/
-    /*margin: 0 0 7px 0*/
-    /*margin: 7px;*/
-}
-
 
 .positions-container section {
     display: flex;
@@ -27,27 +22,26 @@
     margin-right: 5px;
 }
 
-
-.positions-container--compact div.my-elevation {
-    margin: 2px 0 0 2px;
+.positions-container--compact li {
+    margin: 4px 0 0 4px;
     /*width: 100%;*/
     /*max-width: 48%;*/
 }
 
 @media screen and (min-width: 1600px) {
-    .positions-container--compact div.my-elevation {
+    .positions-container--compact li {
         width: calc(95% / 3);
     }
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1800px){
-    .positions-container--compact div.my-elevation {
+    .positions-container--compact li {
         width: calc(48%);
     }
 }
 
 @media screen and (max-width: 1200px) {
-    .positions-container--compact div.my-elevation {
+    .positions-container--compact li {
         width: 98%;
     }
 }

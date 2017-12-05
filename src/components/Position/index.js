@@ -4,8 +4,8 @@ import './style.css';
 // import { ActionButton } from '../ActionButton';
 import { Elevation } from '../material/Elevation';
 import { Progress } from '../material/Progress';
-
-import ReactHighstock from 'react-highcharts/ReactHighstock.src';
+import { Chart } from '../Chart';
+import { Checked, Unchecked } from '../material/Icons';
 
 import {
   getFromCache,
@@ -53,26 +53,25 @@ const ZOOM_INDEX = ZOOM.reduce(
   {}
 );
 
-const colors = {
-  // btc: '#8884d8',
-  btc: '#f7921a',
-  // usd: '#82ca9d',
-  usd: '#009833',
-};
-
 export class Position extends Component {
   state = {
     data: null,
     priceResponse: {},
+    hovered: false,
   };
+
+  onHoverChange = hovered => this.setState({ hovered });
 
   shouldComponentUpdate(nextProps, nextState) {
     const positionChanged = Object.entries(nextProps.position)
-      .map(([key, value]) => value !== this.props.position[key])
+      .map(
+        ([key, value]) => key !== 'coin' && value !== this.props.position[key]
+      )
       .some(Boolean);
     const dataChanged =
       !this.state.data || this.state.data.zoom !== nextState.data.zoom;
-    return positionChanged || dataChanged;
+    const hoverChanged = this.state.hovered !== nextState.hovered;
+    return hoverChanged || positionChanged || dataChanged;
   }
 
   async componentDidMount() {
@@ -116,128 +115,6 @@ export class Position extends Component {
       await this.fetchData();
   }
 
-  renderChart = () => {
-    const { data } = this.state;
-    if (!data) return;
-
-    const { symbol, zoom } = this.props.position;
-
-    const series = [
-      {
-        yAxis: 0,
-        name: 'Price (USD)',
-        color: colors.usd,
-        data: data.usd,
-        tooltip: {
-          valueDecimals: 2,
-        },
-      },
-    ];
-
-    const yAxis = [
-      {
-        labels: {
-          format: '${value}',
-          style: {
-            color: colors.usd,
-          },
-        },
-        title: {
-          text: 'Price (USD)',
-          style: {
-            color: colors.usd,
-          },
-        },
-        opposite: true,
-        offset: 50,
-      },
-    ];
-
-    if (data.btc) {
-      series.push({
-        yAxis: 1,
-        name: 'Price (BTC)',
-        data: data.btc,
-        color: colors.btc,
-        tooltip: {
-          valueDecimals: 6,
-        },
-      });
-
-      yAxis.push({
-        labels: {
-          format: '{value}BTC',
-          style: {
-            color: colors.btc,
-          },
-        },
-        title: {
-          text: 'Price (BTC)',
-          style: {
-            color: colors.btc,
-          },
-        },
-        opposite: true,
-      });
-    }
-
-    const rangeSelector = {
-      allButtonsEnabled: true,
-      inputEnabled: false,
-      buttons: [
-        {
-          type: 'day',
-          count: 1,
-          text: '1d',
-        },
-        {
-          type: 'day',
-          count: 7,
-          text: '7d',
-        },
-        {
-          type: 'month',
-          count: 1,
-          text: '1m',
-        },
-        {
-          type: 'month',
-          count: 3,
-          text: '3m',
-        },
-        {
-          type: 'year',
-          count: 1,
-          text: '1y',
-        },
-      ],
-    };
-
-    rangeSelector.buttons = rangeSelector.buttons.map(b => ({
-      ...b,
-      events: {
-        click: this.handleZoom(b.text),
-      },
-    }));
-
-    rangeSelector.selected = rangeSelector.buttons.findIndex(
-      b => b.text === zoom
-    );
-
-    let subtitle = `<span>$${this.state.priceResponse.USD}</span>`;
-    if (symbol !== 'BTC')
-      subtitle += `<br/><span>${this.state.priceResponse.BTC} BTC</span>`;
-
-    const config = {
-      rangeSelector,
-
-      series,
-      yAxis,
-    };
-
-    return <ReactHighstock config={config} />;
-  };
-
   handleDelete = () => this.props.deletePosition(this.props.position.__id);
 
   handleZoom = zoom => () => {
@@ -251,6 +128,7 @@ export class Position extends Component {
 
   renderHeader = () => {
     const { symbol, coin } = this.props.position;
+    const { hovered } = this.state;
 
     return (
       <section>
@@ -269,19 +147,25 @@ export class Position extends Component {
             <span>{this.state.priceResponse.BTC} BTC</span>
           )}
         </div>
+        {hovered && (
+          <span className="select-icon">
+            <Checked />
+          </span>
+        )}
       </section>
     );
   };
 
   render() {
-    const { position } = this.props;
-    console.log(position.symbol, 'rendered');
+    const { zoom, symbol } = this.props.position;
+    const { data } = this.state;
+    console.log(symbol, 'rendered');
     return (
       <Fragment>
-        <Elevation ripple={false}>
+        <Elevation ripple={false} onHoverChange={this.onHoverChange}>
           <Progress show={false} />
           {this.renderHeader()}
-          {this.renderChart()}
+          <Chart zoom={zoom} data={data} handleZoom={this.handleZoom} />
         </Elevation>
       </Fragment>
     );
