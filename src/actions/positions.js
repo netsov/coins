@@ -1,5 +1,7 @@
 export const GET_STORED_POSITIONS = 'GET_STORED_POSITIONS';
 export const STORE_POSITION = 'STORE_POSITION';
+export const TOGGLE_SELECTED = 'TOGGLE_SELECTED';
+
 
 function getPositionsFromLocalStorage() {
   const storage = window.localStorage;
@@ -43,5 +45,13 @@ export const deletePosition = positionId => {
   return {
     type: STORE_POSITION,
     positions,
+  };
+};
+
+
+export const toggleSelected = positionId => {
+  return {
+    type: TOGGLE_SELECTED,
+    positionId,
   };
 };

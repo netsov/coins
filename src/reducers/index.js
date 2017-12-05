@@ -11,6 +11,21 @@ const positions = (state = [], action) => {
   }
 };
 
+const selected = (state = [], action) => {
+  switch (action.type) {
+    case actions.TOGGLE_SELECTED:
+      const filtered = state.filter(
+        positionId => positionId !== action.positionId
+      );
+      return filtered.length === state.length
+        ? [action.positionId, ...filtered]
+        : filtered;
+    default:
+      return state;
+  }
+};
+
 export const reducers = {
   positions,
+  selected,
 };

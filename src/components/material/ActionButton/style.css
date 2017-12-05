@@ -4,10 +4,11 @@
 /*}*/
 
 .mdc-button.secondary-filled-button:not(:disabled) {
-    color: rgba(0, 0, 0, 0.87);
-    color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87));
+    /*color: rgba(0, 0, 0, 0.87);*/
+    /*color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87));*/
+    color: white;
 }
 
-.mdc-button.secondary-filled-button:not(:disabled) {
-    background-color: #64dd17;
-}
+/*.mdc-button.secondary-filled-button:not(:disabled) {*/
+    /*background-color: #64dd17;*/
+/*}*/

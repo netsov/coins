@@ -5,7 +5,6 @@ import './style.css';
 import { Elevation } from '../material/Elevation';
 import { Progress } from '../material/Progress';
 import { Chart } from '../Chart';
-import { Checked, Unchecked } from '../material/Icons';
 
 import {
   getFromCache,
@@ -57,10 +56,7 @@ export class Position extends Component {
   state = {
     data: null,
     priceResponse: {},
-    hovered: false,
   };
-
-  onHoverChange = hovered => this.setState({ hovered });
 
   shouldComponentUpdate(nextProps, nextState) {
     const positionChanged = Object.entries(nextProps.position)
@@ -70,8 +66,8 @@ export class Position extends Component {
       .some(Boolean);
     const dataChanged =
       !this.state.data || this.state.data.zoom !== nextState.data.zoom;
-    const hoverChanged = this.state.hovered !== nextState.hovered;
-    return hoverChanged || positionChanged || dataChanged;
+    const selectedChanged = this.props.selected !== nextProps.selected;
+    return selectedChanged || positionChanged || dataChanged;
   }
 
   async componentDidMount() {
@@ -127,8 +123,8 @@ export class Position extends Component {
   };
 
   renderHeader = () => {
-    const { symbol, coin } = this.props.position;
-    const { hovered } = this.state;
+    const { position } = this.props;
+    const { symbol, coin } = position;
 
     return (
       <section>
@@ -147,22 +143,25 @@ export class Position extends Component {
             <span>{this.state.priceResponse.BTC} BTC</span>
           )}
         </div>
-        {hovered && (
-          <span className="select-icon">
-            <Checked />
-          </span>
-        )}
       </section>
     );
   };
 
   render() {
-    const { zoom, symbol } = this.props.position;
+    const {
+      position: { zoom, symbol, __id },
+      selected,
+      toggleSelected,
+    } = this.props;
     const { data } = this.state;
     console.log(symbol, 'rendered');
     return (
       <Fragment>
-        <Elevation ripple={false} onHoverChange={this.onHoverChange}>
+        <Elevation
+          checked={selected.find(positionId => positionId === __id)}
+          toggleSelected={() => toggleSelected(__id)}
+          unchecked={selected.length > 0}
+        >
           <Progress show={false} />
           {this.renderHeader()}
           <Chart zoom={zoom} data={data} handleZoom={this.handleZoom} />

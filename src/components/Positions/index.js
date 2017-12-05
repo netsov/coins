@@ -12,7 +12,7 @@ export class Positions extends Component {
   }
 
   render() {
-    const { positions, deletePosition, savePosition } = this.props;
+    const { positions, deletePosition, savePosition, selected, toggleSelected } = this.props;
     return (
       <Fragment>
         <ul
@@ -25,8 +25,10 @@ export class Positions extends Component {
             <li key={position.__id}>
               <Position
                 position={position}
+                selected={selected}
                 deletePosition={deletePosition}
                 savePosition={savePosition}
+                toggleSelected={toggleSelected}
               />
             </li>
           ))}
