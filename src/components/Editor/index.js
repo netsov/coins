@@ -16,12 +16,24 @@ export class Editor extends Component {
   state = {
     coinList: [],
     toSymbols: [],
-    symbol: '',
-    tradePrice: '',
-    tradeDate: '',
-    currency: '',
-    quantity: '',
+    position: {
+      symbol: '',
+      tradePrice: '',
+      tradeDate: '',
+      currency: '',
+      quantity: '',
+      zoom: '1d',
+      coin: {},
+    },
   };
+
+  constructor(ctx, props) {
+    super(ctx);
+
+    if (props.position && props.position.__id) {
+      this.state.position = props.position;
+    }
+  }
 
   async componentDidMount() {
     const response = await getFromCache(COIN_LIST);
@@ -33,54 +45,49 @@ export class Editor extends Component {
   }
 
   async componentWillUpdate(nextProps, nextState) {
-    if (nextState.symbol !== this.state.symbol && nextState.symbol) {
-      const response = await getFromCache(TRADING_PAIRS(nextState.symbol));
+    const { position } = this.state;
+    const nextPosition = nextState.position;
+    if (nextPosition.symbol !== position.symbol && nextPosition.symbol) {
+      const response = await getFromCache(TRADING_PAIRS(nextPosition.symbol));
       const toSymbols = response.Data.map(pair => pair.toSymbol);
       this.setState({
-        currency: '',
-        toSymbols: toSymbols,
+        position: {
+          ...nextPosition,
+          currency: '',
+          toSymbols: toSymbols,
+        },
       });
     }
 
     if (
-      nextState.currency !== this.state.currency &&
-      nextState.currency &&
-      this.state.toSymbols.indexOf(nextState.currency) !== -1
+      nextPosition.currency !== position.currency &&
+      nextPosition.currency &&
+      this.state.toSymbols.indexOf(nextPosition.currency) !== -1
     ) {
       const response = await getFromCache(
-        COIN_PRICE(nextState.symbol, nextState.currency)
+        COIN_PRICE(nextPosition.symbol, nextPosition.currency)
       );
-      const tradePrice = response[nextState.currency];
+      const tradePrice = response[nextPosition.currency];
       if (tradePrice)
         this.setState({
-          tradePrice,
+          position: { ...nextPosition, tradePrice },
         });
     }
   }
 
   handleChange = field => value => {
-    this.setState({ [field]: value });
+    this.setState({ position: { ...this.state.position, [field]: value } });
   };
 
   handleSave = () => {
-    const {
-      symbol,
-      tradeDate,
-      tradePrice,
-      currency,
-      quantity,
-      coinList,
-    } = this.state;
+    const { position, coinList } = this.state;
+
+    if (!position.symbol) return;
 
     const newPosition = {
-      __id: new Date().valueOf(),
-      symbol,
-      tradePrice,
-      tradeDate,
-      currency,
-      quantity,
-      zoom: '1d',
-      coin: coinList.find(c => c.Name === symbol),
+      ...position,
+      __id: position.__id || new Date().valueOf(),
+      coin: coinList.find(c => c.Name === position.symbol),
     };
 
     this.props.savePosition(newPosition);
@@ -161,25 +168,22 @@ export class Editor extends Component {
     );
   };
 
+  renderButtons = () => (
+    <Fragment>
+      <ActionButton handleClick={this.props.closeEditor}>Cancel</ActionButton>
+      <ActionButton
+        handleClick={this.handleSave}
+        raised={true}
+        secondary={true}
+      >
+        Save
+      </ActionButton>
+    </Fragment>
+  );
+
   render() {
     return (
-      <Dialog
-        open={this.props.position}
-        buttons={
-          <Fragment>
-            <ActionButton handleClick={this.props.closeEditor}>
-              Cancel
-            </ActionButton>
-            <ActionButton
-              handleClick={this.handleSave}
-              raised={true}
-              secondary={true}
-            >
-              Save
-            </ActionButton>
-          </Fragment>
-        }
-      >
+      <Dialog open={this.props.position} buttons={this.renderButtons()}>
         {this.renderForm()}
       </Dialog>
     );
