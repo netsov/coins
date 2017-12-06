@@ -12,17 +12,12 @@ export class Positions extends Component {
   }
 
   render() {
-    const {
-      positions,
-      deletePosition,
-      savePosition,
-      selected,
-      toggleSelected,
-    } = this.props;
+    const { positions, savePosition, selected, toggleSelected } = this.props;
+    console.log('Positions rendered');
     return (
       <Fragment>
         <ul
-          className={classNames({
+          className={classNames('mdc-toolbar-fixed-adjust', {
             'positions-container': true,
             'positions-container--compact': true,
           })}
@@ -32,7 +27,6 @@ export class Positions extends Component {
               <Position
                 position={position}
                 selected={selected}
-                deletePosition={deletePosition}
                 savePosition={savePosition}
                 toggleSelected={toggleSelected}
               />

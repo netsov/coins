@@ -27,13 +27,10 @@ export class Editor extends Component {
     },
   };
 
-  constructor(ctx, props) {
-    super(ctx);
-
-    if (props.position && props.position.__id) {
-      this.state.position = props.position;
-    }
-  }
+  // componentWillMount() {
+  //   console.log('??', this.props.position);
+  //   if (this.props.position) this.setState({ position: this.props.position });
+  // }
 
   async componentDidMount() {
     const response = await getFromCache(COIN_LIST);
@@ -94,6 +91,13 @@ export class Editor extends Component {
   };
 
   renderForm = () => {
+    const {
+      symbol,
+      quantity,
+      currency,
+      tradeDate,
+      tradePrice,
+    } = this.state.position;
     return (
       <form>
         <fieldset>
@@ -108,7 +112,7 @@ export class Editor extends Component {
             list="coinList"
             required={true}
             name="Symbol"
-            initialValue={this.state.symbol}
+            initialValue={symbol}
             handleChange={this.handleChange('symbol')}
             placeholder="e.g. BTC, ETH, LTC"
           />
@@ -119,7 +123,7 @@ export class Editor extends Component {
             type="number"
             step={0.00000001}
             min={0}
-            initialValue={this.state.quantity}
+            initialValue={quantity}
             handleChange={this.handleChange('quantity')}
             name="Quantity"
             placeholder="e.g. 0.001"
@@ -137,7 +141,7 @@ export class Editor extends Component {
           <InputField
             list="toSymbols"
             required={true}
-            initialValue={this.state.currency}
+            initialValue={currency}
             handleChange={this.handleChange('currency')}
             name="Currency"
             placeholder="e.g. USD, BTC"
@@ -150,7 +154,7 @@ export class Editor extends Component {
             step={0.00000001}
             min={0}
             name="Trade Price"
-            initialValue={this.state.tradePrice}
+            initialValue={tradePrice}
             handleChange={this.handleChange('tradePrice')}
             placeholder="Trade Price"
             rtl={false}
@@ -159,7 +163,7 @@ export class Editor extends Component {
         <fieldset>
           <InputField
             type="date"
-            initialValue={this.state.tradeDate}
+            initialValue={tradeDate}
             handleChange={this.handleChange('tradeDate')}
             name="Trade Date"
           />

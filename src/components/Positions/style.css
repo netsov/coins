@@ -4,6 +4,10 @@ ul, li {
     padding: 0;
 }
 
+ul {
+    /*margin-top: 64px; !* toolbar offset *!*/
+}
+
 .positions-container {
     display: flex;
     flex-wrap: wrap;

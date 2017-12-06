@@ -120,8 +120,6 @@ export class Position extends Component {
       await this.fetchData();
   }
 
-  handleDelete = () => this.props.deletePosition(this.props.position.__id);
-
   handleZoom = zoom => () => {
     // https://github.com/highcharts/highcharts/issues/2775
     setTimeout(
@@ -148,9 +146,9 @@ export class Position extends Component {
         </div>
         <div className="prices-container">
           <span>${this.state.priceResponse.USD}</span>
-          {symbol === 'BTC' ? null : (
+          {this.state.priceResponse.BTC ? (
             <span>{this.state.priceResponse.BTC} BTC</span>
-          )}
+          ) : null}
         </div>
       </section>
     );

@@ -1,6 +1,8 @@
 export const GET_STORED_POSITIONS = 'GET_STORED_POSITIONS';
 export const STORE_POSITION = 'STORE_POSITION';
+export const DELETE_POSITIONS = 'DELETE_POSITIONS';
 export const TOGGLE_SELECTED = 'TOGGLE_SELECTED';
+export const CLEAR_SELECTED = 'CLEAR_SELECTED';
 export const OPEN_EDITOR = 'OPEN_EDITOR';
 export const CLOSE_EDITOR = 'CLOSE_EDITOR';
 
@@ -38,13 +40,14 @@ export const savePosition = position => {
   };
 };
 
-export const deletePosition = positionId => {
+export const deletePosition = positionIds => {
+  positionIds = Array.isArray(positionIds) ? positionIds : [positionIds];
   let positions = getPositionsFromLocalStorage();
-  positions = positions.filter(p => p.__id !== positionId);
+  positions = positions.filter(p => !positionIds.includes(p.__id));
   savePositionsToLocalStorage(positions);
 
   return {
-    type: STORE_POSITION,
+    type: DELETE_POSITIONS,
     positions,
   };
 };
@@ -53,6 +56,12 @@ export const toggleSelected = positionId => {
   return {
     type: TOGGLE_SELECTED,
     positionId,
+  };
+};
+
+export const clearSelected = () => {
+  return {
+    type: CLEAR_SELECTED,
   };
 };
 

@@ -10,6 +10,7 @@
     "@material/fab": "^0.26.0",
     "@material/linear-progress": "^0.25.0",
     "@material/textfield": "^0.26.0",
+    "@material/toolbar": "^0.25.0",
     "chart.js": "^2.7.1",
     "classnames": "^2.2.5",
     "moment": "^2.19.3",

@@ -2,6 +2,7 @@ import * as actions from '../actions';
 
 const positions = (state = [], action) => {
   switch (action.type) {
+    case actions.DELETE_POSITIONS:
     case actions.GET_STORED_POSITIONS:
       return action.positions;
     case actions.STORE_POSITION:
@@ -13,6 +14,10 @@ const positions = (state = [], action) => {
 
 const selected = (state = [], action) => {
   switch (action.type) {
+    case actions.DELETE_POSITIONS:
+    case actions.OPEN_EDITOR:
+    case actions.CLEAR_SELECTED:
+      return [];
     case actions.TOGGLE_SELECTED:
       const filtered = state.filter(
         positionId => positionId !== action.positionId

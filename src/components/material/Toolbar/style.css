@@ -1,0 +1,19 @@
+/*header.mdc-toolbar {*/
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*z-index: 2;*/
+/*}*/
+
+header.mdc-toolbar:not(.toolbar--edit) {
+    /*color: var(--custom-grey);*/
+    background-color: white;
+}
+
+.toolbar--edit svg {
+    fill: white;
+}
+
+.toolbar--edit {
+    color: white;
+}
