@@ -52,22 +52,29 @@ const ZOOM_INDEX = ZOOM.reduce(
   {}
 );
 
+function stringPropertiesCompare(obj1, obj2) {
+  return Object.entries(obj2)
+    .map(([key, value]) => typeof key === 'string' && value === obj1[key])
+    .every(Boolean);
+}
+
 export class Position extends Component {
   state = {
     data: null,
     priceResponse: {},
+    loading: false,
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const positionChanged = Object.entries(nextProps.position)
-      .map(
-        ([key, value]) => key !== 'coin' && value !== this.props.position[key]
-      )
-      .some(Boolean);
+    const positionChanged = !stringPropertiesCompare(
+      this.props.position,
+      nextProps.position
+    );
     const dataChanged =
       !this.state.data || this.state.data.zoom !== nextState.data.zoom;
     const selectedChanged = this.props.selected !== nextProps.selected;
-    return selectedChanged || positionChanged || dataChanged;
+    const loadingChanged = this.state.loading !== nextState.loading;
+    return loadingChanged || selectedChanged || positionChanged || dataChanged;
   }
 
   async componentDidMount() {
@@ -89,6 +96,8 @@ export class Position extends Component {
     const zoomMeta = ZOOM_INDEX[position.zoom];
     if (!zoomMeta) return;
 
+    this.setState({ loading: true });
+
     const responseUSD = await getFromCache(
       zoomMeta.url(position.symbol, 'USD', zoomMeta.limit)
     );
@@ -103,7 +112,7 @@ export class Position extends Component {
       data.btc = responseBTC.Data.map(item => [item.time * 1000, item.close]);
     }
 
-    this.setState({ data });
+    this.setState({ data, loading: false });
   }
 
   async componentDidUpdate(prevProps) {
@@ -153,7 +162,7 @@ export class Position extends Component {
       selected,
       toggleSelected,
     } = this.props;
-    const { data } = this.state;
+    const { data, loading } = this.state;
     console.log(symbol, 'rendered');
     return (
       <Fragment>
@@ -162,7 +171,7 @@ export class Position extends Component {
           toggleSelected={() => toggleSelected(__id)}
           unchecked={selected.length > 0}
         >
-          <Progress show={false} />
+          <Progress show={loading} />
           {this.renderHeader()}
           <Chart zoom={zoom} data={data} handleZoom={this.handleZoom} />
         </Elevation>

@@ -182,8 +182,9 @@ export class Editor extends Component {
   );
 
   render() {
+    if (!this.props.position) return null;
     return (
-      <Dialog open={this.props.position} buttons={this.renderButtons()}>
+      <Dialog open={true} buttons={this.renderButtons()}>
         {this.renderForm()}
       </Dialog>
     );
