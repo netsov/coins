@@ -1,7 +1,8 @@
 export const GET_STORED_POSITIONS = 'GET_STORED_POSITIONS';
 export const STORE_POSITION = 'STORE_POSITION';
 export const TOGGLE_SELECTED = 'TOGGLE_SELECTED';
-
+export const OPEN_EDITOR = 'OPEN_EDITOR';
+export const CLOSE_EDITOR = 'CLOSE_EDITOR';
 
 function getPositionsFromLocalStorage() {
   const storage = window.localStorage;
@@ -48,10 +49,25 @@ export const deletePosition = positionId => {
   };
 };
 
-
 export const toggleSelected = positionId => {
   return {
     type: TOGGLE_SELECTED,
     positionId,
+  };
+};
+
+export const openEditor = positionId => {
+  const position = positionId
+    ? getPositionsFromLocalStorage().find(p => p.__id === positionId)
+    : {};
+  return {
+    type: OPEN_EDITOR,
+    position,
+  };
+};
+
+export const closeEditor = () => {
+  return {
+    type: CLOSE_EDITOR,
   };
 };

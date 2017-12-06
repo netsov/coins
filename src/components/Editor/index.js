@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './style.css';
 
 import { ActionButton } from '../material/ActionButton';
 import { InputField } from '../material/InputField';
-import { Card } from '../material/Card';
+import { Dialog } from '../material/Dialog';
 
 import {
   getFromCache,
@@ -62,8 +62,6 @@ export class Editor extends Component {
     this.setState({ [field]: value });
   };
 
-  handleCancel = () => {};
-
   handleSave = () => {
     const {
       symbol,
@@ -88,89 +86,90 @@ export class Editor extends Component {
     this.props.savePosition(newPosition);
   };
 
+  renderForm = () => {
+    return (
+      <form>
+        <fieldset>
+          <datalist id="coinList">
+            {this.state.coinList.map(coin => (
+              <option key={coin.Name} value={coin.Name}>
+                {coin.FullName}
+              </option>
+            ))}
+          </datalist>
+          <InputField
+            list="coinList"
+            required={true}
+            name="Symbol"
+            initialValue={this.state.symbol}
+            handleChange={this.handleChange('symbol')}
+            placeholder="e.g. BTC, ETH, LTC"
+          />
+        </fieldset>
+        <fieldset>
+          <InputField
+            required={true}
+            type="number"
+            step={0.00000001}
+            min={0}
+            initialValue={this.state.quantity}
+            handleChange={this.handleChange('quantity')}
+            name="Quantity"
+            placeholder="e.g. 0.001"
+            rtl={false}
+          />
+        </fieldset>
+        <fieldset>
+          <datalist id="toSymbols">
+            {this.state.toSymbols.map(toSymbol => (
+              <option key={toSymbol} value={toSymbol}>
+                {toSymbol}
+              </option>
+            ))}
+          </datalist>
+          <InputField
+            list="toSymbols"
+            required={true}
+            initialValue={this.state.currency}
+            handleChange={this.handleChange('currency')}
+            name="Currency"
+            placeholder="e.g. USD, BTC"
+          />
+        </fieldset>
+        <fieldset>
+          <InputField
+            required={true}
+            type="number"
+            step={0.00000001}
+            min={0}
+            name="Trade Price"
+            initialValue={this.state.tradePrice}
+            handleChange={this.handleChange('tradePrice')}
+            placeholder="Trade Price"
+            rtl={false}
+          />
+        </fieldset>
+        <fieldset>
+          <InputField
+            type="date"
+            initialValue={this.state.tradeDate}
+            handleChange={this.handleChange('tradeDate')}
+            name="Trade Date"
+          />
+        </fieldset>
+      </form>
+    );
+  };
+
   render() {
     return (
-      <Card
-        header={
-          <section className="card-header right">
-            <h1>??</h1>
-            <h1>0.00%</h1>
-          </section>
-        }
-      >
-        <div className="CardContent">
-          <div className="row">
-            <datalist id="coinList">
-              {this.state.coinList.map(coin => (
-                <option key={coin.Name} value={coin.Name}>
-                  {coin.FullName}
-                </option>
-              ))}
-            </datalist>
-            <InputField
-              list="coinList"
-              required={true}
-              name="Symbol"
-              initialValue={this.state.symbol}
-              handleChange={this.handleChange('symbol')}
-              placeholder="e.g. BTC, ETH, LTC"
-            />
-          </div>
-          <div className="row">
-            <InputField
-              required={true}
-              type="number"
-              step={0.00000001}
-              min={0}
-              initialValue={this.state.quantity}
-              handleChange={this.handleChange('quantity')}
-              name="Quantity"
-              placeholder="e.g. 0.001"
-              rtl={false}
-            />
-          </div>
-          <div className="row">
-            <datalist id="toSymbols">
-              {this.state.toSymbols.map(toSymbol => (
-                <option key={toSymbol} value={toSymbol}>
-                  {toSymbol}
-                </option>
-              ))}
-            </datalist>
-            <InputField
-              list="toSymbols"
-              required={true}
-              initialValue={this.state.currency}
-              handleChange={this.handleChange('currency')}
-              name="Currency"
-              placeholder="e.g. USD, BTC"
-            />
-          </div>
-          <div className="row" />
-          <div className="row">
-            <InputField
-              required={true}
-              type="number"
-              step={0.00000001}
-              min={0}
-              name="Trade Price"
-              initialValue={this.state.tradePrice}
-              handleChange={this.handleChange('tradePrice')}
-              placeholder="Trade Price"
-              rtl={false}
-            />
-          </div>
-          <div className="row">
-            <InputField
-              type="date"
-              initialValue={this.state.tradeDate}
-              handleChange={this.handleChange('tradeDate')}
-              name="Trade Date"
-            />
-          </div>
-
-          <div className="row right">
-            <ActionButton handleClick={this.handleCancel}>Cancel</ActionButton>
+      <Dialog
+        open={this.props.position}
+        buttons={
+          <Fragment>
+            <ActionButton handleClick={this.props.closeEditor}>
+              Cancel
+            </ActionButton>
             <ActionButton
               handleClick={this.handleSave}
               raised={true}
@@ -178,9 +177,11 @@ export class Editor extends Component {
             >
               Save
             </ActionButton>
-          </div>
-        </div>
-      </Card>
+          </Fragment>
+        }
+      >
+        {this.renderForm()}
+      </Dialog>
     );
   }
 }

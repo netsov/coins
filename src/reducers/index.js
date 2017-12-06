@@ -25,7 +25,20 @@ const selected = (state = [], action) => {
   }
 };
 
+const position = (state = null, action) => {
+  switch (action.type) {
+    case actions.OPEN_EDITOR:
+      return action.position;
+    case actions.CLOSE_EDITOR:
+    case actions.STORE_POSITION:
+      return null;
+    default:
+      return state;
+  }
+};
+
 export const reducers = {
   positions,
+  position,
   selected,
 };

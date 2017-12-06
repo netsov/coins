@@ -12,7 +12,13 @@ export class Positions extends Component {
   }
 
   render() {
-    const { positions, deletePosition, savePosition, selected, toggleSelected } = this.props;
+    const {
+      positions,
+      deletePosition,
+      savePosition,
+      selected,
+      toggleSelected,
+    } = this.props;
     return (
       <Fragment>
         <ul
@@ -33,7 +39,7 @@ export class Positions extends Component {
             </li>
           ))}
         </ul>
-        <FAB>
+        <FAB handleClick={() => this.props.openEditor()}>
           <Add />
         </FAB>
       </Fragment>

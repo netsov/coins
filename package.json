@@ -5,6 +5,7 @@
   "dependencies": {
     "@material/button": "^0.26.0",
     "@material/card": "^0.25.0",
+    "@material/dialog": "^0.26.0",
     "@material/elevation": "^0.25.0",
     "@material/fab": "^0.26.0",
     "@material/linear-progress": "^0.25.0",
@@ -28,7 +29,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.2",
+    "babel-eslint": "^8.0.3",
     "eslint": "^4.12.1",
     "eslint-config-react-app": "^2.0.1",
     "eslint-plugin-flowtype": "^2.39.1",
