@@ -16,21 +16,12 @@ export class Editor extends Component {
   state = {
     coinList: [],
     toSymbols: [],
-    position: {
-      symbol: '',
-      tradePrice: '',
-      tradeDate: '',
-      currency: '',
-      quantity: '',
-      zoom: '1d',
-      coin: {},
-    },
+    position: null,
   };
 
-  // componentWillMount() {
-  //   console.log('??', this.props.position);
-  //   if (this.props.position) this.setState({ position: this.props.position });
-  // }
+  componentWillMount() {
+    this.setState({ position: this.props.position });
+  }
 
   async componentDidMount() {
     const response = await getFromCache(COIN_LIST);
@@ -78,7 +69,6 @@ export class Editor extends Component {
 
   handleSave = () => {
     const { position, coinList } = this.state;
-
     if (!position.symbol) return;
 
     const newPosition = {
@@ -92,6 +82,7 @@ export class Editor extends Component {
 
   renderForm = () => {
     const {
+      __id,
       symbol,
       quantity,
       currency,
@@ -115,6 +106,7 @@ export class Editor extends Component {
             initialValue={symbol}
             handleChange={this.handleChange('symbol')}
             placeholder="e.g. BTC, ETH, LTC"
+            disabled={!!__id}
           />
         </fieldset>
         <fieldset>
@@ -186,9 +178,12 @@ export class Editor extends Component {
   );
 
   render() {
-    if (!this.props.position) return null;
     return (
-      <Dialog open={true} buttons={this.renderButtons()}>
+      <Dialog
+        open={true}
+        edit={!!this.props.position.__id}
+        buttons={this.renderButtons()}
+      >
         {this.renderForm()}
       </Dialog>
     );

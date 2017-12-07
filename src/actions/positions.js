@@ -65,10 +65,21 @@ export const clearSelected = () => {
   };
 };
 
+const defaultPosition = {
+  __id: null,
+  symbol: '',
+  tradePrice: '',
+  tradeDate: '',
+  currency: '',
+  quantity: '',
+  zoom: '1d',
+  coin: {},
+};
+
 export const openEditor = positionId => {
   const position = positionId
     ? getPositionsFromLocalStorage().find(p => p.__id === positionId)
-    : {};
+    : defaultPosition;
   return {
     type: OPEN_EDITOR,
     position,
