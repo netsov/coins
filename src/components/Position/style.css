@@ -19,7 +19,7 @@ div.my-elevation section {
 .prices-container {
     display: flex;
     align-items: center;
-    padding-top: 3px;
+    /*padding-top: 3px;*/
 }
 
 small {

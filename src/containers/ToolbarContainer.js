@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { Toolbar } from '../components/material/Toolbar';
+import { Toolbar } from '../components/Toolbar';
 import { deletePosition, clearSelected, openEditor } from '../actions';
 
 const mapStateToProps = state => {

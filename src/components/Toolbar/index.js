@@ -1,0 +1,64 @@
+import React, { Fragment } from 'react';
+
+import classNames from 'classnames';
+import { Close, Delete, Edit } from '../material/Icons/index';
+
+import './style.css';
+import '@material/toolbar/dist/mdc.toolbar.css';
+
+const Icon = ({ children, handleClick }) => {
+  return (
+    <a href="#" className="mdc-toolbar__menu-icon" onClick={handleClick}>
+      {children}
+    </a>
+  );
+};
+
+export const Toolbar = ({
+  header,
+  selected,
+  clearSelected,
+  deletePosition,
+  openEditor,
+  total,
+}) => {
+  const edit = selected.length > 0;
+  return (
+    <header
+      className={classNames('mdc-toolbar', 'mdc-toolbar--fixed', {
+        'toolbar--edit': edit,
+      })}
+    >
+      <div className="mdc-toolbar__row">
+        {edit ? null : (
+          <section className="total">
+            <h3>Total:</h3>
+          </section>
+        )}
+
+        {edit ? (
+          <Fragment>
+            <section className="mdc-toolbar__section mdc-toolbar__section--align-start">
+              <Icon handleClick={clearSelected}>
+                <Close />
+              </Icon>
+              <span className="mdc-toolbar__title">
+                {edit ? `${selected.length} Selected` : null}
+              </span>
+            </section>
+            <section className="mdc-toolbar__section mdc-toolbar__section--align-end">
+              {selected.length === 1 ? (
+                <Icon handleClick={() => openEditor(...selected)}>
+                  <Edit />
+                </Icon>
+              ) : null}
+              <Icon handleClick={() => deletePosition(selected)}>
+                <Delete />
+              </Icon>
+            </section>
+          </Fragment>
+        ) : null}
+      </div>
+    </header>
+  );
+};

@@ -74,6 +74,7 @@ const defaultPosition = {
   quantity: '',
   zoom: '1d',
   coin: {},
+  price: {}
 };
 
 export const openEditor = positionId => {
