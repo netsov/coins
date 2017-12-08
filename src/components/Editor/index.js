@@ -69,7 +69,7 @@ export class Editor extends Component {
 
   handleSave = () => {
     const { position, coinList } = this.state;
-    if (!position.symbol) return;
+    if (!position.symbol || !position.quantity) return;
 
     const newPosition = {
       ...position,

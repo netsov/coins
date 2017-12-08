@@ -3,7 +3,6 @@ div.my-elevation {
 
 div.my-elevation section {
     display: flex;
-    /*flex-direction: column;*/
     color: #333333;
 }
 
@@ -13,14 +12,36 @@ div.my-elevation section {
     margin-bottom: 10px;
 }
 
-.symbol-container span {
-    margin-left: 10px;
-    font-size: 22px;
+.coin-name {
+    font-size: 18px;
 }
 
 .prices-container {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    padding-top: 3px;
+}
+
+small {
+    color: var(--custom-grey)
+}
+
+.holdings-container {
+    display: flex;
     flex: 1;
     align-items: center;
+    justify-content: center;
+
+}
+
+.usd-price {
+}
+
+.btc-price {
+}
+
+.separator {
+    height: 1.5em;
+    margin: 0 6px;
+    border-right: 1px solid lightgray;
 }

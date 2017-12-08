@@ -34,11 +34,7 @@ export const Toolbar = ({
             <Icon handleClick={clearSelected}>
               <Close />
             </Icon>
-          ) : (
-            <Icon>
-              <Menu />
-            </Icon>
-          )}
+          ) : null}
           <span className="mdc-toolbar__title">
             {edit ? `${selected.length} Selected` : null}
           </span>

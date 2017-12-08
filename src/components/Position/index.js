@@ -58,6 +58,8 @@ function stringPropertiesCompare(obj1, obj2) {
     .every(Boolean);
 }
 
+const Separator = () => <div className="separator" />;
+
 export class Position extends Component {
   state = {
     data: null,
@@ -131,23 +133,38 @@ export class Position extends Component {
 
   renderHeader = () => {
     const { position } = this.props;
-    const { symbol, coin } = position;
+    const { coin, quantity, symbol } = position;
+    const { USD, BTC } = this.state.priceResponse;
 
     return (
       <section>
         <div className="symbol-container">
-          <img
-            src={COIN_IMG_URL(coin.ImageUrl)}
-            height="32"
-            width="32"
-            alt=""
-          />
-          <span>{coin.FullName}</span>
+          <img src={COIN_IMG_URL(coin.ImageUrl)} height="32" width="32" />
+          &nbsp;
+          <span className="coin-name">{coin.FullName}</span>
+          &nbsp; &nbsp;
+          <div className="prices-container">
+            <span className="usd-price">${USD}</span>
+            {symbol !== 'BTC' ? (
+              <Fragment>
+                <Separator />
+                <span className="btc-price">${BTC}</span>
+              </Fragment>
+            ) : null}
+          </div>
         </div>
-        <div className="prices-container">
-          <span>${this.state.priceResponse.USD}</span>
-          {this.state.priceResponse.BTC ? (
-            <span>{this.state.priceResponse.BTC} BTC</span>
+        <div className="holdings-container">
+          <span>
+            {quantity}&nbsp;
+            {symbol}
+          </span>
+          <Separator />
+          <span>${quantity * USD}</span>
+          {symbol !== 'BTC' ? (
+            <Fragment>
+              <Separator />
+              <span>{(quantity * BTC).toFixed(8)}&nbsp;BTC</span>
+            </Fragment>
           ) : null}
         </div>
       </section>
