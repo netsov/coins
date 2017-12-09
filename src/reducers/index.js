@@ -1,5 +1,4 @@
 import * as actions from '../actions';
-import { defaultSettings } from '../models';
 
 const positions = (state = [], action) => {
   switch (action.type) {
@@ -61,10 +60,12 @@ const showSettings = (state = false, action) => {
   }
 };
 
-const settings = (state = defaultSettings, action) => {
+const settings = (state = {}, action) => {
   switch (action.type) {
+    case actions.GET_SETTINGS:
+      return action.settings;
     case actions.UPDATE_SETTINGS:
-      return {...state, [action.key]: action.value};
+      return { ...state, [action.key]: action.value };
     default:
       return state;
   }

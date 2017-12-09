@@ -22,6 +22,7 @@ const SelectAll = ({ toggleSelectAll, fulfilled }) => {
 
 export class Positions extends Component {
   async componentDidMount() {
+    this.props.getSettings();
     this.props.getPositions();
   }
 

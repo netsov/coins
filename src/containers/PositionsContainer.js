@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import {Positions} from '../components/Positions';
-import { getPositions, updatePosition, toggleSelected, toggleSelectAll, openEditor } from '../actions';
+import { getPositions, updatePosition, toggleSelected, toggleSelectAll, openEditor, getSettings } from '../actions';
 
 const mapStateToProps = state => {
   return {
@@ -16,5 +16,6 @@ export const PositionsContainer = connect(mapStateToProps, {
   updatePosition,
   toggleSelected,
   toggleSelectAll,
-  openEditor
+  openEditor,
+  getSettings
 })(Positions);
