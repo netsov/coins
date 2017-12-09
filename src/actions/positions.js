@@ -46,8 +46,24 @@ export const deletePosition = positionIds => {
 export const toggleSelected = positionId => {
   return {
     type: TOGGLE_SELECTED,
-    positionId,
+    positionIds: [positionId],
   };
+};
+
+export const toggleSelectAll = () => (dispatch, getState) => {
+  const { positions, selected } = getState();
+  if (selected.length === positions.length) {
+    dispatch({
+      type: CLEAR_SELECTED,
+    });
+  } else {
+    dispatch({
+      type: TOGGLE_SELECTED,
+      positionIds: positions
+        .filter(p => !selected.includes(p.__id))
+        .map(p => p.__id),
+    });
+  }
 };
 
 export const clearSelected = () => {

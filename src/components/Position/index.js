@@ -10,6 +10,7 @@ import {
   getFromCache,
   HYSTO_DAY,
   HYSTO_HOUR,
+  HYSTO_MINUTE,
   COIN_PRICE,
   COIN_IMG_URL,
 } from '../../utils';
@@ -17,9 +18,9 @@ import {
 const ZOOM = [
   {
     name: '1d',
-    url: HYSTO_HOUR,
+    url: HYSTO_MINUTE,
     format: 'HH:mm',
-    limit: 24,
+    limit: 60 * 24,
   },
   {
     name: '7d',
@@ -29,9 +30,9 @@ const ZOOM = [
   },
   {
     name: '1m',
-    url: HYSTO_DAY,
+    url: HYSTO_HOUR,
     format: 'MMM D',
-    limit: 30,
+    limit: 30 * 24,
   },
   {
     name: '3m',
@@ -54,7 +55,12 @@ const ZOOM_INDEX = ZOOM.reduce(
 
 function isEqual(obj1, obj2) {
   return Object.entries(obj2)
-    .map(([key, value]) => typeof key === 'string' ? value === obj1[key] : isEqual(value, obj1[key]))
+    .map(
+      ([key, value]) =>
+        typeof key === 'string'
+          ? value === obj1[key]
+          : isEqual(value, obj1[key])
+    )
     .every(Boolean);
 }
 
@@ -67,10 +73,7 @@ export class Position extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const positionChanged = !isEqual(
-      this.props.position,
-      nextProps.position
-    );
+    const positionChanged = !isEqual(this.props.position, nextProps.position);
     const dataChanged =
       !this.state.data || this.state.data.zoom !== nextState.data.zoom;
     const selectedChanged = this.props.selected !== nextProps.selected;
@@ -87,7 +90,7 @@ export class Position extends Component {
     const prices = await getFromCache(
       COIN_PRICE(this.props.position.symbol, 'USD,BTC')
     );
-    this.props.updatePosition({...this.props.position, prices})
+    this.props.updatePosition({ ...this.props.position, prices });
   }
 
   async fetchData() {
@@ -129,7 +132,12 @@ export class Position extends Component {
   };
 
   renderHeader = () => {
-    const { coin, quantity, symbol, prices: { USD, BTC }} = this.props.position;
+    const {
+      coin,
+      quantity,
+      symbol,
+      prices: { USD, BTC },
+    } = this.props.position;
 
     return (
       <section>

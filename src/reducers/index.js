@@ -23,12 +23,14 @@ const selected = (state = [], action) => {
     case actions.OPEN_EDITOR:
     case actions.CLEAR_SELECTED:
       return [];
+    // case actions.SELECT_ALL:
+    //   return state.length ===
     case actions.TOGGLE_SELECTED:
       const filtered = state.filter(
-        positionId => positionId !== action.positionId
+        positionId => !action.positionIds.includes(positionId)
       );
       return filtered.length === state.length
-        ? [action.positionId, ...filtered]
+        ? [...action.positionIds, ...filtered]
         : filtered;
     default:
       return state;

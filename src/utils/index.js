@@ -19,6 +19,11 @@ export async function getFromCache(url) {
   return response;
 }
 
+export const HYSTO_MINUTE = (fsym, tsym, limit) =>
+  `https://min-api.cryptocompare.com/data/histominute?fsym=${fsym}&tsym=${
+    tsym
+    }&limit=${limit}`;
+
 export const HYSTO_HOUR = (fsym, tsym, limit) =>
   `https://min-api.cryptocompare.com/data/histohour?fsym=${fsym}&tsym=${
     tsym

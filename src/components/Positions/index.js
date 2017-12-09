@@ -1,10 +1,20 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import './style.css';
 import { Position } from '../Position';
-import { Add } from '../material/Icons';
+import { Add, Checked } from '../material/Icons';
 import { FAB } from '../material/FAB';
+
+const SelectAll = ({ toggleSelectAll, fulfilled }) => {
+  return (
+    <div className={classNames("select-all", {"select-all--fulfilled": fulfilled})}>
+      <span className="select-all-icon" onClick={toggleSelectAll}>
+        <Checked />
+      </span>
+    </div>
+  );
+};
 
 export class Positions extends Component {
   async componentDidMount() {
@@ -12,12 +22,24 @@ export class Positions extends Component {
   }
 
   render() {
-    const { positions, updatePosition, selected, toggleSelected } = this.props;
+    const {
+      positions,
+      updatePosition,
+      selected,
+      toggleSelected,
+      toggleSelectAll,
+    } = this.props;
     console.log('Positions rendered');
     return (
-      <Fragment>
+      <main className="mdc-toolbar-fixed-adjust">
+        {selected.length > 0 ? (
+          <SelectAll
+            toggleSelectAll={toggleSelectAll}
+            fulfilled={positions.length === selected.length}
+          />
+        ) : null}
         <ul
-          className={classNames('mdc-toolbar-fixed-adjust', {
+          className={classNames({
             'positions-container': true,
             'positions-container--compact': true,
           })}
@@ -36,7 +58,7 @@ export class Positions extends Component {
         <FAB handleClick={() => this.props.openEditor()}>
           <Add />
         </FAB>
-      </Fragment>
+      </main>
     );
   }
 }

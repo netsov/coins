@@ -49,3 +49,25 @@ ul {
         /*width: 98%;*/
     /*}*/
 /*}*/
+
+.select-all {
+    /*position: relative;*/
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 23px;
+    padding-top: 15px;
+}
+
+.select-all-icon {
+    /*position: absolute;*/
+    /*right: 15px;*/
+    /*top: 0;*/
+}
+
+.select-all svg {
+    fill: var(--custom-grey);
+}
+
+.select-all--fulfilled svg {
+    fill: var(--mdc-theme-primary);
+}
