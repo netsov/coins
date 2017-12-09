@@ -9,3 +9,7 @@ export const defaultPosition = {
   coin: {},
   prices: {},
 };
+
+export const defaultSettings = {
+  showCharts: false
+};

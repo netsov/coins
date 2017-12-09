@@ -18,10 +18,12 @@ header.mdc-toolbar:not(.toolbar--edit) {
     color: white;
 }
 
-.total {
+header.mdc-toolbar:not(.toolbar--edit) section {
+    display: flex;
     width: 100%;
     max-width: 1180px;
     margin: 0 auto;
     color: #333333;
     padding-left: 8px;
+    justify-content: space-between;
 }

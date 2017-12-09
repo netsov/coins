@@ -7,6 +7,7 @@ const mapStateToProps = state => {
   return {
     positions: state.positions,
     selected: state.selected,
+    showCharts: state.settings.showCharts,
   };
 };
 

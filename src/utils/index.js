@@ -20,14 +20,10 @@ export async function getFromCache(url) {
 }
 
 export const HYSTO_MINUTE = (fsym, tsym, limit) =>
-  `https://min-api.cryptocompare.com/data/histominute?fsym=${fsym}&tsym=${
-    tsym
-    }&limit=${limit}`;
+  `https://min-api.cryptocompare.com/data/histominute?fsym=${fsym}&tsym=${tsym}&limit=${limit}`;
 
 export const HYSTO_HOUR = (fsym, tsym, limit) =>
-  `https://min-api.cryptocompare.com/data/histohour?fsym=${fsym}&tsym=${
-    tsym
-  }&limit=${limit}`;
+  `https://min-api.cryptocompare.com/data/histohour?fsym=${fsym}&tsym=${tsym}&limit=${limit}`;
 
 export const HYSTO_DAY = (fsym, tsym, limit) =>
   `https://min-api.cryptocompare.com/data/histoday?fsym=${fsym}&tsym=${tsym}&${
@@ -44,7 +40,6 @@ export const COIN_PRICE = (fsym, tsym) =>
 
 export const COIN_IMG_URL = url => `https://www.cryptocompare.com/${url}`;
 
-
 export function calcTotal(quantity, price) {
-  return quantity * price
+  return quantity * price;
 }

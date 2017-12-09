@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
+import isEqual from 'lodash.isequal';
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
 
 const colors = {
@@ -11,9 +12,8 @@ const colors = {
 
 export class Chart extends Component {
   shouldComponentUpdate(nextProps) {
-    const dataChanged = this.props.data !== nextProps.data;
-    const zoomChanged = this.props.zoom !== nextProps.zoom;
-    return dataChanged || zoomChanged;
+    const propsKeys = ['data', 'zoom'];
+    return propsKeys.some(key => !isEqual(this.props[key], nextProps[key]));
   }
 
   render() {

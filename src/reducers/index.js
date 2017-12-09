@@ -1,4 +1,5 @@
 import * as actions from '../actions';
+import { defaultSettings } from '../models';
 
 const positions = (state = [], action) => {
   switch (action.type) {
@@ -49,8 +50,30 @@ const position = (state = null, action) => {
   }
 };
 
+const showSettings = (state = false, action) => {
+  switch (action.type) {
+    case actions.OPEN_SETTINGS:
+      return true;
+    case actions.CLOSE_SETTINGS:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const settings = (state = defaultSettings, action) => {
+  switch (action.type) {
+    case actions.UPDATE_SETTINGS:
+      return {...state, [action.key]: action.value};
+    default:
+      return state;
+  }
+};
+
 export const reducers = {
   positions,
   position,
   selected,
+  settings,
+  showSettings,
 };

@@ -185,7 +185,7 @@ export class Editor extends Component {
     return (
       <Dialog
         open={true}
-        edit={!!this.props.position.__id}
+        header={this.props.position.__id ? 'Edit' : 'Add new position'}
         buttons={this.renderButtons()}
       >
         {this.renderForm()}

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 
 import classNames from 'classnames';
-import { Close, Delete, Edit } from '../material/Icons/index';
+import { Close, Delete, Edit, Settings } from '../material/Icons/index';
 
 import './style.css';
 import '@material/toolbar/dist/mdc.toolbar.css';
@@ -21,6 +21,7 @@ export const Toolbar = ({
   deletePosition,
   openEditor,
   total,
+  openSettings,
 }) => {
   const edit = selected.length > 0;
   console.log('toolbar rendered');
@@ -32,8 +33,11 @@ export const Toolbar = ({
     >
       <div className="mdc-toolbar__row">
         {edit ? null : (
-          <section className="total">
+          <section className="">
             <h3>Total: {total ? `$${total}` : ''}</h3>
+            <Icon handleClick={openSettings}>
+              <Settings />
+            </Icon>
           </section>
         )}
 

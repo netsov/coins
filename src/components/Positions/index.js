@@ -8,7 +8,11 @@ import { FAB } from '../material/FAB';
 
 const SelectAll = ({ toggleSelectAll, fulfilled }) => {
   return (
-    <div className={classNames("select-all", {"select-all--fulfilled": fulfilled})}>
+    <div
+      className={classNames('select-all', {
+        'select-all--fulfilled': fulfilled,
+      })}
+    >
       <span className="select-all-icon" onClick={toggleSelectAll}>
         <Checked />
       </span>
@@ -28,6 +32,7 @@ export class Positions extends Component {
       selected,
       toggleSelected,
       toggleSelectAll,
+      showCharts
     } = this.props;
     console.log('Positions rendered');
     return (
@@ -51,6 +56,7 @@ export class Positions extends Component {
                 selected={selected}
                 updatePosition={updatePosition}
                 toggleSelected={toggleSelected}
+                showChart={showCharts}
               />
             </li>
           ))}

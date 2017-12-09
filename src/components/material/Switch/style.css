@@ -1,0 +1,16 @@
+.switch-combo {
+    display: flex !important;
+    align-items: center;
+}
+
+.switch-combo label:hover {
+    cursor: pointer;
+}
+
+.switch-combo label[disabled]:hover, input[disabled]:hover {
+    cursor: not-allowed;
+}
+
+label[disabled="true"], label[checked="false"] {
+    color: #AAA;
+}

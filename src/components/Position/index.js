@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import './style.css';
 
+import isEqual from 'lodash.isequal';
+
 // import { ActionButton } from '../ActionButton';
 import { Elevation } from '../material/Elevation';
 import { Progress } from '../material/Progress';
@@ -53,17 +55,6 @@ const ZOOM_INDEX = ZOOM.reduce(
   {}
 );
 
-function isEqual(obj1, obj2) {
-  return Object.entries(obj2)
-    .map(
-      ([key, value]) =>
-        typeof key === 'string'
-          ? value === obj1[key]
-          : isEqual(value, obj1[key])
-    )
-    .every(Boolean);
-}
-
 const Separator = () => <div className="separator" />;
 
 export class Position extends Component {
@@ -73,12 +64,13 @@ export class Position extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const positionChanged = !isEqual(this.props.position, nextProps.position);
-    const dataChanged =
-      !this.state.data || this.state.data.zoom !== nextState.data.zoom;
-    const selectedChanged = this.props.selected !== nextProps.selected;
-    const loadingChanged = this.state.loading !== nextState.loading;
-    return loadingChanged || selectedChanged || positionChanged || dataChanged;
+    const propsKeys = ['position', 'showChart', 'selected'];
+    const stateKeys = ['loading'];
+
+    return (
+      stateKeys.some(key => !isEqual(this.state[key], nextState[key])) ||
+      propsKeys.some(key => !isEqual(this.props[key], nextProps[key]))
+    );
   }
 
   async componentDidMount() {
@@ -179,6 +171,7 @@ export class Position extends Component {
       position: { zoom, symbol, __id },
       selected,
       toggleSelected,
+      showChart,
     } = this.props;
     const { data, loading } = this.state;
     console.log(symbol, 'rendered');
@@ -191,7 +184,9 @@ export class Position extends Component {
         >
           <Progress show={loading} />
           {this.renderHeader()}
-          <Chart zoom={zoom} data={data} handleZoom={this.handleZoom} />
+          {showChart && (
+            <Chart zoom={zoom} data={data} handleZoom={this.handleZoom} />
+          )}
         </Elevation>
       </Fragment>
     );
