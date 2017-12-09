@@ -3,10 +3,15 @@ import * as actions from '../actions';
 const positions = (state = [], action) => {
   switch (action.type) {
     case actions.DELETE_POSITIONS:
-    case actions.GET_STORED_POSITIONS:
+      return state.filter(p => !action.positionIds.includes(p.__id));
+    case actions.GET_POSITIONS:
       return action.positions;
-    case actions.STORE_POSITION:
-      return action.positions;
+    case actions.CREATE_POSITION:
+      return [action.position, ...state];
+    case actions.UPDATE_POSITION:
+      return state.map(
+        p => (p.__id === action.position.__id ? action.position : p)
+      );
     default:
       return state;
   }
@@ -35,7 +40,7 @@ const position = (state = null, action) => {
     case actions.OPEN_EDITOR:
       return action.position;
     case actions.CLOSE_EDITOR:
-    case actions.STORE_POSITION:
+    case actions.UPDATE_POSITION:
       return null;
     default:
       return state;

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Editor } from '../components/Editor';
-import { savePosition, closeEditor } from '../actions';
+import { createPosition, updatePosition, closeEditor } from '../actions';
 
 const mapStateToProps = state => {
   return {
@@ -11,6 +11,7 @@ const mapStateToProps = state => {
 };
 
 export const EditorContainer = connect(mapStateToProps, {
-  savePosition,
+  createPosition,
+  updatePosition,
   closeEditor,
 })(props => (props.position ? <Editor {...props} /> : null));

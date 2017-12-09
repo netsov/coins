@@ -12,7 +12,7 @@ export class Positions extends Component {
   }
 
   render() {
-    const { positions, savePosition, selected, toggleSelected } = this.props;
+    const { positions, updatePosition, selected, toggleSelected } = this.props;
     console.log('Positions rendered');
     return (
       <Fragment>
@@ -27,7 +27,7 @@ export class Positions extends Component {
               <Position
                 position={position}
                 selected={selected}
-                savePosition={savePosition}
+                updatePosition={updatePosition}
                 toggleSelected={toggleSelected}
               />
             </li>

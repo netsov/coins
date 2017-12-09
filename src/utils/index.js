@@ -38,3 +38,8 @@ export const COIN_PRICE = (fsym, tsym) =>
   `https://min-api.cryptocompare.com/data/price?fsym=${fsym}&tsyms=${tsym}`;
 
 export const COIN_IMG_URL = url => `https://www.cryptocompare.com/${url}`;
+
+
+export function calcTotal(quantity, price) {
+  return quantity * price
+}

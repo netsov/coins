@@ -52,9 +52,9 @@ const ZOOM_INDEX = ZOOM.reduce(
   {}
 );
 
-function stringPropertiesCompare(obj1, obj2) {
+function isEqual(obj1, obj2) {
   return Object.entries(obj2)
-    .map(([key, value]) => typeof key === 'string' && value === obj1[key])
+    .map(([key, value]) => typeof key === 'string' ? value === obj1[key] : isEqual(value, obj1[key]))
     .every(Boolean);
 }
 
@@ -63,12 +63,11 @@ const Separator = () => <div className="separator" />;
 export class Position extends Component {
   state = {
     data: null,
-    priceResponse: {},
     loading: false,
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const positionChanged = !stringPropertiesCompare(
+    const positionChanged = !isEqual(
       this.props.position,
       nextProps.position
     );
@@ -85,12 +84,10 @@ export class Position extends Component {
   }
 
   async fetchPrice() {
-    const priceResponse = await getFromCache(
+    const prices = await getFromCache(
       COIN_PRICE(this.props.position.symbol, 'USD,BTC')
     );
-    this.setState({
-      priceResponse,
-    });
+    this.props.updatePosition({...this.props.position, prices})
   }
 
   async fetchData() {
@@ -125,16 +122,14 @@ export class Position extends Component {
   handleZoom = zoom => () => {
     // https://github.com/highcharts/highcharts/issues/2775
     setTimeout(
-      () => this.props.savePosition({ ...this.props.position, zoom }),
+      () => this.props.updatePosition({ ...this.props.position, zoom }),
       1
     );
     return false;
   };
 
   renderHeader = () => {
-    const { position } = this.props;
-    const { coin, quantity, symbol } = position;
-    const { USD, BTC } = this.state.priceResponse;
+    const { coin, quantity, symbol, prices: { USD, BTC }} = this.props.position;
 
     return (
       <section>

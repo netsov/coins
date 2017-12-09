@@ -1,54 +1,45 @@
-export const GET_STORED_POSITIONS = 'GET_STORED_POSITIONS';
-export const STORE_POSITION = 'STORE_POSITION';
+import { defaultPosition } from '../models';
+
+import * as storage from '../utils/localStorage';
+
+export const GET_POSITIONS = 'GET_POSITIONS';
+export const CREATE_POSITION = 'CREATE_POSITION';
+export const UPDATE_POSITION = 'UPDATE_POSITION';
 export const DELETE_POSITIONS = 'DELETE_POSITIONS';
 export const TOGGLE_SELECTED = 'TOGGLE_SELECTED';
 export const CLEAR_SELECTED = 'CLEAR_SELECTED';
 export const OPEN_EDITOR = 'OPEN_EDITOR';
 export const CLOSE_EDITOR = 'CLOSE_EDITOR';
 
-function getPositionsFromLocalStorage() {
-  const storage = window.localStorage;
-  let positions = storage.getItem('positions');
-  positions = positions ? JSON.parse(positions) : [];
-  return positions;
-}
-
-function savePositionsToLocalStorage(positions) {
-  const storage = window.localStorage;
-  storage.setItem('positions', JSON.stringify(positions));
-}
-
 export const getPositions = () => {
-  const positions = getPositionsFromLocalStorage();
   return {
-    type: GET_STORED_POSITIONS,
-    positions,
+    type: GET_POSITIONS,
+    positions: storage.getPositions(),
   };
 };
 
-export const savePosition = position => {
-  let positions = getPositionsFromLocalStorage();
-  const existing = positions.find(p => p.__id === position.__id);
-  positions = existing
-    ? positions.map(p => (p.__id === position.__id ? position : p))
-    : [position, ...positions];
-  savePositionsToLocalStorage(positions);
-
+export const createPosition = position => {
+  position.__id = new Date().valueOf();
+  storage.createPosition(position);
   return {
-    type: STORE_POSITION,
-    positions,
+    type: CREATE_POSITION,
+    position,
+  };
+};
+
+export const updatePosition = position => {
+  storage.updatePosition(position);
+  return {
+    type: UPDATE_POSITION,
+    position,
   };
 };
 
 export const deletePosition = positionIds => {
-  positionIds = Array.isArray(positionIds) ? positionIds : [positionIds];
-  let positions = getPositionsFromLocalStorage();
-  positions = positions.filter(p => !positionIds.includes(p.__id));
-  savePositionsToLocalStorage(positions);
-
+  storage.deletePositions(positionIds);
   return {
     type: DELETE_POSITIONS,
-    positions,
+    positionIds,
   };
 };
 
@@ -65,22 +56,8 @@ export const clearSelected = () => {
   };
 };
 
-const defaultPosition = {
-  __id: null,
-  symbol: '',
-  tradePrice: '',
-  tradeDate: '',
-  currency: '',
-  quantity: '',
-  zoom: '1d',
-  coin: {},
-  price: {}
-};
-
 export const openEditor = positionId => {
-  const position = positionId
-    ? getPositionsFromLocalStorage().find(p => p.__id === positionId)
-    : defaultPosition;
+  const position = storage.getPosition(positionId) || defaultPosition;
   return {
     type: OPEN_EDITOR,
     position,

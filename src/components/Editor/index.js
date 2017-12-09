@@ -73,11 +73,14 @@ export class Editor extends Component {
 
     const newPosition = {
       ...position,
-      __id: position.__id || new Date().valueOf(),
       coin: coinList.find(c => c.Name === position.symbol),
     };
 
-    this.props.savePosition(newPosition);
+    if (newPosition.__id) {
+      this.props.updatePosition(newPosition);
+    } else {
+      this.props.createPosition(newPosition);
+    }
   };
 
   renderForm = () => {
@@ -178,6 +181,7 @@ export class Editor extends Component {
   );
 
   render() {
+    console.log('editor rendered');
     return (
       <Dialog
         open={true}

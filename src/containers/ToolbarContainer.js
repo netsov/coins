@@ -2,10 +2,12 @@ import { connect } from 'react-redux';
 
 import { Toolbar } from '../components/Toolbar';
 import { deletePosition, clearSelected, openEditor } from '../actions';
+import { calcTotal } from '../utils';
 
 const mapStateToProps = state => {
   return {
     selected: state.selected,
+    total: state.positions.reduce((acc, next) => acc + calcTotal(next.quantity, next.prices.USD), 0)
   };
 };
 

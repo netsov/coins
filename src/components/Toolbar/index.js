@@ -23,6 +23,7 @@ export const Toolbar = ({
   total,
 }) => {
   const edit = selected.length > 0;
+  console.log('toolbar rendered');
   return (
     <header
       className={classNames('mdc-toolbar', 'mdc-toolbar--fixed', {
@@ -32,7 +33,7 @@ export const Toolbar = ({
       <div className="mdc-toolbar__row">
         {edit ? null : (
           <section className="total">
-            <h3>Total:</h3>
+            <h3>Total: {total ? `$${total}` : ''}</h3>
           </section>
         )}
 
