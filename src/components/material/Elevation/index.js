@@ -19,26 +19,29 @@ export class Elevation extends Component {
     const {
       children,
       ripple,
-      zIndex = 4,
+      // zIndex = 4,
       checked,
-      // unchecked,
       // toggleSelected,
+      hoverClass,
     } = this.props;
     const { hovered } = this.state;
     return (
       <div
         className={classNames('my-elevation-container', {
-          'my-elevation-container-checked': checked,
+          // 'my-elevation-container-checked': checked,
         })}
         onMouseOver={this.toggleHovered(true)}
         onMouseLeave={this.toggleHovered(false)}
       >
         <div
           className={classNames(
-            `my-elevation mdc-elevation--z${hovered ? zIndex * 2 : zIndex}`,
+            // `my-elevation mdc-elevation--z${hovered ? zIndex * 2 : zIndex}`,
+            `my-elevation`,
             {
+              [hoverClass]: hovered || checked,
+              'mdc-elevation--z2': !(hovered || checked),
               'my-elevation-ripple': ripple,
-              'my-elevation-checked': checked,
+              // 'my-elevation-checked': checked,
             }
           )}
         >

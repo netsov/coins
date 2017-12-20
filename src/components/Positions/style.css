@@ -30,7 +30,7 @@ ul {
 }
 
 .positions-container--compact li {
-    margin: 0 8px 8px 8px;
+    margin: 0 2px 2px 2px;
     width: 100%;
     /*max-width: 48%;*/
 }
@@ -76,10 +76,14 @@ ul {
 }
 
 
-/*table {*/
-    /*width: 100%;*/
-/*}*/
-/*td {*/
-    /*text-align:center;*/
-    /*vertical-align:middle;*/
-/*}*/
+table, tbody, tr, thead {
+    width: 100%;
+}
+td {
+    text-align:center;
+    vertical-align:middle;
+}
+
+.hovered-position {
+    background-color: #eee !important;
+}

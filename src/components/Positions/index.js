@@ -6,6 +6,7 @@ import './style.css';
 import { Position } from '../Position';
 import { Add, Checked } from '../material/Icons';
 import { FAB } from '../material/FAB';
+import { Elevation } from '../material/Elevation';
 
 // const SelectAll = ({ toggleSelectAll, fulfilled }) => {
 //   return (
@@ -67,40 +68,48 @@ export class Positions extends Component {
     console.log('Positions rendered');
     return (
       <main className="mdc-toolbar-fixed-adjust">
-        {/*<Elevation>*/}
-        {/*<table className="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">*/}
+        {/*<table className="">*/}
         {/*<thead>*/}
         {/*<tr>*/}
-        {/*<th className="mdl-data-table__cell--non-numeric">Material</th>*/}
+        {/*<th />*/}
+        {/*<th>Logo</th>*/}
+        {/*<th>Name</th>*/}
+        {/*<th>Price</th>*/}
         {/*<th>Quantity</th>*/}
-        {/*<th>Unit price</th>*/}
         {/*</tr>*/}
         {/*</thead>*/}
-        {/*<tbody>*/}
-        {/*<tr>*/}
-        {/*<td className="mdl-data-table__cell--non-numeric">*/}
-        {/*Acrylic (Transparent)*/}
-        {/*</td>*/}
-        {/*<td>25</td>*/}
-        {/*<td>$2.90</td>*/}
+        {/*/!*<tbody>*!/*/}
+        {/*/!*<tr>*!/*/}
+        {/*/!*<td className="mdl-data-table__cell--non-numeric">*!/*/}
+        {/*/!*Acrylic (Transparent)*!/*/}
+        {/*/!*</td>*!/*/}
+        {/*/!*<td>25</td>*!/*/}
+        {/*/!*<td>$2.90</td>*!/*/}
+        {/*/!*</tr>*!/*/}
+        {/*/!*</tbody>*!/*/}
+        {/*<tbody*/}
+
+        {/*className={classNames({*/}
+        {/*'positions-container': true,*/}
+        {/*'positions-container--compact': true,*/}
+        {/*})}*/}
+        {/*>*/}
+        {/*{positions.map(position => (*/}
+        {/*<tr key={position.__id}>*/}
+
+        {/*<Position*/}
+        {/*position={position}*/}
+        {/*prices={prices}*/}
+        {/*selected={selected}*/}
+        {/*updatePosition={updatePosition}*/}
+        {/*toggleSelected={toggleSelected}*/}
+        {/*showChart={showCharts}*/}
+        {/*/>*/}
         {/*</tr>*/}
-        {/*<tr>*/}
-        {/*<td className="mdl-data-table__cell--non-numeric">*/}
-        {/*Plywood (Birch)*/}
-        {/*</td>*/}
-        {/*<td>50</td>*/}
-        {/*<td>$1.25</td>*/}
-        {/*</tr>*/}
-        {/*<tr>*/}
-        {/*<td className="mdl-data-table__cell--non-numeric">*/}
-        {/*Laminate (Gold on Blue)*/}
-        {/*</td>*/}
-        {/*<td>10</td>*/}
-        {/*<td>$2.35</td>*/}
-        {/*</tr>*/}
+        {/*))}*/}
+
         {/*</tbody>*/}
         {/*</table>*/}
-        {/*</Elevation>*/}
 
         {/*{selected.length > 0 ? (*/}
         {/*<SelectAll*/}
@@ -108,6 +117,7 @@ export class Positions extends Component {
         {/*fulfilled={positions.length === selected.length}*/}
         {/*/>*/}
         {/*) : null}*/}
+
         <ul
           className={classNames({
             'positions-container': true,

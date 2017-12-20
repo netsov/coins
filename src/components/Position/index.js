@@ -144,6 +144,51 @@ export class Position extends Component {
           checked={selected.find(positionId => positionId === __id)}
           onToggle={() => toggleSelected(__id)}
         />
+
+        <div style={{ flex: 1 }}>
+          <img
+            className="coin-logo"
+            src={COIN_IMG_URL(coin.ImageUrl)}
+            height="32"
+            width="32"
+          />
+        </div>
+
+        <div style={{ flex: 2 }}>
+          <span className="usd-price">
+            ${formatFloat(USD)}&nbsp;{change(symbol, 'USD', prices)}
+          </span>
+        </div>
+
+        <div style={{ flex: 2 }}>
+          <span className="btc-price">
+            ₿{formatFloat(BTC)}&nbsp;{change(symbol, 'BTC', prices)}
+          </span>
+        </div>
+
+        <div style={{ flex: 2 }}>
+          <span>
+            {quantity}&nbsp;
+            {symbol}
+          </span>
+        </div>
+
+        <div style={{ flex: 2 }}>
+          <span>${formatFloat(quantity * USD)}</span>
+        </div>
+
+        <div style={{ flex: 2 }}>
+          <span>{formatFloat(quantity * BTC)}&nbsp;BTC</span>
+        </div>
+      </section>
+    );
+
+    return (
+      <section className="position-header">
+        <Checkbox
+          checked={selected.find(positionId => positionId === __id)}
+          onToggle={() => toggleSelected(__id)}
+        />
         <div className="symbol-container">
           <img
             className="coin-logo"
@@ -183,12 +228,19 @@ export class Position extends Component {
   };
 
   render() {
-    const { position: { zoom, symbol }, showChart } = this.props;
+    const {
+      position: { zoom, symbol, __id },
+      selected,
+      showChart,
+    } = this.props;
     const { data, loading } = this.state;
     console.log(symbol, 'rendered');
     return (
       <Fragment>
-        <Elevation>
+        <Elevation
+          hoverClass="hovered-position"
+          checked={selected.find(positionId => positionId === __id)}
+        >
           <Progress show={loading} />
           {this.renderHeader()}
           {showChart && (
