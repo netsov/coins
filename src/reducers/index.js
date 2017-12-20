@@ -71,10 +71,20 @@ const settings = (state = {}, action) => {
   }
 };
 
+const prices = (state = {}, action) => {
+  switch (action.type) {
+    case actions.GET_PRICES:
+      return action.prices;
+    default:
+      return state;
+  }
+};
+
 export const reducers = {
   positions,
   position,
   selected,
   settings,
   showSettings,
+  prices,
 };

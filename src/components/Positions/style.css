@@ -74,3 +74,12 @@ ul {
 .select-all--fulfilled svg {
     fill: var(--mdc-theme-primary);
 }
+
+
+/*table {*/
+    /*width: 100%;*/
+/*}*/
+/*td {*/
+    /*text-align:center;*/
+    /*vertical-align:middle;*/
+/*}*/

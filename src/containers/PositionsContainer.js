@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 
 import {Positions} from '../components/Positions';
-import { getPositions, updatePosition, toggleSelected, toggleSelectAll, openEditor, getSettings } from '../actions';
+import { getPositions, updatePosition, toggleSelected, toggleSelectAll, openEditor, getSettings, getPrices } from '../actions';
 
 const mapStateToProps = state => {
   return {
     positions: state.positions,
+    prices: state.prices,
     selected: state.selected,
     showCharts: state.settings.showCharts,
   };
@@ -17,5 +18,6 @@ export const PositionsContainer = connect(mapStateToProps, {
   toggleSelected,
   toggleSelectAll,
   openEditor,
-  getSettings
+  getSettings,
+  getPrices,
 })(Positions);

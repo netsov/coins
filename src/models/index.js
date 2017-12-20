@@ -7,9 +7,8 @@ export const defaultPosition = {
   quantity: '',
   zoom: '1d',
   coin: {},
-  prices: {},
 };
 
 export const defaultSettings = {
-  showCharts: false
+  showCharts: false,
 };

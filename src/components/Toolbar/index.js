@@ -20,7 +20,8 @@ export const Toolbar = ({
   clearSelected,
   deletePosition,
   openEditor,
-  total,
+  totalUSD,
+  totalBTC,
   openSettings,
 }) => {
   const edit = selected.length > 0;
@@ -34,7 +35,10 @@ export const Toolbar = ({
       <div className="mdc-toolbar__row">
         {edit ? null : (
           <section className="">
-            <h3>Total: {total ? `$${total}` : ''}</h3>
+            <h3>
+              Total: {totalUSD ? `$${totalUSD}` : ''}&nbsp;|&nbsp;
+              {totalBTC ? `₿${totalBTC}` : ''}
+            </h3>
             <Icon handleClick={openSettings}>
               <Settings />
             </Icon>

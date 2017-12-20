@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import isEqual from 'lodash.isequal';
 
 import './style.css';
 import { Position } from '../Position';
@@ -21,19 +22,47 @@ const SelectAll = ({ toggleSelectAll, fulfilled }) => {
 };
 
 export class Positions extends Component {
+  interval = 1000 * 60;
+  intervalID = null;
+
+  componentWillUnmount() {
+    this.resetInterval();
+  }
+
+  resetInterval() {
+    this.intervalID && clearInterval(this.intervalID);
+  }
+
   async componentDidMount() {
     this.props.getSettings();
     this.props.getPositions();
+    this.updatePrices(this.props.positions);
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    if (!isEqual(this.props.positions, nextProps.positions)) {
+      this.updatePrices(nextProps.positions, true);
+    }
+  }
+
+  updatePrices(positions, force) {
+    if (force) this.resetInterval();
+    this.props.getPrices(positions, force);
+    this.intervalID = setInterval(
+      () => this.props.getPrices(positions),
+      this.interval
+    );
   }
 
   render() {
     const {
       positions,
+      prices,
       updatePosition,
       selected,
       toggleSelected,
       toggleSelectAll,
-      showCharts
+      showCharts,
     } = this.props;
     console.log('Positions rendered');
     return (
@@ -54,6 +83,7 @@ export class Positions extends Component {
             <li key={position.__id}>
               <Position
                 position={position}
+                prices={prices}
                 selected={selected}
                 updatePosition={updatePosition}
                 toggleSelected={toggleSelected}

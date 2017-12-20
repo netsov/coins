@@ -1,6 +1,6 @@
-import {defaultSettings} from '../models'
+import { defaultSettings } from '../models';
 
-function storeToLocalStorage(key, value) {
+export function storeToLocalStorage(key, value) {
   const storage = window.localStorage;
   storage.setItem(key, JSON.stringify(value));
 }
@@ -12,7 +12,7 @@ export function getFromLocalStorage(key) {
 }
 
 export function getPositions() {
-  return getFromLocalStorage('positions') || []
+  return getFromLocalStorage('positions') || [];
 }
 
 export function getPosition(positionId) {
@@ -38,10 +38,18 @@ export function deletePositions(positionIds) {
 }
 
 export const updateSettings = (key, value) => {
-  storeToLocalStorage('settings', {...getSettings(), [key]: value});
+  storeToLocalStorage('settings', { ...getSettings(), [key]: value });
 };
 
 export function getSettings() {
-  return getFromLocalStorage('settings') || defaultSettings
+  return getFromLocalStorage('settings') || defaultSettings;
 }
 
+export const getPrices = prices => {
+  return getFromLocalStorage('prices') || {};
+};
+
+
+export const updatePrices = prices => {
+  storeToLocalStorage('prices', prices);
+};

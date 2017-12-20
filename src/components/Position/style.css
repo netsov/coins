@@ -1,5 +1,6 @@
-div.my-elevation section {
+.position-header {
     display: flex;
+    flex-wrap: wrap;
     color: #333333;
 }
 
@@ -41,4 +42,17 @@ small {
     height: 1.5em;
     margin: 0 6px;
     border-right: 1px solid lightgray;
+}
+
+/*.change--positive {*/
+    /*color: var(--custom-grey);*/
+/*}*/
+
+.change--positive data {
+    color: green;
+}
+
+
+.change--negative data {
+    color: tomato;
 }

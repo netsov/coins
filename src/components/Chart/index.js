@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import isEqual from 'lodash.isequal';
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
@@ -12,6 +12,7 @@ const colors = {
 
 export class Chart extends Component {
   shouldComponentUpdate(nextProps) {
+    // console.log('>>>', nextProps);
     const propsKeys = ['data', 'zoom'];
     return propsKeys.some(key => !isEqual(this.props[key], nextProps[key]));
   }
@@ -20,12 +21,14 @@ export class Chart extends Component {
     const { data, zoom, handleZoom } = this.props;
     if (!data) return null;
 
+    const ts = list => list.map(([time, price]) => [time * 1000, price]);
+
     const series = [
       {
         yAxis: 0,
         name: 'Price (USD)',
         color: colors.usd,
-        data: data.usd,
+        data: ts(data.usd),
         tooltip: {
           valueDecimals: 2,
         },
@@ -55,7 +58,7 @@ export class Chart extends Component {
       series.push({
         yAxis: 1,
         name: 'Price (BTC)',
-        data: data.btc,
+        data: ts(data.btc),
         color: colors.btc,
         tooltip: {
           valueDecimals: 6,
