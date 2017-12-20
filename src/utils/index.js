@@ -145,12 +145,17 @@ export function getCoinChange(fsym, tsym, prices) {
 
 export function formatFloat(value) {
   let digits;
-  if (value < 0.001) {
-    digits = 6;
-  } else if (value < 0.01) {
-    digits = 4;
-  } else if (value < 10) {
+
+  if (value < 10) {
     digits = 2;
+  }
+
+  if (value < 1) {
+    digits = 4;
+  }
+
+  if (value < 0.01) {
+    digits = 6;
   }
 
   value = digits ? value.toFixed(digits) : Math.floor(value);

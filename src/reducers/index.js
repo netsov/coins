@@ -20,7 +20,7 @@ const positions = (state = [], action) => {
 const selected = (state = [], action) => {
   switch (action.type) {
     case actions.DELETE_POSITIONS:
-    case actions.OPEN_EDITOR:
+    case actions.CLOSE_EDITOR:
     case actions.CLEAR_SELECTED:
       return [];
     // case actions.SELECT_ALL:

@@ -36,8 +36,8 @@ export const Toolbar = ({
         {edit ? null : (
           <section className="">
             <h3>
-              Total: {totalUSD ? `$${totalUSD}` : ''}&nbsp;|&nbsp;
-              {totalBTC ? `₿${totalBTC}` : ''}
+              Total: {`$${totalUSD}`}&nbsp;|&nbsp;
+              {`₿${totalBTC}`}
             </h3>
             <Icon handleClick={openSettings}>
               <Settings />

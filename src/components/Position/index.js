@@ -1,12 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import './style.css';
-
 import classNames from 'classnames';
 import isEqual from 'lodash.isequal';
-
-// import { ActionButton } from '../ActionButton';
 import { Elevation } from '../material/Elevation';
 import { Progress } from '../material/Progress';
+import { Checkbox } from '../material/Checkbox';
 import { Chart } from '../Chart';
 
 import {
@@ -125,7 +123,11 @@ export class Position extends Component {
   };
 
   renderHeader = () => {
-    const { coin, quantity, symbol } = this.props.position;
+    const {
+      position: { coin, quantity, symbol, __id },
+      selected,
+      toggleSelected,
+    } = this.props;
 
     const { prices } = this.props;
 
@@ -138,8 +140,17 @@ export class Position extends Component {
 
     return (
       <section className="position-header">
+        <Checkbox
+          checked={selected.find(positionId => positionId === __id)}
+          onToggle={() => toggleSelected(__id)}
+        />
         <div className="symbol-container">
-          <img src={COIN_IMG_URL(coin.ImageUrl)} height="32" width="32" />
+          <img
+            className="coin-logo"
+            src={COIN_IMG_URL(coin.ImageUrl)}
+            height="32"
+            width="32"
+          />
           &nbsp;
           <span className="coin-name">{coin.FullName}</span>
           &nbsp; &nbsp;
@@ -147,14 +158,12 @@ export class Position extends Component {
             <span className="usd-price">
               ${formatFloat(USD)}&nbsp;{change(symbol, 'USD', prices)}
             </span>
-            {symbol !== 'BTC' ? (
-              <Fragment>
-                <Separator />
-                <span className="btc-price">
-                  ₿{formatFloat(BTC)}&nbsp;{change(symbol, 'BTC', prices)}
-                </span>
-              </Fragment>
-            ) : null}
+            <Fragment>
+              <Separator />
+              <span className="btc-price">
+                ₿{formatFloat(BTC)}&nbsp;{change(symbol, 'BTC', prices)}
+              </span>
+            </Fragment>
           </div>
         </div>
         <div className="holdings-container">
@@ -164,33 +173,22 @@ export class Position extends Component {
           </span>
           <Separator />
           <span>${formatFloat(quantity * USD)}</span>
-          {symbol !== 'BTC' ? (
-            <Fragment>
-              <Separator />
-              <span>{formatFloat(quantity * BTC)}&nbsp;BTC</span>
-            </Fragment>
-          ) : null}
+          <Fragment>
+            <Separator />
+            <span>{formatFloat(quantity * BTC)}&nbsp;BTC</span>
+          </Fragment>
         </div>
       </section>
     );
   };
 
   render() {
-    const {
-      position: { zoom, symbol, __id },
-      selected,
-      toggleSelected,
-      showChart,
-    } = this.props;
+    const { position: { zoom, symbol }, showChart } = this.props;
     const { data, loading } = this.state;
     console.log(symbol, 'rendered');
     return (
       <Fragment>
-        <Elevation
-          checked={selected.find(positionId => positionId === __id)}
-          toggleSelected={() => toggleSelected(__id)}
-          unchecked={selected.length > 0}
-        >
+        <Elevation>
           <Progress show={loading} />
           {this.renderHeader()}
           {showChart && (

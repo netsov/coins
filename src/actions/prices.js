@@ -7,6 +7,13 @@ export const getPrices = (positions, force) => async dispatch => {
   if (positions.length === 0) return;
   let { timestamp, raw } = storage.getPrices();
   if (force || !timestamp || isExpired(timestamp)) {
+    if (raw) {
+      dispatch({
+        type: GET_PRICES,
+        prices: raw,
+      });
+    }
+
     const response = await fetchPrices(positions);
     raw = response.RAW;
     storage.updatePrices({

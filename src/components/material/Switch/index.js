@@ -3,16 +3,21 @@ import React from 'react';
 import './style.css';
 import '@material/switch/dist/mdc.switch.css';
 
-export const Switch = ({ children, checked, onToggle, disabled }) => (
+export const Switch = ({
+  children,
+  checked = false,
+  onToggle,
+  disabled = false,
+}) => (
   <div className="switch-combo">
     <div className="mdc-switch">
       <input
         className="mdc-switch__native-control"
         id={children}
         type="checkbox"
-        checked={!!checked}
+        checked={checked}
         onChange={onToggle}
-        disabled={!!disabled}
+        disabled={disabled}
         aria-label={children}
       />
       <div className="mdc-switch__background">

@@ -56,3 +56,7 @@ small {
 .change--negative data {
     color: tomato;
 }
+
+.coin-logo {
+    margin: 0 10px;
+}

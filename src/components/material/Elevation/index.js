@@ -21,8 +21,8 @@ export class Elevation extends Component {
       ripple,
       zIndex = 4,
       checked,
-      unchecked,
-      toggleSelected,
+      // unchecked,
+      // toggleSelected,
     } = this.props;
     const { hovered } = this.state;
     return (
@@ -45,16 +45,16 @@ export class Elevation extends Component {
           {children}
         </div>
 
-        {(checked || hovered) && (
-          <span className="select-icon" onClick={toggleSelected}>
-            <Checked />
-          </span>
-        )}
-        {((!checked && hovered) || unchecked) && (
-          <span className="select-icon" onClick={toggleSelected}>
-            <Unchecked />
-          </span>
-        )}
+        {/*{(checked || hovered) && (*/}
+        {/*<span className="select-icon" onClick={toggleSelected}>*/}
+        {/*<Checked />*/}
+        {/*</span>*/}
+        {/*)}*/}
+        {/*{((!checked && hovered) || unchecked) && (*/}
+        {/*<span className="select-icon" onClick={toggleSelected}>*/}
+        {/*<Unchecked />*/}
+        {/*</span>*/}
+        {/*)}*/}
       </div>
     );
   }
