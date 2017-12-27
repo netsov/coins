@@ -38,8 +38,9 @@ export class Elevation extends Component {
             // `my-elevation mdc-elevation--z${hovered ? zIndex * 2 : zIndex}`,
             `my-elevation`,
             {
-              [hoverClass]: hovered || checked,
-              'mdc-elevation--z2': !(hovered || checked),
+              // [hoverClass]: hovered,
+              'mdc-elevation--z2': true,
+              'mdc-elevation--z8': hovered || checked,
               'my-elevation-ripple': ripple,
               // 'my-elevation-checked': checked,
             }

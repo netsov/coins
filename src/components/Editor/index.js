@@ -81,6 +81,8 @@ export class Editor extends Component {
     } else {
       this.props.createPosition(newPosition);
     }
+
+    this.props.closeEditor();
   };
 
   renderForm = () => {

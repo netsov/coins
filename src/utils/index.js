@@ -134,7 +134,7 @@ export function isExpired(ts, minutes = 5) {
 
 export function getCoinPrice(fsym, tsym, prices) {
   let { [tsym]: { PRICE } = {} } = (prices[fsym] && prices[fsym]) || {};
-  return PRICE;
+  return PRICE || 0;
 }
 
 export function getCoinChange(fsym, tsym, prices) {

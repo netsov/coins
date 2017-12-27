@@ -22,6 +22,7 @@ const Separator = () => <div className="separator" />;
 
 const change = (symbol, tsym, prices) => {
   const change = getCoinChange(symbol, tsym, prices);
+  if (!change) return null;
   return (
     <small
       className={classNames('change--positive', {
@@ -155,6 +156,10 @@ export class Position extends Component {
         </div>
 
         <div style={{ flex: 2 }}>
+          <span className="">{coin.FullName}</span>
+        </div>
+
+        <div style={{ flex: 2 }}>
           <span className="usd-price">
             ${formatFloat(USD)}&nbsp;{change(symbol, 'USD', prices)}
           </span>
@@ -238,7 +243,7 @@ export class Position extends Component {
     return (
       <Fragment>
         <Elevation
-          hoverClass="hovered-position"
+          // hoverClass="hovered-position"
           checked={selected.find(positionId => positionId === __id)}
         >
           <Progress show={loading} />
