@@ -13,7 +13,7 @@
     "@material/switch": "^0.25.0",
     "@material/textfield": "^0.26.0",
     "@material/toolbar": "^0.25.0",
-    "chart.js": "^2.7.1",
+    "antd": "^3.0.3",
     "classnames": "^2.2.5",
     "lodash.isequal": "^4.5.0",
     "moment": "^2.19.3",
@@ -22,7 +22,6 @@
     "react-highcharts": "^15.0.0",
     "react-redux": "^5.0.6",
     "react-scripts": "1.0.17",
-    "recharts": "^1.0.0-beta.6",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0"

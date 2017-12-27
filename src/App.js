@@ -10,10 +10,10 @@ export class App extends Component {
   render() {
     return (
       <Fragment>
-        <ToolbarContainer />
+        {/*<ToolbarContainer />*/}
         <PositionsContainer />
-        <EditorContainer />
-        <SettingsContainer />
+        {/*<EditorContainer />*/}
+        {/*<SettingsContainer />*/}
       </Fragment>
     );
   }

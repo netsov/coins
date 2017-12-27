@@ -146,6 +146,8 @@ export function getCoinChange(fsym, tsym, prices) {
 export function formatFloat(value) {
   let digits;
 
+  if (!value) return 0;
+
   if (value < 10) {
     digits = 2;
   }
@@ -161,4 +163,13 @@ export function formatFloat(value) {
   value = digits ? value.toFixed(digits) : Math.floor(value);
 
   return value;
+}
+
+export function calcTotalSum(positions, prices, tsym) {
+  const sum = positions.reduce(
+    (acc, next) =>
+      acc + calcTotal(next.quantity, getCoinPrice(next.symbol, tsym, prices)),
+    0
+  );
+  return formatFloat(sum);
 }
