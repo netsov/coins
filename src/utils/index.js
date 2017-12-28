@@ -126,7 +126,7 @@ export function getTimestamp() {
   return Math.ceil(new Date().valueOf() * 0.001);
 }
 
-export function isExpired(ts, minutes = 5) {
+export function isExpired(ts, minutes) {
   const now = getTimestamp();
   const ageMinutes = (now - ts) / 60;
   return ageMinutes > minutes;

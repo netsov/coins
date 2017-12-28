@@ -54,26 +54,30 @@ const columns = [
     dataIndex: 'priceBTC',
     sorter: sorter('priceBTC'),
     className: 'column--right',
+    width: 130,
   },
   {
     title: 'Change (24hr)',
     dataIndex: 'changeBTC',
     render: change,
     sorter: sorter('changeBTC'),
-    className: 'column--right',
+    // className: 'column--right',
+    width: 130,
   },
   {
     title: 'Price USD',
     dataIndex: 'priceUSD',
     sorter: sorter('priceUSD'),
     className: 'column--right',
+    width: 110,
   },
   {
     title: 'Change (24hr)',
     dataIndex: 'changeUSD',
     render: change,
     sorter: sorter('changeUSD'),
-    className: 'column--right',
+    // className: 'column--right',
+    width: 130,
   },
 ];
 

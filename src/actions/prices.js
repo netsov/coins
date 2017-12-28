@@ -6,7 +6,7 @@ export const GET_PRICES = 'GET_PRICES';
 export const getPrices = (positions, force) => async dispatch => {
   if (positions.length === 0) return;
   let { timestamp, raw } = storage.getPrices();
-  if (force || !timestamp || isExpired(timestamp)) {
+  if (force || !timestamp || isExpired(timestamp, 1)) {
     if (raw) {
       dispatch({
         type: GET_PRICES,
