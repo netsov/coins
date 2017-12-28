@@ -38,7 +38,7 @@ export class Chart extends Component {
     const yAxis = [
       {
         labels: {
-          format: '${value}',
+          format: '${value}', // eslint-disable-line no-template-curly-in-string
           style: {
             color: colors.usd,
           },

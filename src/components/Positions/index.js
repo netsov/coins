@@ -6,6 +6,7 @@ import './style.css';
 
 import { Position } from '../Position';
 import { getTableColumns } from './utils';
+import { intervalMixin } from '../../utils/mixins';
 
 import {
   // ZOOM_CHOICES_INDEX,
@@ -17,17 +18,7 @@ import {
 
 import { Table, Button, Divider, Popconfirm, message } from 'antd';
 
-export class Positions extends Component {
-  interval = 1000 * 60;
-  intervalID = null;
-
-  componentWillUnmount() {
-    this.resetInterval();
-  }
-
-  resetInterval() {
-    this.intervalID && clearInterval(this.intervalID);
-  }
+export class Positions extends intervalMixin(Component) {
 
   async componentDidMount() {
     this.props.getSettings();

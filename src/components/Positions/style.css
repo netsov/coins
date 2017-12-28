@@ -110,3 +110,7 @@ ul {
 .column--right {
     text-align: right !important;
 }
+
+tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
+    background-color: white;
+}
