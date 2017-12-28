@@ -171,38 +171,47 @@ export class Positions extends Component {
             okText="Yes"
             cancelText="No"
           >
-            <Button disabled={this.props.selected.length < 1}>Delete</Button>
+            <Button
+              disabled={this.props.selected.length < 1}
+              type="danger"
+              ghost
+            >
+              Delete
+            </Button>
           </Popconfirm>
 
           <Button
             disabled={this.props.selected.length !== 1}
             onClick={this.props.openEditor}
+            ghost={this.props.selected.length !== 1}
           >
             Edit
           </Button>
-          <Button onClick={this.props.openEditor}>Add</Button>
+          <Button onClick={this.props.openEditor} type="primary" ghost>
+            Add
+          </Button>
         </div>
       </div>
     );
 
     return (
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={false}
-          title={header}
-          size="small"
-          expandRowByClick={true}
-          expandedRowRender={function() {
-            console.log(arguments);
-            return <span>test</span>;
-          }}
-          rowSelection={{
-            selectedRowKeys: selected,
-            onSelect: record => toggleSelected(record.key),
-            onSelectAll: toggleSelectAll,
-          }}
-        />
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        title={header}
+        size="small"
+        expandRowByClick={true}
+        expandedRowRender={function() {
+          console.log(arguments);
+          return <span>test</span>;
+        }}
+        rowSelection={{
+          selectedRowKeys: selected,
+          onSelect: record => toggleSelected(record.key),
+          onSelectAll: toggleSelectAll,
+        }}
+      />
     );
     // return (
     //   <main className="mdc-toolbar-fixed-adjust">
