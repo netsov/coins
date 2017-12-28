@@ -20,7 +20,7 @@ const mapStateToProps = state => {
     prices: state.prices,
     selected: state.selected,
     showCharts: state.settings.showCharts,
-    totalUSD: calcTotalSum(state.positions, state.prices, 'USD', 0),
+    totalUSD: calcTotalSum(state.positions, state.prices, 'USD', 2),
     totalBTC: calcTotalSum(state.positions, state.prices, 'BTC'),
   };
 };

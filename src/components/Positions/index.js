@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import classNames from 'classnames';
 import isEqual from 'lodash.isequal';
-
+import DocumentTitle from 'react-document-title';
 import './style.css';
 
 import { Position } from '../Position';
@@ -19,7 +19,6 @@ import {
 import { Table, Button, Divider, Popconfirm, message } from 'antd';
 
 export class Positions extends intervalMixin(Component) {
-
   async componentDidMount() {
     this.props.getSettings();
     this.props.getPositions();
@@ -42,42 +41,48 @@ export class Positions extends intervalMixin(Component) {
   }
 
   renderHeader = () => (
-    <div className="table-header">
-      <span>
-        Total:&nbsp;${this.props.totalUSD}
-        <Divider type="vertical" />
-        {this.props.totalBTC}&nbsp;BTC
-      </span>
-      <div>
-        <Popconfirm
-          placement="topRight"
-          title={`Delete ${this.props.selected.length} position${
-            this.props.selected.length > 1 ? 's' : ''
-          }?`}
-          onConfirm={() => {
-            this.props.deletePositions();
-            message.info('Deleted');
-          }}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button disabled={this.props.selected.length < 1} type="danger" ghost>
-            Delete
-          </Button>
-        </Popconfirm>
+    <DocumentTitle title={`$${this.props.totalUSD} · Crypto Assets`}>
+      <div className="table-header">
+        <span>
+          Total:&nbsp;${this.props.totalUSD}
+          <Divider type="vertical" />
+          {this.props.totalBTC}&nbsp;BTC
+        </span>
+        <div>
+          <Popconfirm
+            placement="topRight"
+            title={`Delete ${this.props.selected.length} position${
+              this.props.selected.length > 1 ? 's' : ''
+            }?`}
+            onConfirm={() => {
+              this.props.deletePositions();
+              message.info('Deleted');
+            }}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button
+              disabled={this.props.selected.length < 1}
+              type="danger"
+              ghost
+            >
+              Delete
+            </Button>
+          </Popconfirm>
 
-        <Button
-          disabled={this.props.selected.length !== 1}
-          onClick={this.props.openEditor}
-          ghost={this.props.selected.length !== 1}
-        >
-          Edit
-        </Button>
-        <Button onClick={this.props.openEditor} type="primary" ghost>
-          Add
-        </Button>
+          <Button
+            disabled={this.props.selected.length !== 1}
+            onClick={this.props.openEditor}
+            ghost={this.props.selected.length !== 1}
+          >
+            Edit
+          </Button>
+          <Button onClick={this.props.openEditor} type="primary" ghost>
+            Add
+          </Button>
+        </div>
       </div>
-    </div>
+    </DocumentTitle>
   );
 
   render() {
