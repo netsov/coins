@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import isEqual from 'lodash.isequal';
 
 import './style.css';
+
+import { Position } from '../Position';
+import { getTableColumns } from './utils';
 
 import {
   // ZOOM_CHOICES_INDEX,
@@ -12,7 +15,7 @@ import {
   getCoinChange,
 } from '../../utils';
 
-import { Table, Button, Tooltip, Divider, Popconfirm, message } from 'antd';
+import { Table, Button, Divider, Popconfirm, message } from 'antd';
 
 export class Positions extends Component {
   interval = 1000 * 60;
@@ -47,6 +50,45 @@ export class Positions extends Component {
     );
   }
 
+  renderHeader = () => (
+    <div className="table-header">
+      <span>
+        Total:&nbsp;${this.props.totalUSD}
+        <Divider type="vertical" />
+        {this.props.totalBTC}&nbsp;BTC
+      </span>
+      <div>
+        <Popconfirm
+          placement="topRight"
+          title={`Delete ${this.props.selected.length} position${
+            this.props.selected.length > 1 ? 's' : ''
+          }?`}
+          onConfirm={() => {
+            this.props.deletePositions();
+            message.info('Deleted');
+          }}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button disabled={this.props.selected.length < 1} type="danger" ghost>
+            Delete
+          </Button>
+        </Popconfirm>
+
+        <Button
+          disabled={this.props.selected.length !== 1}
+          onClick={this.props.openEditor}
+          ghost={this.props.selected.length !== 1}
+        >
+          Edit
+        </Button>
+        <Button onClick={this.props.openEditor} type="primary" ghost>
+          Add
+        </Button>
+      </div>
+    </div>
+  );
+
   render() {
     const {
       positions,
@@ -56,85 +98,11 @@ export class Positions extends Component {
       toggleSelected,
       toggleSelectAll,
       showCharts,
-      totalUSD,
-      totalBTC,
     } = this.props;
     console.log('Positions rendered');
 
-    const change = change =>
-      change ? (
-        <span
-          className={classNames('change--positive', {
-            'change--negative': change < 0,
-          })}
-        >
-          <data>
-            {change > 0 ? '+' : '-'}
-            {Math.abs(change)}%
-          </data>
-        </span>
-      ) : null;
+    const columns = getTableColumns();
 
-    const sorter = column => (a, b) => a[column] - b[column];
-
-    const columns = [
-      {
-        title: 'Name',
-        dataIndex: 'name',
-        render: ([text, imgUrl, fullName]) => (
-          <span>
-            <Tooltip title={fullName} placement="topLeft">
-              <img src={imgUrl} height="24" width="24" />&nbsp;&nbsp;
-              <span>{text}</span>
-            </Tooltip>
-          </span>
-        ),
-      },
-      {
-        title: 'Balance',
-        dataIndex: 'balance',
-        sorter: sorter('balance'),
-        className: 'column--right',
-      },
-      {
-        title: 'USD Value',
-        dataIndex: 'usdValue',
-        sorter: sorter('usdValue'),
-        className: 'column--right',
-      },
-      {
-        title: 'BTC Value',
-        dataIndex: 'btcValue',
-        sorter: sorter('btcValue'),
-        className: 'column--right',
-      },
-      {
-        title: 'Price BTC',
-        dataIndex: 'priceBTC',
-        sorter: sorter('priceBTC'),
-        className: 'column--right',
-      },
-      {
-        title: 'Change (24hr)',
-        dataIndex: 'changeBTC',
-        render: change,
-        sorter: sorter('changeBTC'),
-        className: 'column--right',
-      },
-      {
-        title: 'Price USD',
-        dataIndex: 'priceUSD',
-        sorter: sorter('priceUSD'),
-        className: 'column--right',
-      },
-      {
-        title: 'Change (24hr)',
-        dataIndex: 'changeUSD',
-        render: change,
-        sorter: sorter('changeUSD'),
-        className: 'column--right',
-      },
-    ];
     const data = positions.map(p => {
       const USD = getCoinPrice(p.symbol, 'USD', prices);
       const BTC = getCoinPrice(p.symbol, 'BTC', prices);
@@ -148,64 +116,28 @@ export class Positions extends Component {
         priceUSD: formatFloat(USD, 2),
         changeBTC: getCoinChange(p.symbol, 'BTC', prices),
         changeUSD: getCoinChange(p.symbol, 'USD', prices),
+        position: p,
       };
     });
-
-    const header = () => (
-      <div className="table-header">
-        <span>
-          Total:&nbsp;${totalUSD}
-          <Divider type="vertical" />
-          {totalBTC}&nbsp;BTC
-        </span>
-        <div>
-          <Popconfirm
-            placement="topRight"
-            title={`Delete ${selected.length} position${
-              selected.length > 1 ? 's' : ''
-            }?`}
-            onConfirm={() => {
-              this.props.deletePositions();
-              message.info('Deleted');
-            }}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button
-              disabled={this.props.selected.length < 1}
-              type="danger"
-              ghost
-            >
-              Delete
-            </Button>
-          </Popconfirm>
-
-          <Button
-            disabled={this.props.selected.length !== 1}
-            onClick={this.props.openEditor}
-            ghost={this.props.selected.length !== 1}
-          >
-            Edit
-          </Button>
-          <Button onClick={this.props.openEditor} type="primary" ghost>
-            Add
-          </Button>
-        </div>
-      </div>
-    );
 
     return (
       <Table
         columns={columns}
         dataSource={data}
         pagination={false}
-        title={header}
+        title={this.renderHeader}
         size="small"
         expandRowByClick={true}
-        expandedRowRender={function() {
-          console.log(arguments);
-          return <span>test</span>;
-        }}
+        expandedRowRender={record => (
+          <Position
+            position={record.position}
+            prices={prices}
+            selected={selected}
+            updatePosition={updatePosition}
+            toggleSelected={toggleSelected}
+            showChart={showCharts}
+          />
+        )}
         rowSelection={{
           selectedRowKeys: selected,
           onSelect: record => toggleSelected(record.key),
@@ -213,31 +145,5 @@ export class Positions extends Component {
         }}
       />
     );
-    // return (
-    //   <main className="mdc-toolbar-fixed-adjust">
-    //     <ul
-    //       className={classNames({
-    //         'positions-container': true,
-    //         'positions-container--compact': true,
-    //       })}
-    //     >
-    //       {positions.map(position => (
-    //         <li key={position.__id}>
-    //           <Position
-    //             position={position}
-    //             prices={prices}
-    //             selected={selected}
-    //             updatePosition={updatePosition}
-    //             toggleSelected={toggleSelected}
-    //             showChart={showCharts}
-    //           />
-    //         </li>
-    //       ))}
-    //     </ul>
-    //     <FAB handleClick={() => this.props.openEditor()}>
-    //       <Add />
-    //     </FAB>
-    //   </main>
-    // );
   }
 }

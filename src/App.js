@@ -1,5 +1,4 @@
-import React, { Component, Fragment } from 'react';
-import './components/Editor/style.css';
+import React, { Component } from 'react';
 
 import { PositionsContainer } from './containers/PositionsContainer';
 import { EditorContainer } from './containers/EditorContainer';
@@ -17,13 +16,17 @@ export class App extends Component {
             <PositionsContainer />
             <EditorContainer />
           </TabPane>
-          <TabPane tab="Pie" key="2" />
-          <TabPane tab="Watchlist" key="3" />
+          <TabPane tab="Pie" key="2">
+            <p>Coming soon</p>
+          </TabPane>
+          <TabPane tab="Watchlist" key="3">
+            <p>Coming soon</p>
+          </TabPane>
           <TabPane tab="Settings" key="4">
             <SettingsContainer />
           </TabPane>
           <TabPane tab="Donate" key="5">
-            <p>Content of Tab Pane 3</p>
+            <p>Coming soon</p>
           </TabPane>
         </Tabs>
       </main>

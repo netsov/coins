@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 import './style.css';
 
 import { ActionButton } from '../material/ActionButton';
@@ -12,7 +12,11 @@ export const Settings = ({ closeSettings, settings, updateSettings }) => (
     buttons={<ActionButton handleClick={closeSettings}>Done</ActionButton>}
   >
     <form>
-      <Switch value="Show " checked={settings.showCharts} onToggle={() => updateSettings('showCharts', !settings.showCharts)}>
+      <Switch
+        value="Show "
+        checked={settings.showCharts}
+        onToggle={() => updateSettings('showCharts', !settings.showCharts)}
+      >
         Show charts
       </Switch>
     </form>
