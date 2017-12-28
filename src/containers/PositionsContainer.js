@@ -9,6 +9,7 @@ import {
   openEditor,
   getSettings,
   getPrices,
+  deletePositions,
 } from '../actions';
 
 import { calcTotalSum } from '../utils';
@@ -19,7 +20,7 @@ const mapStateToProps = state => {
     prices: state.prices,
     selected: state.selected,
     showCharts: state.settings.showCharts,
-    totalUSD: calcTotalSum(state.positions, state.prices, 'USD'),
+    totalUSD: calcTotalSum(state.positions, state.prices, 'USD', 0),
     totalBTC: calcTotalSum(state.positions, state.prices, 'BTC'),
   };
 };
@@ -32,4 +33,5 @@ export const PositionsContainer = connect(mapStateToProps, {
   openEditor,
   getSettings,
   getPrices,
+  deletePositions,
 })(Positions);

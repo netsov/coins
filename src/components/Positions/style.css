@@ -1,7 +1,4 @@
-main {
-    /*padding-top: 8px;*/
-    padding: 25px;
-}
+
 ul, li {
     list-style-type: none;
     margin: 0;
@@ -92,6 +89,7 @@ ul {
 .table-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 
@@ -102,4 +100,13 @@ ul {
 
 .change--negative data {
     color: tomato;
+}
+
+.table-header button {
+    margin-left: 5px;
+    /*width: 80px;*/
+}
+
+.column--right {
+    text-align: right !important;
 }

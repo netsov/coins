@@ -35,12 +35,13 @@ export const updatePosition = position => {
   };
 };
 
-export const deletePosition = positionIds => {
+export const deletePositions = () => (dispatch, getState) => {
+  const { selected: positionIds } = getState();
   storage.deletePositions(positionIds);
-  return {
+  dispatch({
     type: DELETE_POSITIONS,
     positionIds,
-  };
+  });
 };
 
 export const toggleSelected = positionId => {
@@ -72,12 +73,17 @@ export const clearSelected = () => {
   };
 };
 
-export const openEditor = positionId => {
-  const position = storage.getPosition(positionId) || defaultPosition;
-  return {
+export const openEditor = () => (dispatch, getState) => {
+  const { selected } = getState();
+  const positionId = selected.length === 1 && selected[0];
+
+  const position = positionId
+    ? storage.getPosition(positionId)
+    : defaultPosition;
+  dispatch({
     type: OPEN_EDITOR,
     position,
-  };
+  });
 };
 
 export const closeEditor = () => {

@@ -143,33 +143,16 @@ export function getCoinChange(fsym, tsym, prices) {
   return CHANGEPCT24HOUR && CHANGEPCT24HOUR.toFixed(2);
 }
 
-export function formatFloat(value) {
-  let digits;
-
-  if (!value) return 0;
-
-  if (value < 10) {
-    digits = 2;
-  }
-
-  if (value < 1) {
-    digits = 4;
-  }
-
-  if (value < 0.01) {
-    digits = 6;
-  }
-
+export function formatFloat(value, digits = 8) {
   value = digits ? value.toFixed(digits) : Math.floor(value);
-
   return value;
 }
 
-export function calcTotalSum(positions, prices, tsym) {
+export function calcTotalSum(positions, prices, tsym, digits) {
   const sum = positions.reduce(
     (acc, next) =>
       acc + calcTotal(next.quantity, getCoinPrice(next.symbol, tsym, prices)),
     0
   );
-  return formatFloat(sum);
+  return formatFloat(sum, digits);
 }

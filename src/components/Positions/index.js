@@ -12,7 +12,7 @@ import {
   getCoinChange,
 } from '../../utils';
 
-import { Table, Button, Tooltip } from 'antd';
+import { Table, Button, Tooltip, Divider, Popconfirm, message } from 'antd';
 
 export class Positions extends Component {
   interval = 1000 * 60;
@@ -54,7 +54,7 @@ export class Positions extends Component {
       updatePosition,
       selected,
       toggleSelected,
-      // toggleSelectAll,
+      toggleSelectAll,
       showCharts,
       totalUSD,
       totalBTC,
@@ -94,38 +94,45 @@ export class Positions extends Component {
         title: 'Balance',
         dataIndex: 'balance',
         sorter: sorter('balance'),
+        className: 'column--right',
       },
       {
         title: 'USD Value',
         dataIndex: 'usdValue',
         sorter: sorter('usdValue'),
+        className: 'column--right',
       },
       {
         title: 'BTC Value',
         dataIndex: 'btcValue',
         sorter: sorter('btcValue'),
+        className: 'column--right',
       },
       {
         title: 'Price BTC',
         dataIndex: 'priceBTC',
         sorter: sorter('priceBTC'),
+        className: 'column--right',
       },
       {
         title: 'Change (24hr)',
         dataIndex: 'changeBTC',
         render: change,
         sorter: sorter('changeBTC'),
+        className: 'column--right',
       },
       {
         title: 'Price USD',
         dataIndex: 'priceUSD',
         sorter: sorter('priceUSD'),
+        className: 'column--right',
       },
       {
         title: 'Change (24hr)',
         dataIndex: 'changeUSD',
         render: change,
         sorter: sorter('changeUSD'),
+        className: 'column--right',
       },
     ];
     const data = positions.map(p => {
@@ -135,10 +142,10 @@ export class Positions extends Component {
         key: p.__id,
         name: [p.symbol, COIN_IMG_URL(p.coin.ImageUrl), p.coin.FullName],
         balance: p.quantity,
-        usdValue: formatFloat(USD * p.quantity),
+        usdValue: formatFloat(USD * p.quantity, 2),
         btcValue: formatFloat(BTC * p.quantity),
         priceBTC: formatFloat(BTC),
-        priceUSD: formatFloat(USD),
+        priceUSD: formatFloat(USD, 2),
         changeBTC: getCoinChange(p.symbol, 'BTC', prices),
         changeUSD: getCoinChange(p.symbol, 'USD', prices),
       };
@@ -147,23 +154,55 @@ export class Positions extends Component {
     const header = () => (
       <div className="table-header">
         <span>
-          Total: ${totalUSD} | {totalBTC} BTC
+          Total:&nbsp;${totalUSD}
+          <Divider type="vertical" />
+          {totalBTC}&nbsp;BTC
         </span>
-        <Button className="editable-add-btn" onClick={() => {}} type="primary">
-          Add
-        </Button>
+        <div>
+          <Popconfirm
+            placement="topRight"
+            title={`Delete ${selected.length} position${
+              selected.length > 1 ? 's' : ''
+            }?`}
+            onConfirm={() => {
+              this.props.deletePositions();
+              message.info('Deleted');
+            }}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button disabled={this.props.selected.length < 1}>Delete</Button>
+          </Popconfirm>
+
+          <Button
+            disabled={this.props.selected.length !== 1}
+            onClick={this.props.openEditor}
+          >
+            Edit
+          </Button>
+          <Button onClick={this.props.openEditor}>Add</Button>
+        </div>
       </div>
     );
 
     return (
-      <main>
         <Table
           columns={columns}
           dataSource={data}
           pagination={false}
           title={header}
+          size="small"
+          expandRowByClick={true}
+          expandedRowRender={function() {
+            console.log(arguments);
+            return <span>test</span>;
+          }}
+          rowSelection={{
+            selectedRowKeys: selected,
+            onSelect: record => toggleSelected(record.key),
+            onSelectAll: toggleSelectAll,
+          }}
         />
-      </main>
     );
     // return (
     //   <main className="mdc-toolbar-fixed-adjust">

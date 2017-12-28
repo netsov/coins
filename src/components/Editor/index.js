@@ -3,7 +3,8 @@ import './style.css';
 
 import { ActionButton } from '../material/ActionButton';
 import { InputField } from '../material/InputField';
-import { Dialog } from '../material/Dialog';
+
+import { Modal, Select } from 'antd';
 
 import {
   getFromCache,
@@ -97,22 +98,25 @@ export class Editor extends Component {
     return (
       <form>
         <fieldset>
-          <datalist id="coinList">
-            {this.state.coinList.map(coin => (
-              <option key={coin.Name} value={coin.Name}>
-                {coin.FullName}
-              </option>
-            ))}
-          </datalist>
-          <InputField
-            list="coinList"
-            required={true}
-            name="Symbol"
-            initialValue={symbol}
-            handleChange={this.handleChange('symbol')}
-            placeholder="e.g. BTC, ETH, LTC"
+          <Select
+            showSearch
             disabled={!!__id}
-          />
+            placeholder="Select a coin"
+            optionFilterProp="children"
+            onChange={this.handleChange('symbol')}
+            filterOption={(input, option) =>
+              option.props.children
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
+            }
+            defaultValue={symbol || undefined}
+          >
+            {this.state.coinList.map(coin => (
+              <Select.Option key={coin.Name} value={coin.Name}>
+                {coin.FullName}
+              </Select.Option>
+            ))}
+          </Select>
         </fieldset>
         <fieldset>
           <InputField
@@ -185,13 +189,15 @@ export class Editor extends Component {
   render() {
     console.log('editor rendered');
     return (
-      <Dialog
-        open={true}
-        header={this.props.position.__id ? 'Edit' : 'Add new position'}
-        buttons={this.renderButtons()}
+      <Modal
+        title={this.props.position.__id ? 'Edit' : 'Add new position'}
+        visible={true}
+        onOk={this.handleSave}
+        okText="Save"
+        onCancel={this.props.closeEditor}
       >
         {this.renderForm()}
-      </Dialog>
+      </Modal>
     );
   }
 }

@@ -1,11 +1,9 @@
 import { connect } from 'react-redux';
 
 import { Toolbar } from '../components/Toolbar';
-import { deletePosition, clearSelected, openEditor } from '../actions';
+import { deletePositions, clearSelected, openEditor } from '../actions';
 import { calcTotalSum } from '../utils';
 import { openSettings } from '../actions';
-
-
 
 const mapStateToProps = state => {
   return {
@@ -16,7 +14,7 @@ const mapStateToProps = state => {
 };
 
 export const ToolbarContainer = connect(mapStateToProps, {
-  deletePosition,
+  deletePosition: deletePositions,
   clearSelected,
   openEditor,
   openSettings,
