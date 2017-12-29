@@ -1,21 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import './style.css';
 
-import { ActionButton } from '../material/ActionButton';
 import { InputField } from '../material/InputField';
 
 import { Modal, Select } from 'antd';
 
-import {
-  getFromCache,
-  COIN_LIST,
-  COIN_PRICE,
-  TRADING_PAIRS,
-} from '../../utils';
+import { COIN_PRICE, TRADING_PAIRS, callApi } from '../../utils';
 
 export class Editor extends Component {
   state = {
-    coinList: [],
     toSymbols: [],
     position: null,
   };
@@ -25,19 +18,14 @@ export class Editor extends Component {
   }
 
   async componentDidMount() {
-    const response = await getFromCache(COIN_LIST);
-    const coinList = Object.values(response.Data).sort(
-      (a, b) => parseInt(a.SortOrder, 10) - parseInt(b.SortOrder, 10)
-    );
-
-    this.setState({ coinList });
+    this.props.getCoins();
   }
 
   async componentWillUpdate(nextProps, nextState) {
     const { position } = this.state;
     const nextPosition = nextState.position;
     if (nextPosition.symbol !== position.symbol && nextPosition.symbol) {
-      const response = await getFromCache(TRADING_PAIRS(nextPosition.symbol));
+      const response = await callApi(TRADING_PAIRS(nextPosition.symbol));
       const toSymbols = response.Data.map(pair => pair.toSymbol);
       this.setState({
         position: {
@@ -53,7 +41,7 @@ export class Editor extends Component {
       nextPosition.currency &&
       this.state.toSymbols.indexOf(nextPosition.currency) !== -1
     ) {
-      const response = await getFromCache(
+      const response = await callApi(
         COIN_PRICE(nextPosition.symbol, nextPosition.currency)
       );
       const tradePrice = response[nextPosition.currency];
@@ -69,12 +57,13 @@ export class Editor extends Component {
   };
 
   handleSave = () => {
-    const { position, coinList } = this.state;
+    const { coins } = this.props;
+    const { position } = this.state;
     if (!position.symbol || !position.quantity) return;
 
     const newPosition = {
       ...position,
-      coin: coinList.find(c => c.Name === position.symbol),
+      coin: coins.find(c => c.Name === position.symbol),
     };
 
     if (newPosition.__id) {
@@ -87,6 +76,7 @@ export class Editor extends Component {
   };
 
   renderForm = () => {
+    const { coins } = this.props;
     const {
       __id,
       symbol,
@@ -111,7 +101,7 @@ export class Editor extends Component {
             }
             defaultValue={symbol || undefined}
           >
-            {this.state.coinList.map(coin => (
+            {coins.map(coin => (
               <Select.Option key={coin.Name} value={coin.Name}>
                 {coin.FullName}
               </Select.Option>
@@ -172,19 +162,6 @@ export class Editor extends Component {
       </form>
     );
   };
-
-  renderButtons = () => (
-    <Fragment>
-      <ActionButton handleClick={this.props.closeEditor}>Cancel</ActionButton>
-      <ActionButton
-        handleClick={this.handleSave}
-        raised={true}
-        secondary={true}
-      >
-        Save
-      </ActionButton>
-    </Fragment>
-  );
 
   render() {
     console.log('editor rendered');

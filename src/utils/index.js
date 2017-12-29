@@ -1,68 +1,66 @@
-import { getFromLocalStorage, storeToLocalStorage } from './localStorage';
+import { message } from 'antd';
 
-export const HYSTO_MINUTE = (fsym, tsym, limit) =>
-  `https://min-api.cryptocompare.com/data/histominute?fsym=${fsym}&tsym=${tsym}&limit=${limit}`;
+const BASE_URL = 'https://min-api.cryptocompare.com/data/';
 
-export const HYSTO_HOUR = (fsym, tsym, limit) =>
-  `https://min-api.cryptocompare.com/data/histohour?fsym=${fsym}&tsym=${tsym}&limit=${limit}`;
+export const HISTO_MINUTE = (fsym, tsym, limit) =>
+  `${BASE_URL}histominute?fsym=${fsym}&tsym=${tsym}&limit=${limit}`;
 
-export const HYSTO_DAY = (fsym, tsym, limit) =>
-  `https://min-api.cryptocompare.com/data/histoday?fsym=${fsym}&tsym=${tsym}&${
+export const HISTO_HOUR = (fsym, tsym, limit) =>
+  `${BASE_URL}histohour?fsym=${fsym}&tsym=${tsym}&limit=${limit}`;
+
+export const HISTO_DAY = (fsym, tsym, limit) =>
+  `${BASE_URL}histoday?fsym=${fsym}&tsym=${tsym}&${
     limit ? `limit=${limit}` : 'allData=true'
   }`;
 
-export const COIN_LIST = 'https://min-api.cryptocompare.com/data/all/coinlist';
+export const COIN_LIST = `${BASE_URL}all/coinlist`;
 
 export const TRADING_PAIRS = fsym =>
-  `https://min-api.cryptocompare.com/data/top/pairs?fsym=${fsym}&limit=100`;
+  `${BASE_URL}top/pairs?fsym=${fsym}&limit=100`;
 
 export const COIN_PRICE = (fsym, tsym) =>
-  `https://min-api.cryptocompare.com/data/price?fsym=${fsym}&tsyms=${tsym}`;
+  `${BASE_URL}price?fsym=${fsym}&tsyms=${tsym}`;
 
 export const COIN_IMG_URL = url => `https://www.cryptocompare.com/${url}`;
 
 const PRICE_MULTI = (fsyms, tsyms) =>
-  `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${fsyms}&tsyms=${tsyms}`;
+  `${BASE_URL}pricemultifull?fsyms=${fsyms}&tsyms=${tsyms}`;
 
-const secondsInDay = 60 * 60 * 24;
+export const HISTO_KEY = (fsym, tsym, zoom) => `${fsym}_${tsym}_${zoom}`;
 
 export const ZOOM_CHOICES = [
   {
     name: '1d',
-    url: HYSTO_MINUTE,
-    // format: 'HH:mm',
-    period: secondsInDay,
+    url: HISTO_MINUTE,
     limit: 60 * 24,
   },
   {
     name: '7d',
-    url: HYSTO_HOUR,
-    // format: 'MMM D',
-    period: 7 * secondsInDay,
+    url: HISTO_HOUR,
     limit: 7 * 24,
   },
   {
     name: '1m',
-    url: HYSTO_DAY,
-    // format: 'MMM D',
-    period: 30 * secondsInDay,
+    url: HISTO_DAY,
     limit: 30,
   },
   {
     name: '3m',
-    url: HYSTO_DAY,
-    // format: 'MMM D',
-    period: 90 * secondsInDay,
+    url: HISTO_DAY,
     limit: 90,
   },
   {
     name: '1y',
-    url: HYSTO_DAY,
-    // format: 'MMM D',
-    period: 365 * secondsInDay,
+    url: HISTO_DAY,
     limit: 365,
   },
 ];
+
+export async function callApi(url, opts) {
+  const response = await (await fetch(url, opts)).json();
+  if (response.Response === 'Error') message.error(response.Message);
+  return response;
+}
 
 export const ZOOM_CHOICES_INDEX = ZOOM_CHOICES.reduce(
   (prev, next) => ({ ...prev, [next.name]: next }),
@@ -73,53 +71,19 @@ export function calcTotal(quantity, price) {
   return quantity * price;
 }
 
-export async function getFromCache(url) {
-  const storage = window.localStorage;
-  const cacheJSON = storage.getItem(url);
-  const cache = cacheJSON && JSON.parse(cacheJSON);
-  const now = new Date().valueOf();
-  if (cache) {
-    const { response, ts } = cache;
-    const deltaMin = (now - ts) * 0.001 / 60;
-    if (deltaMin < 5) return response;
-  }
-  const response = await (await fetch(url)).json();
-  storage.setItem(
-    url,
-    JSON.stringify({
-      response: response,
-      ts: now,
-    })
-  );
-  return response;
-}
-
-export async function getHystoData(zoom, fsym, tsym = 'USD') {
-  const { url, limit, period } = ZOOM_CHOICES_INDEX[zoom];
-  const hystoURL = url(fsym, tsym, limit);
-  const key = `${fsym}/${tsym}`;
-  let data = getFromLocalStorage(key);
-
-  if (data) {
-    const now = Math.floor(Date.now() / 1000);
-    const from = now - period;
-    const oldest = data[0];
-    if (oldest && oldest <= from) {
-      const periodData = data && data.filter(([time, _]) => time > from);
-      if (periodData) return data;
-    }
-  }
-
-  const response = await (await fetch(hystoURL)).json();
-  data = response.Data.map(item => [item.time, item.close]);
-
-  storeToLocalStorage(key, data);
-  return data;
+export async function fetchHisto(fsym, tsym, zoom) {
+  const { url, limit } = ZOOM_CHOICES_INDEX[zoom];
+  const response = await callApi(url(fsym, tsym, limit));
+  return response.Data.map(item => [item.time, item.close]);
 }
 
 export async function fetchPrices(positions) {
   const url = PRICE_MULTI(positions.map(p => p.symbol).join(','), 'USD,BTC');
-  return await (await fetch(url, { cache: 'no-store' })).json();
+  return await callApi(url, { cache: 'no-store' });
+}
+
+export async function fetchCoins() {
+  return await callApi(COIN_LIST);
 }
 
 export function getTimestamp() {

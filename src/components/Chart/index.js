@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import isEqual from 'lodash.isequal';
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
+import { HISTO_KEY } from '../../utils';
 
 const colors = {
   // btc: '#8884d8',
@@ -11,15 +12,40 @@ const colors = {
 };
 
 export class Chart extends Component {
-  shouldComponentUpdate(nextProps) {
-    // console.log('>>>', nextProps);
-    const propsKeys = ['data', 'zoom'];
-    return propsKeys.some(key => !isEqual(this.props[key], nextProps[key]));
+  shouldComponentUpdate(nextProps, nextState) {
+    const propsKeys = ['zoom', 'usd', 'btc'];
+    const stateKeys = [];
+
+    return (
+      stateKeys.some(key => !isEqual(this.state[key], nextState[key])) ||
+      propsKeys.some(key => !isEqual(this.props[key], nextProps[key]))
+    );
   }
 
+  async componentDidMount() {
+    this.getData(this.props.position.zoom);
+    // this.updatePrices(this.props.positions);
+  }
+
+  getData(zoom) {
+    const { symbol } = this.props.position;
+    this.props.getHisto(symbol, 'USD', zoom);
+    if (symbol !== 'BTC') this.props.getHisto(symbol, 'BTC', zoom);
+  }
+
+  handleZoom = zoom => () => {
+    // https://github.com/highcharts/highcharts/issues/2775
+    setTimeout(async () => {
+      this.props.updatePosition({ ...this.props.position, zoom });
+      this.getData(zoom);
+
+      // await this.fetchData();
+    }, 1);
+  };
+
   render() {
-    const { data, zoom, handleZoom } = this.props;
-    if (!data) return null;
+    const { usd, btc, zoom } = this.props;
+    if (!(usd || btc)) return null;
 
     const ts = list => list.map(([time, price]) => [time * 1000, price]);
 
@@ -28,7 +54,7 @@ export class Chart extends Component {
         yAxis: 0,
         name: 'Price (USD)',
         color: colors.usd,
-        data: ts(data.usd),
+        data: ts(usd),
         tooltip: {
           valueDecimals: 2,
         },
@@ -54,11 +80,11 @@ export class Chart extends Component {
       },
     ];
 
-    if (data.btc) {
+    if (btc) {
       series.push({
         yAxis: 1,
         name: 'Price (BTC)',
-        data: ts(data.btc),
+        data: ts(btc),
         color: colors.btc,
         tooltip: {
           valueDecimals: 6,
@@ -117,7 +143,7 @@ export class Chart extends Component {
     rangeSelector.buttons = rangeSelector.buttons.map(b => ({
       ...b,
       events: {
-        click: handleZoom(b.text),
+        click: this.handleZoom(b.text),
       },
     }));
 

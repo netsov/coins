@@ -5,25 +5,25 @@ export const GET_PRICES = 'GET_PRICES';
 
 export const getPrices = (positions, force) => async dispatch => {
   if (positions.length === 0) return;
-  let { timestamp, raw } = storage.getPrices();
+  let { timestamp, data } = storage.getHisto();
   if (force || !timestamp || isExpired(timestamp, 1)) {
-    if (raw) {
+    if (data) {
       dispatch({
         type: GET_PRICES,
-        prices: raw,
+        prices: data,
       });
     }
 
     const response = await fetchPrices(positions);
-    raw = response.RAW;
+    data = response.RAW;
     storage.updatePrices({
-      raw,
+      data,
       timestamp: getTimestamp(),
     });
   }
 
   dispatch({
     type: GET_PRICES,
-    prices: raw,
+    prices: data,
   });
 };

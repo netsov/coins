@@ -26,7 +26,9 @@ export const createPosition = position => {
 export const updatePosition = position => {
   storeToLocalStorage(
     'positions',
-    getPositions().map(p => (p.__id === position.__id ? position : p))
+    getPositions().map(
+      p => (p.__id === position.__id ? { ...p, ...position } : p)
+    )
   );
 };
 
@@ -45,11 +47,26 @@ export function getSettings() {
   return getFromLocalStorage('settings') || defaultSettings;
 }
 
-export const getPrices = prices => {
+export const getPrices = () => {
   return getFromLocalStorage('prices') || {};
 };
 
+export const getCoins = () => {
+  return getFromLocalStorage('coins') || [];
+};
+
+export const updateCoins = coins => {
+  storeToLocalStorage('coins', coins);
+};
 
 export const updatePrices = prices => {
   storeToLocalStorage('prices', prices);
+};
+
+export const getHisto = key => {
+  return getFromLocalStorage(key) || [];
+};
+
+export const updatHisto = (key, data) => {
+  storeToLocalStorage(key, data);
 };

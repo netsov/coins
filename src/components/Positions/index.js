@@ -4,7 +4,9 @@ import isEqual from 'lodash.isequal';
 import DocumentTitle from 'react-document-title';
 import './style.css';
 
-import { Position } from '../Position';
+// import { Position } from '../Position';
+// import { Chart } from '../Chart';
+import { ChartContainer } from '../../containers/ChartContainer';
 import { getTableColumns } from './utils';
 import { intervalMixin } from '../../utils/mixins';
 
@@ -22,16 +24,21 @@ export class Positions extends intervalMixin(Component) {
   async componentDidMount() {
     this.props.getSettings();
     this.props.getPositions();
-    this.updatePrices(this.props.positions);
+    this.watchPrices(this.props.positions);
   }
 
   async componentWillReceiveProps(nextProps) {
-    if (!isEqual(this.props.positions, nextProps.positions)) {
-      this.updatePrices(nextProps.positions, true);
+    if (
+      !isEqual(
+        this.props.positions.map(p => p.__id),
+        nextProps.positions.map(p => p.__id)
+      )
+    ) {
+      this.watchPrices(nextProps.positions, true);
     }
   }
 
-  updatePrices(positions, force) {
+  watchPrices(positions, force) {
     if (force) this.resetInterval();
     this.props.getPrices(positions, force);
     this.intervalID = setInterval(
@@ -89,15 +96,11 @@ export class Positions extends intervalMixin(Component) {
     const {
       positions,
       prices,
-      updatePosition,
       selected,
       toggleSelected,
       toggleSelectAll,
-      showCharts,
     } = this.props;
     console.log('Positions rendered');
-
-    const columns = getTableColumns();
 
     const data = positions.map(p => {
       const USD = getCoinPrice(p.symbol, 'USD', prices);
@@ -118,21 +121,14 @@ export class Positions extends intervalMixin(Component) {
 
     return (
       <Table
-        columns={columns}
+        columns={getTableColumns()}
         dataSource={data}
         pagination={false}
         title={this.renderHeader}
         size="small"
         expandRowByClick={true}
         expandedRowRender={record => (
-          <Position
-            position={record.position}
-            prices={prices}
-            selected={selected}
-            updatePosition={updatePosition}
-            toggleSelected={toggleSelected}
-            showChart={showCharts}
-          />
+          <ChartContainer position={record.position} />
         )}
         rowSelection={{
           selectedRowKeys: selected,

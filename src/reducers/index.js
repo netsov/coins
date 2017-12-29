@@ -80,6 +80,24 @@ const prices = (state = {}, action) => {
   }
 };
 
+const histo = (state = {}, action) => {
+  switch (action.type) {
+    case actions.GET_HISTO:
+      return { [action.key]: action.data, ...state };
+    default:
+      return state;
+  }
+};
+
+const coins = (state = {}, action) => {
+  switch (action.type) {
+    case actions.GET_COINS:
+      return action.data;
+    default:
+      return state;
+  }
+};
+
 export const reducers = {
   positions,
   position,
@@ -87,4 +105,6 @@ export const reducers = {
   settings,
   showSettings,
   prices,
+  histo,
+  coins,
 };
