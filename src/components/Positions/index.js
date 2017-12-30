@@ -160,6 +160,7 @@ export class Positions extends intervalMixin(Component) {
 
     return (
       <Table
+        // bordered={true}
         columns={getTableColumns()}
         dataSource={data}
         pagination={false}

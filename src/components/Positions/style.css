@@ -112,6 +112,10 @@ ul {
     text-align: right !important;
 }
 
+.column--center {
+    text-align: center !important;
+}
+
 tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     background-color: white;
 }
@@ -119,4 +123,8 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 .table-header--left {
     display: flex;
     align-items: center;
+}
+
+th {
+    /*border-right: 1px solid #e8e8e8;*/
 }
