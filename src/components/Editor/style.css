@@ -13,3 +13,6 @@ form fieldset {
   border: none;
 }
 
+.ant-input-number {
+  width: 100%
+}
