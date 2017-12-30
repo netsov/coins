@@ -115,3 +115,8 @@ ul {
 tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     background-color: white;
 }
+
+.table-header--left {
+    display: flex;
+    align-items: center;
+}

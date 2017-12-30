@@ -41,8 +41,8 @@ export const ZOOM_CHOICES = [
   },
   {
     name: '1m',
-    url: HISTO_DAY,
-    limit: 30,
+    url: HISTO_HOUR,
+    limit: 30 * 24,
   },
   {
     name: '3m',

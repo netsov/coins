@@ -18,9 +18,21 @@ import {
   getCoinChange,
 } from '../../utils';
 
-import { Table, Button, Divider, Popconfirm, message } from 'antd';
+import {
+  Table,
+  Button,
+  Divider,
+  Popconfirm,
+  message,
+  // Switch,
+  // Form,
+} from 'antd';
 
 export class Positions extends intervalMixin(Component) {
+  state = {
+    expanded: [],
+  };
+
   async componentDidMount() {
     this.props.getSettings();
     this.props.getPositions();
@@ -55,7 +67,18 @@ export class Positions extends intervalMixin(Component) {
           <Divider type="vertical" />
           {this.props.totalBTC}&nbsp;BTC
         </span>
-        <div>
+        <div className="table-header--left">
+          {/*<Form layout="inline">*/}
+          {/*<Form.Item label="Charts">*/}
+          {/*<Switch*/}
+          {/*checked={*/}
+          {/*this.state.expanded.length === this.props.positions.length*/}
+          {/*}*/}
+          {/*onChange={on => this.handleExpandAll(on)}*/}
+          {/*/>*/}
+          {/*</Form.Item>*/}
+          {/*</Form>*/}
+
           <Popconfirm
             placement="topRight"
             title={`Delete ${this.props.selected.length} position${
@@ -91,6 +114,22 @@ export class Positions extends intervalMixin(Component) {
       </div>
     </DocumentTitle>
   );
+
+  handleExpand = (on, record) =>
+    this.setState(prevState => {
+      return {
+        expanded: on
+          ? [...prevState.expanded, record.position.__id]
+          : prevState.expanded.filter(__id => __id !== record.position.__id),
+      };
+    });
+
+  handleExpandAll = on =>
+    this.setState((prevState, props) => {
+      return {
+        expanded: on ? props.positions.map(({ __id }) => __id) : [],
+      };
+    });
 
   render() {
     const {
@@ -130,6 +169,8 @@ export class Positions extends intervalMixin(Component) {
         expandedRowRender={record => (
           <ChartContainer position={record.position} />
         )}
+        // expandedRowKeys={this.state.expanded}
+        // onExpand={this.handleExpand}
         rowSelection={{
           selectedRowKeys: selected,
           onSelect: record => toggleSelected(record.key),

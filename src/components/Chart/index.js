@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import isEqual from 'lodash.isequal';
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
-import { HISTO_KEY } from '../../utils';
+// import { HISTO_KEY } from '../../utils';
 
 const colors = {
   // btc: '#8884d8',
@@ -10,6 +10,34 @@ const colors = {
   // usd: '#82ca9d',
   usd: '#009833',
 };
+
+const buttons = [
+  {
+    type: 'day',
+    count: 1,
+    text: '1d',
+  },
+  {
+    type: 'day',
+    count: 7,
+    text: '7d',
+  },
+  {
+    type: 'month',
+    count: 1,
+    text: '1m',
+  },
+  {
+    type: 'month',
+    count: 3,
+    text: '3m',
+  },
+  {
+    type: 'year',
+    count: 1,
+    text: '1y',
+  },
+];
 
 export class Chart extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -24,13 +52,27 @@ export class Chart extends Component {
 
   async componentDidMount() {
     this.getData(this.props.position.zoom);
-    // this.updatePrices(this.props.positions);
+    this.handleLoading(this.props.position);
   }
 
+  showLoading = () =>
+    this.refs.chart && this.refs.chart.getChart().showLoading();
+
+  hideLoading = () =>
+    this.refs.chart && this.refs.chart.getChart().hideLoading();
+
+  handleLoading = position =>
+    (position.loading ? this.showLoading : this.hideLoading)();
+
   getData(zoom) {
-    const { symbol } = this.props.position;
-    this.props.getHisto(symbol, 'USD', zoom);
-    if (symbol !== 'BTC') this.props.getHisto(symbol, 'BTC', zoom);
+    const { position: { symbol, __id }, usd, btc } = this.props;
+    if (!(usd.length || btc.length)) this.showLoading();
+    this.props.getHisto(symbol, 'USD', zoom, __id);
+    if (symbol !== 'BTC') this.props.getHisto(symbol, 'BTC', zoom, __id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.handleLoading(nextProps.position);
   }
 
   handleZoom = zoom => () => {
@@ -38,14 +80,13 @@ export class Chart extends Component {
     setTimeout(async () => {
       this.props.updatePosition({ ...this.props.position, zoom });
       this.getData(zoom);
-
       // await this.fetchData();
     }, 1);
   };
 
   render() {
     const { usd, btc, zoom } = this.props;
-    if (!(usd || btc)) return null;
+    // if (!(usd || btc)) return null;
 
     const ts = list => list.map(([time, price]) => [time * 1000, price]);
 
@@ -111,55 +152,26 @@ export class Chart extends Component {
     const rangeSelector = {
       allButtonsEnabled: true,
       inputEnabled: false,
-      buttons: [
-        {
-          type: 'day',
-          count: 1,
-          text: '1d',
+      buttons: buttons.map(b => ({
+        ...b,
+        events: {
+          click: this.handleZoom(b.text),
         },
-        {
-          type: 'day',
-          count: 7,
-          text: '7d',
-        },
-        {
-          type: 'month',
-          count: 1,
-          text: '1m',
-        },
-        {
-          type: 'month',
-          count: 3,
-          text: '3m',
-        },
-        {
-          type: 'year',
-          count: 1,
-          text: '1y',
-        },
-      ],
+      })),
+      selected: buttons.findIndex(b => b.text === zoom),
     };
-
-    rangeSelector.buttons = rangeSelector.buttons.map(b => ({
-      ...b,
-      events: {
-        click: this.handleZoom(b.text),
-      },
-    }));
-
-    rangeSelector.selected = rangeSelector.buttons.findIndex(
-      b => b.text === zoom
-    );
 
     const config = {
       rangeSelector,
-
       series,
       yAxis,
+      chart: {
+        zoomType: 'x',
+      },
     };
 
     console.log('chart rendered');
 
-    return <ReactHighstock config={config} />;
+    return <ReactHighstock config={config} ref="chart" />;
   }
 }

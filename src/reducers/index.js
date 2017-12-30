@@ -12,6 +12,14 @@ const positions = (state = [], action) => {
       return state.map(
         p => (p.__id === action.position.__id ? action.position : p)
       );
+    case actions.GET_HISTO_REQUEST:
+      return state.map(
+        p => (p.__id === action.__id ? {...p, loading: true} : p )
+      );
+    case actions.GET_HISTO_SUCCESS:
+      return state.map(
+        p => (p.__id === action.__id ? {...p, loading: false} : p )
+      );
     default:
       return state;
   }
@@ -82,7 +90,7 @@ const prices = (state = {}, action) => {
 
 const histo = (state = {}, action) => {
   switch (action.type) {
-    case actions.GET_HISTO:
+    case actions.GET_HISTO_SUCCESS:
       return { [action.key]: action.data, ...state };
     default:
       return state;

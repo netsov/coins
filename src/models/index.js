@@ -7,6 +7,7 @@ export const defaultPosition = {
   quantity: '',
   zoom: '1d',
   coin: {},
+  loading: false
 };
 
 export const defaultSettings = {
