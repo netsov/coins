@@ -29,9 +29,25 @@ import {
 } from 'antd';
 
 export class Positions extends intervalMixin(Component) {
-  state = {
-    expanded: [],
-  };
+  // state = {
+  //   expanded: [],
+  // };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const propsKeys = [
+      'positions',
+      'prices',
+      'selected',
+      'totalUSD',
+      'totalBTC',
+    ];
+    const stateKeys = [];
+
+    return (
+      stateKeys.some(key => !isEqual(this.state[key], nextState[key])) ||
+      propsKeys.some(key => !isEqual(this.props[key], nextProps[key]))
+    );
+  }
 
   async componentDidMount() {
     this.props.getSettings();

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { PositionsContainer } from './containers/PositionsContainer';
 import { EditorContainer } from './containers/EditorContainer';
 import { SettingsContainer } from './containers/SettingsContainer';
+import { PieContainer } from './containers/PieContainer';
 
 import { Tabs } from 'antd';
 const TabPane = Tabs.TabPane;
@@ -17,7 +18,7 @@ export class App extends Component {
             <EditorContainer />
           </TabPane>
           <TabPane tab="Pie" key="2">
-            <p>Coming soon</p>
+            <PieContainer/>
           </TabPane>
           <TabPane tab="Watchlist" key="3">
             <p>Coming soon</p>

@@ -179,9 +179,9 @@ class _Editor extends Component {
       __id,
       symbol,
       quantity,
-      currency,
-      tradeDate,
-      tradePrice,
+      // currency,
+      // tradeDate,
+      // tradePrice,
     } = this.state.position;
 
     const { getFieldDecorator } = this.props.form;

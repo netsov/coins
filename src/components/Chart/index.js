@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 
 import isEqual from 'lodash.isequal';
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
+import HighchartsExporting from 'highcharts-exporting';
 // import { HISTO_KEY } from '../../utils';
+
+HighchartsExporting(ReactHighstock.Highcharts);
 
 const colors = {
   // btc: '#8884d8',
@@ -50,7 +53,7 @@ export class Chart extends Component {
     );
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.getData(this.props.position.zoom);
     this.handleLoading(this.props.position);
   }
@@ -64,11 +67,11 @@ export class Chart extends Component {
   handleLoading = position =>
     (position.loading ? this.showLoading : this.hideLoading)();
 
-  getData(zoom) {
+  getData(zoom, force) {
     const { position: { symbol, __id }, usd, btc } = this.props;
     if (!(usd.length || btc.length)) this.showLoading();
-    this.props.getHisto(symbol, 'USD', zoom, __id);
-    if (symbol !== 'BTC') this.props.getHisto(symbol, 'BTC', zoom, __id);
+    this.props.getHisto(symbol, 'USD', zoom, __id, force);
+    if (symbol !== 'BTC') this.props.getHisto(symbol, 'BTC', zoom, __id, force);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -161,6 +164,18 @@ export class Chart extends Component {
       selected: buttons.findIndex(b => b.text === zoom),
     };
 
+    const exporting = {
+      buttons: {
+        customButton: {
+          text: 'Reload',
+          onclick: () => this.getData(zoom, true),
+        },
+        contextButton: {
+          enabled: false,
+        },
+      },
+    };
+
     const config = {
       rangeSelector,
       series,
@@ -168,9 +183,10 @@ export class Chart extends Component {
       chart: {
         zoomType: 'x',
       },
+      exporting,
     };
 
-    console.log('chart rendered');
+    console.log('Chart rendered');
 
     return <ReactHighstock config={config} ref="chart" />;
   }
