@@ -104,10 +104,12 @@ export function getCoinPrice(fsym, tsym, prices) {
 export function getCoinChange(fsym, tsym, prices) {
   let { [tsym]: { CHANGEPCT24HOUR } = {} } =
     (prices[fsym] && prices[fsym]) || {};
-  return CHANGEPCT24HOUR && CHANGEPCT24HOUR.toFixed(2);
+  return CHANGEPCT24HOUR ? CHANGEPCT24HOUR.toFixed(2) : 0;
 }
 
 export function formatFloat(value, digits = 8) {
+  if (!value) return 0;
+  value = parseFloat(value);
   value = digits ? value.toFixed(digits) : Math.floor(value);
   return value;
 }
