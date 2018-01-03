@@ -119,7 +119,9 @@ export class Positions extends intervalMixin(Component) {
           <Button
             disabled={this.props.selected.length !== 1}
             onClick={this.props.openEditor}
-            ghost={this.props.selected.length !== 1}
+            type="primary"
+            // ghost={this.props.selected.length !== 1}
+            ghost
           >
             Edit
           </Button>
@@ -193,6 +195,9 @@ export class Positions extends intervalMixin(Component) {
           onSelect: record => toggleSelected(record.key),
           onSelectAll: toggleSelectAll,
         }}
+        footer={() =>
+          `${positions.length} asset${positions.length > 1 ? 's' : ''}`
+        }
       />
     );
   }
