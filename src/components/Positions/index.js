@@ -74,7 +74,7 @@ export class Positions extends intervalMixin(Component) {
 
   renderHeader = () => {
     const RadioTooltip = ({ children }) => (
-      <Tooltip title="Affects price and holdings columns" placement="topLeft">
+      <Tooltip title="Affects price and market value columns" placement="topLeft">
         {children}
       </Tooltip>
     );

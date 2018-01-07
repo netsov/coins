@@ -116,6 +116,10 @@ ul {
     text-align: center !important;
 }
 
+.column--align {
+    text-align: center !important;
+}
+
 tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     background-color: white;
 }
