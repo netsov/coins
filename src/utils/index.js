@@ -71,7 +71,7 @@ export function calcTotal(quantity, price) {
   return quantity * price;
 }
 
-export async function fetchHisto(fsym, tsym, zoom) {
+export async function fetchHisto(fsym, tsym, zoom = '1d') {
   const { url, limit } = ZOOM_CHOICES_INDEX[zoom];
   const response = await callApi(url(fsym, tsym, limit));
   return response.Data.map(item => [item.time, item.close]);

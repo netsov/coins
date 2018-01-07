@@ -3,24 +3,26 @@ import { connect } from 'react-redux';
 
 import { Editor } from '../components/Editor';
 import {
-  createPosition,
+  // createPosition,
   updatePosition,
   closeEditor,
-  getCoins,
+  // getCoins,
+  getTickerData,
 } from '../actions';
 
 const mapStateToProps = state => {
   return {
     position: state.position,
-    coins: Object.values(state.coins).sort(
-      (a, b) => parseInt(a.SortOrder, 10) - parseInt(b.SortOrder, 10)
-    ),
+    // coins: Object.values(state.coins).sort(
+    //   (a, b) => parseInt(a.SortOrder, 10) - parseInt(b.SortOrder, 10)
+    // ),
+    coins: state.ticker
   };
 };
 
 export const EditorContainer = connect(mapStateToProps, {
-  createPosition,
+  // createPosition,
   updatePosition,
   closeEditor,
-  getCoins,
+  getTickerData,
 })(props => (props.position ? <Editor {...props} /> : null));

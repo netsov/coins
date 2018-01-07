@@ -8,19 +8,36 @@ import {
   toggleSelectAll,
   openEditor,
   getSettings,
-  getPrices,
+  // getPrices,
   deletePositions,
+  getTickerData,
 } from '../actions';
 
-import { calcTotalSum } from '../utils';
+// import { calcTotalSum } from '../utils';
+
+export function calcTotal(positions, tickerById, key) {
+  return positions
+    .filter(p => tickerById[p.__id])
+    .reduce(
+      (acc, next) =>
+        acc + next.quantity * parseFloat(tickerById[next.__id][key]),
+      0
+    );
+}
 
 const mapStateToProps = state => {
+  const tickerById = state.ticker.reduce(
+    (acc, next) => ({ ...acc, [next.id]: next }),
+    {}
+  );
   return {
-    positions: state.positions,
-    prices: state.prices,
+    positions: state.positions.map(p => ({
+      ...p,
+      __meta: tickerById[p.__id] || {},
+    })),
     selected: state.selected,
-    totalUSD: calcTotalSum(state.positions, state.prices, 'USD', 2),
-    totalBTC: calcTotalSum(state.positions, state.prices, 'BTC'),
+    totalUSD: calcTotal(state.positions, tickerById, 'price_usd').toFixed(2),
+    totalBTC: calcTotal(state.positions, tickerById, 'price_btc').toFixed(6),
   };
 };
 
@@ -31,6 +48,6 @@ export const PositionsContainer = connect(mapStateToProps, {
   toggleSelectAll,
   openEditor,
   getSettings,
-  getPrices,
+  getTickerData,
   deletePositions,
 })(Positions);

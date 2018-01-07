@@ -11,7 +11,7 @@ const RadioGroup = Radio.Group;
 
 export class Pie extends Component {
   state = {
-    tsym: 'USD',
+    tsym: 'usd',
   };
 
   componentDidMount() {
@@ -20,13 +20,13 @@ export class Pie extends Component {
 
   render() {
     const { tsym } = this.state;
-    const { positions, prices } = this.props;
+    const { positions } = this.props;
 
     if (positions.length === 0) return null;
 
     const tooltipFormatter = {
-      USD: '${point.y:.1f}',
-      BTC: '{point.y:.6f} BTC',
+      usd: '${point.y:.1f}',
+      btc: '{point.y:.6f} BTC',
     };
     const config = {
       colors: [
@@ -71,8 +71,8 @@ export class Pie extends Component {
           name: 'Assets',
           colorByPoint: true,
           data: positions.map(p => ({
-            name: p.coin.FullName,
-            y: calcTotal(p.quantity, getCoinPrice(p.symbol, tsym, prices)),
+            name: `${p.__meta.name} (${p.__meta.symbol})`,
+            y: p.quantity * parseFloat(p.__meta[`price_${tsym}`]),
           })),
         },
       ],
@@ -85,8 +85,8 @@ export class Pie extends Component {
           onChange={e => this.setState({ tsym: e.target.value })}
           value={tsym}
         >
-          <Radio value={'USD'}>USD</Radio>
-          <Radio value={'BTC'}>BTC</Radio>
+          <Radio value={'usd'}>USD</Radio>
+          <Radio value={'btc'}>BTC</Radio>
         </RadioGroup>
         <ReactHighcharts config={config} ref="chart" />
       </div>

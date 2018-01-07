@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { PositionsContainer } from './containers/PositionsContainer';
 import { EditorContainer } from './containers/EditorContainer';
-import { SettingsContainer } from './containers/SettingsContainer';
+// import { SettingsContainer } from './containers/SettingsContainer';
 import { PieContainer } from './containers/PieContainer';
 
 import { Tabs } from 'antd';
@@ -18,13 +18,13 @@ export class App extends Component {
             <EditorContainer />
           </TabPane>
           <TabPane tab="Pie" key="2">
-            <PieContainer/>
+            <PieContainer />
           </TabPane>
           <TabPane tab="Watchlist" key="3">
             <p>Coming soon</p>
           </TabPane>
           <TabPane tab="Settings" key="4">
-            <SettingsContainer />
+            {/*<SettingsContainer />*/}
           </TabPane>
           <TabPane tab="Donate" key="5">
             <p>Coming soon</p>

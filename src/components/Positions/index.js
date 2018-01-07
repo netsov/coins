@@ -12,10 +12,10 @@ import { intervalMixin } from '../../utils/mixins';
 
 import {
   // ZOOM_CHOICES_INDEX,
-  COIN_IMG_URL,
-  getCoinPrice,
+  // COIN_IMG_URL,
+  // getCoinPrice,
   formatFloat,
-  getCoinChange,
+  // getCoinChange,
 } from '../../utils';
 
 import {
@@ -34,13 +34,7 @@ export class Positions extends intervalMixin(Component) {
   // };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const propsKeys = [
-      'positions',
-      'prices',
-      'selected',
-      'totalUSD',
-      'totalBTC',
-    ];
+    const propsKeys = ['positions', 'selected', 'totalUSD', 'totalBTC'];
     const stateKeys = [];
 
     return (
@@ -68,9 +62,9 @@ export class Positions extends intervalMixin(Component) {
 
   watchPrices(positions, force) {
     if (force) this.resetInterval();
-    this.props.getPrices(positions, force);
+    this.props.getTickerData();
     this.intervalID = setInterval(
-      () => this.props.getPrices(positions),
+      () => this.props.getTickerData(),
       this.interval
     );
   }
@@ -150,28 +144,23 @@ export class Positions extends intervalMixin(Component) {
     });
 
   render() {
-    const {
-      positions,
-      prices,
-      selected,
-      toggleSelected,
-      toggleSelectAll,
-    } = this.props;
+    const { positions, selected, toggleSelected, toggleSelectAll } = this.props;
     console.log('Positions rendered');
 
     const data = positions.map(p => {
-      const USD = getCoinPrice(p.symbol, 'USD', prices);
-      const BTC = getCoinPrice(p.symbol, 'BTC', prices);
+      const USD = p.__meta.price_usd;
+      const BTC = p.__meta.price_btc;
       return {
         key: p.__id,
-        name: [p.symbol, COIN_IMG_URL(p.coin.ImageUrl), p.coin.FullName],
+        name: p.__meta,
         balance: p.quantity,
-        usdValue: formatFloat(USD * p.quantity, 2),
+        usdValue: formatFloat(USD * p.quantity, 0),
         btcValue: formatFloat(BTC * p.quantity),
         priceBTC: formatFloat(BTC),
         priceUSD: formatFloat(USD, 2),
-        changeBTC: getCoinChange(p.symbol, 'BTC', prices),
-        changeUSD: getCoinChange(p.symbol, 'USD', prices),
+        change1h: p.__meta.percent_change_1h,
+        change24h: p.__meta.percent_change_24h,
+        change7d: p.__meta.percent_change_7d,
         position: p,
       };
     });

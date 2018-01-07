@@ -68,7 +68,8 @@ export class Chart extends Component {
     (position.loading ? this.showLoading : this.hideLoading)();
 
   getData(zoom, force) {
-    const { position: { symbol, __id }, usd, btc } = this.props;
+    const { position: { __meta: { symbol }, __id }, usd, btc } = this.props;
+    if (!symbol) return;
     if (!(usd.length || btc.length)) this.showLoading();
     this.props.getHisto(symbol, 'USD', zoom, __id, force);
     if (symbol !== 'BTC') this.props.getHisto(symbol, 'BTC', zoom, __id, force);

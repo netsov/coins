@@ -6,19 +6,19 @@ const positions = (state = [], action) => {
       return state.filter(p => !action.positionIds.includes(p.__id));
     case actions.GET_POSITIONS:
       return action.positions;
-    case actions.CREATE_POSITION:
-      return [action.position, ...state];
+    // case actions.CREATE_POSITION:
+    //   return [action.position, ...state];
     case actions.UPDATE_POSITION:
       return state.map(
         p => (p.__id === action.position.__id ? action.position : p)
       );
     case actions.GET_HISTO_REQUEST:
       return state.map(
-        p => (p.__id === action.__id ? {...p, loading: true} : p )
+        p => (p.__id === action.__id ? { ...p, loading: true } : p)
       );
     case actions.GET_HISTO_SUCCESS:
       return state.map(
-        p => (p.__id === action.__id ? {...p, loading: false} : p )
+        p => (p.__id === action.__id ? { ...p, loading: false } : p)
       );
     default:
       return state;
@@ -106,6 +106,15 @@ const coins = (state = {}, action) => {
   }
 };
 
+const ticker = (state = [], action) => {
+  switch (action.type) {
+    case actions.GET_TICKER:
+      return action.data;
+    default:
+      return state;
+  }
+};
+
 export const reducers = {
   positions,
   position,
@@ -115,4 +124,5 @@ export const reducers = {
   prices,
   histo,
   coins,
+  ticker,
 };

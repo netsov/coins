@@ -22,11 +22,17 @@ const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
-    render: ([text, imgUrl, fullName]) => (
+    // width: 100,
+    render: ({ symbol, name, id }) => (
       <span>
-        <Tooltip title={fullName} placement="topLeft">
-          <img src={imgUrl} height="24" width="24" alt="" />&nbsp;&nbsp;
-          <span>{text}</span>
+        <Tooltip title={`${name} (${symbol})`} placement="topLeft">
+          <img
+            src={`https://files.coinmarketcap.com/static/img/coins/32x32/${id}.png`}
+            height="24"
+            width="24"
+            alt=""
+          />&nbsp;&nbsp;
+          <span>{symbol}</span>
         </Tooltip>
       </span>
     ),
@@ -64,20 +70,28 @@ const columns = [
     // width: 130,
   },
   {
-    title: 'Change vs USD (24hr)',
-    dataIndex: 'changeUSD',
+    title: '% 1h',
+    dataIndex: 'change1h',
     render: change,
-    sorter: sorter('changeUSD'),
+    sorter: sorter('change1h'),
     className: 'column--center',
-    width: 130,
+    // width: 130,
   },
   {
-    title: 'Change vs BTC (24hr)',
-    dataIndex: 'changeBTC',
+    title: '% 24h',
+    dataIndex: 'change24h',
     render: change,
-    sorter: sorter('changeBTC'),
+    sorter: sorter('change24h'),
     className: 'column--center',
-    width: 130,
+    // width: 130,
+  },
+  {
+    title: '% 7d',
+    dataIndex: 'change7d',
+    render: change,
+    sorter: sorter('change7d'),
+    className: 'column--center',
+    // width: 130,
   },
 ];
 

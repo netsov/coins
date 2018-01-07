@@ -3,7 +3,7 @@ import { defaultPosition } from '../models';
 import * as storage from '../utils/localStorage';
 
 export const GET_POSITIONS = 'GET_POSITIONS';
-export const CREATE_POSITION = 'CREATE_POSITION';
+// export const CREATE_POSITION = 'CREATE_POSITION';
 export const UPDATE_POSITION = 'UPDATE_POSITION';
 export const DELETE_POSITIONS = 'DELETE_POSITIONS';
 export const TOGGLE_SELECTED = 'TOGGLE_SELECTED';
@@ -18,14 +18,13 @@ export const getPositions = () => {
   };
 };
 
-export const createPosition = position => {
-  position.__id = new Date().valueOf();
-  storage.createPosition(position);
-  return {
-    type: CREATE_POSITION,
-    position,
-  };
-};
+// export const createPosition = position => {
+//   storage.createPosition(position);
+//   return {
+//     type: CREATE_POSITION,
+//     position,
+//   };
+// };
 
 export const updatePosition = position => {
   storage.updatePosition(position);

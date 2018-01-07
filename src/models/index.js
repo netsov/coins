@@ -1,12 +1,12 @@
 export const defaultPosition = {
   __id: null,
-  symbol: '',
-  tradePrice: '',
-  tradeDate: '',
-  currency: '',
+  // symbol: '',
+  // tradePrice: '',
+  // tradeDate: '',
+  // currency: '',
   quantity: '',
   zoom: '1d',
-  coin: {},
+  // coin: {},
   loading: false
 };
 

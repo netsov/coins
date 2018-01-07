@@ -26,9 +26,7 @@ export const createPosition = position => {
 export const updatePosition = position => {
   storeToLocalStorage(
     'positions',
-    getPositions().map(
-      p => (p.__id === position.__id ? { ...p, ...position } : p)
-    )
+    [...getPositions().filter(p => p.__id !== position.__id), position]
   );
 };
 
@@ -69,4 +67,12 @@ export const getHisto = key => {
 
 export const updatHisto = (key, data) => {
   storeToLocalStorage(key, data);
+};
+
+export const getTickerData = () => {
+  return getFromLocalStorage('ticker') || [];
+};
+
+export const updateTickerData = coins => {
+  storeToLocalStorage('ticker', coins);
 };

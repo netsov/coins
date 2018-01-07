@@ -20,10 +20,11 @@ class _Editor extends Component {
   }
 
   async componentDidMount() {
-    this.props.getCoins();
+    this.props.getTickerData();
   }
 
   async componentWillUpdate(nextProps, nextState) {
+    return;
     const { position } = this.state;
     const nextPosition = nextState.position;
     if (nextPosition.symbol !== position.symbol && nextPosition.symbol) {
@@ -59,20 +60,11 @@ class _Editor extends Component {
   };
 
   handleSave = () => {
-    const { coins } = this.props;
+    // const { coins } = this.props;
     const { position } = this.state;
-    if (!position.symbol || !position.quantity) return;
+    if (!(position.__id || position.quantity)) return;
 
-    const newPosition = {
-      ...position,
-      coin: coins.find(c => c.Name === position.symbol),
-    };
-
-    if (newPosition.__id) {
-      this.props.updatePosition(newPosition);
-    } else {
-      this.props.createPosition(newPosition);
-    }
+    this.props.updatePosition(position);
 
     this.props.closeEditor();
   };
@@ -95,7 +87,7 @@ class _Editor extends Component {
             disabled={!!__id}
             placeholder="Select a coin"
             optionFilterProp="children"
-            onChange={this.handleChange('symbol')}
+            onChange={this.handleChange('__id')}
             filterOption={(input, option) =>
               option.props.children
                 .toLowerCase()
@@ -175,14 +167,7 @@ class _Editor extends Component {
 
   renderForm2 = () => {
     const { coins } = this.props;
-    const {
-      __id,
-      symbol,
-      quantity,
-      // currency,
-      // tradeDate,
-      // tradePrice,
-    } = this.state.position;
+    const { __id, quantity } = this.state.position;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -200,14 +185,16 @@ class _Editor extends Component {
                 required: true,
               },
             ],
-            initialValue: symbol || undefined,
+            initialValue: __id
+              ? coins.find(i => i.id === __id).symbol
+              : undefined,
           })(
             <Select
               showSearch
               disabled={!!__id}
               placeholder="Select a coin"
               optionFilterProp="children"
-              onChange={this.handleChange('symbol')}
+              onChange={this.handleChange('__id')}
               filterOption={(input, option) =>
                 option.props.children
                   .toLowerCase()
@@ -216,8 +203,8 @@ class _Editor extends Component {
               // defaultValue={symbol || undefined}
             >
               {coins.map(coin => (
-                <Select.Option key={coin.Name} value={coin.Name}>
-                  {coin.FullName}
+                <Select.Option key={coin.id} value={coin.id}>
+                  {`${coin.name} (${coin.symbol})`}
                 </Select.Option>
               ))}
             </Select>

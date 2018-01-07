@@ -6,7 +6,7 @@ import { HISTO_KEY } from '../utils';
 import { getHisto, updatePosition } from '../actions';
 
 const mapStateToProps = (state, ownProps) => {
-  const { position: { zoom, symbol } } = ownProps;
+  const { position: { zoom, __meta: {symbol} } } = ownProps;
   return {
     zoom: zoom,
     usd: state.histo[HISTO_KEY(symbol, 'USD', zoom)] || [],
