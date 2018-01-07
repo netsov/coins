@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 
 import './style.css';
-
-// import isEqual from 'lodash.isequal';
+import isEqual from 'lodash.isequal';
 import ReactHighcharts from 'react-highcharts/ReactHighcharts.src';
-import { calcTotal, getCoinPrice } from '../../utils';
 
 import { Radio } from 'antd';
 const RadioGroup = Radio.Group;
@@ -13,6 +11,16 @@ export class Pie extends Component {
   state = {
     tsym: 'usd',
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const propsKeys = ['positions'];
+    const stateKeys = ['tsym'];
+
+    return (
+      stateKeys.some(key => !isEqual(this.state[key], nextState[key])) ||
+      propsKeys.some(key => !isEqual(this.props[key], nextProps[key]))
+    );
+  }
 
   componentDidMount() {
     this.props.getPositions();
@@ -68,7 +76,7 @@ export class Pie extends Component {
       },
       series: [
         {
-          name: 'Assets',
+          name: 'Holdings',
           colorByPoint: true,
           data: positions.map(p => ({
             name: `${p.__meta.name} (${p.__meta.symbol})`,

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 import ReactHighstock from 'react-highcharts/ReactHighstock.src';
 import HighchartsExporting from 'highcharts-exporting';
-// import { HISTO_KEY } from '../../utils';
 
 HighchartsExporting(ReactHighstock.Highcharts);
 
@@ -44,7 +43,7 @@ const buttons = [
 
 export class Chart extends Component {
   shouldComponentUpdate(nextProps, nextState) {
-    const propsKeys = ['zoom', 'usd', 'btc'];
+    const propsKeys = ['zoom', 'usd', 'btc', 'expanded'];
     const stateKeys = [];
 
     return (
@@ -77,6 +76,10 @@ export class Chart extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.handleLoading(nextProps.position);
+
+    if (!this.props.expanded && nextProps.expanded) {
+      this.getData(nextProps.position.zoom);
+    }
   }
 
   handleZoom = zoom => () => {

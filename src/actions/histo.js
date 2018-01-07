@@ -4,7 +4,13 @@ import { fetchHisto, isExpired, getTimestamp, HISTO_KEY } from '../utils';
 export const GET_HISTO_REQUEST = 'GET_HISTO_REQUEST';
 export const GET_HISTO_SUCCESS = 'GET_HISTO_SUCCESS';
 
-export const getHisto = (fsym, tsym, zoom, __id, force) => async dispatch => {
+export const getHisto = (
+  fsym,
+  tsym,
+  zoom = '1d',
+  __id,
+  force
+) => async dispatch => {
   const key = HISTO_KEY(fsym, tsym, zoom);
   let { timestamp, data } = storage.getHisto(key);
 

@@ -47,27 +47,35 @@ const columns = [
     title: 'Holdings USD',
     dataIndex: 'usdValue',
     sorter: sorter('usdValue'),
+    render: s => `$${s}`,
     className: 'column--center',
+    currency: 'USD',
   },
   {
     title: 'Holdings BTC',
     dataIndex: 'btcValue',
     sorter: sorter('btcValue'),
+    render: s => `${s} BTC`,
     className: 'column--center',
+    currency: 'BTC',
   },
   {
     title: 'Price USD',
     dataIndex: 'priceUSD',
     sorter: sorter('priceUSD'),
+    render: s => `$${s}`,
     className: 'column--center',
     // width: 110,
+    currency: 'USD',
   },
   {
     title: 'Price BTC',
     dataIndex: 'priceBTC',
     sorter: sorter('priceBTC'),
+    render: s => `${s} BTC`,
     className: 'column--center',
     // width: 130,
+    currency: 'BTC',
   },
   {
     title: '% 1h',
@@ -93,8 +101,15 @@ const columns = [
     className: 'column--center',
     // width: 130,
   },
+  {
+    title: 'Market Cap',
+    dataIndex: 'marketCapUSD',
+    render: s => `$${s.toLocaleString()}`,
+    sorter: sorter('marketCapUSD'),
+    className: 'column--center',
+  },
 ];
 
-export function getTableColumns() {
-  return columns;
+export function getTableColumns(currency) {
+  return columns.filter(c => !c.currency || c.currency === currency);
 }

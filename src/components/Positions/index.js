@@ -1,22 +1,14 @@
 import React, { Component } from 'react';
-// import classNames from 'classnames';
 import isEqual from 'lodash.isequal';
 import DocumentTitle from 'react-document-title';
-import './style.css';
 
-// import { Position } from '../Position';
-// import { Chart } from '../Chart';
 import { ChartContainer } from '../../containers/ChartContainer';
 import { getTableColumns } from './utils';
 import { intervalMixin } from '../../utils/mixins';
 
-import {
-  // ZOOM_CHOICES_INDEX,
-  // COIN_IMG_URL,
-  // getCoinPrice,
-  formatFloat,
-  // getCoinChange,
-} from '../../utils';
+import './style.css';
+
+import { formatFloat } from '../../utils';
 
 import {
   Table,
@@ -26,16 +18,21 @@ import {
   message,
   // Switch,
   // Form,
+  Radio,
+  Tooltip,
 } from 'antd';
 
+const RadioGroup = Radio.Group;
+
 export class Positions extends intervalMixin(Component) {
-  // state = {
-  //   expanded: [],
-  // };
+  state = {
+    expanded: [],
+    currency: 'USD',
+  };
 
   shouldComponentUpdate(nextProps, nextState) {
     const propsKeys = ['positions', 'selected', 'totalUSD', 'totalBTC'];
-    const stateKeys = [];
+    const stateKeys = ['expanded', 'currency'];
 
     return (
       stateKeys.some(key => !isEqual(this.state[key], nextState[key])) ||
@@ -69,63 +66,93 @@ export class Positions extends intervalMixin(Component) {
     );
   }
 
-  renderHeader = () => (
-    <DocumentTitle title={`$${this.props.totalUSD} · Crypto Assets`}>
-      <div className="table-header">
-        <span>
-          Total:&nbsp;${this.props.totalUSD}
-          <Divider type="vertical" />
-          {this.props.totalBTC}&nbsp;BTC
-        </span>
-        <div className="table-header--left">
-          {/*<Form layout="inline">*/}
-          {/*<Form.Item label="Charts">*/}
-          {/*<Switch*/}
-          {/*checked={*/}
-          {/*this.state.expanded.length === this.props.positions.length*/}
-          {/*}*/}
-          {/*onChange={on => this.handleExpandAll(on)}*/}
-          {/*/>*/}
-          {/*</Form.Item>*/}
-          {/*</Form>*/}
+  handleCurrencyChange = e => {
+    this.setState({
+      currency: e.target.value,
+    });
+  };
 
-          <Popconfirm
-            placement="topRight"
-            title={`Delete ${this.props.selected.length} position${
-              this.props.selected.length > 1 ? 's' : ''
-            }?`}
-            onConfirm={() => {
-              this.props.deletePositions();
-              message.info('Deleted');
-            }}
-            okText="Yes"
-            cancelText="No"
-          >
+  renderHeader = () => {
+    const RadioTooltip = ({ children }) => (
+      <Tooltip title="Affects price and holdings columns" placement="topLeft">
+        {children}
+      </Tooltip>
+    );
+    return (
+      <DocumentTitle title={`$${this.props.totalUSD} · Crypto Assets`}>
+        <div className="table-header">
+          <span>
+            Total:&nbsp;${this.props.totalUSD}
+            <Divider type="vertical" />
+            {this.props.totalBTC}&nbsp;BTC
+          </span>
+
+          <div className="table-header--left">
+            <RadioGroup
+              onChange={this.handleCurrencyChange}
+              value={this.state.currency}
+            >
+              <RadioTooltip>
+                <Radio value="USD">USD</Radio>
+              </RadioTooltip>
+              <RadioTooltip>
+                <Radio value="BTC">BTC</Radio>
+              </RadioTooltip>
+            </RadioGroup>
+            <Popconfirm
+              placement="topRight"
+              title={`Delete ${this.props.selected.length} position${
+                this.props.selected.length > 1 ? 's' : ''
+              }?`}
+              onConfirm={() => {
+                this.props.deletePositions();
+                message.info('Deleted');
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button
+                disabled={this.props.selected.length < 1}
+                type="danger"
+                ghost
+              >
+                Delete
+              </Button>
+            </Popconfirm>
+
             <Button
-              disabled={this.props.selected.length < 1}
-              type="danger"
+              disabled={this.props.selected.length !== 1}
+              onClick={this.props.openEditor}
+              type="primary"
+              // ghost={this.props.selected.length !== 1}
               ghost
             >
-              Delete
+              Edit
             </Button>
-          </Popconfirm>
-
-          <Button
-            disabled={this.props.selected.length !== 1}
-            onClick={this.props.openEditor}
-            type="primary"
-            // ghost={this.props.selected.length !== 1}
-            ghost
-          >
-            Edit
-          </Button>
-          <Button onClick={this.props.openEditor} type="primary" ghost>
-            Add
-          </Button>
+            <Button onClick={this.props.openEditor} type="primary" ghost>
+              Add
+            </Button>
+          </div>
         </div>
-      </div>
-    </DocumentTitle>
-  );
+      </DocumentTitle>
+    );
+  };
+
+  renderFooter = () => {
+    const { positions } = this.props;
+    return `${positions.length} asset${positions.length === 1 ? '' : 's'}`;
+  };
+
+  renderExpandedRow = record => {
+    return (
+      <ChartContainer
+        position={record.position}
+        expanded={
+          !!this.state.expanded.find(__id => __id === record.position.__id)
+        }
+      />
+    );
+  };
 
   handleExpand = (on, record) =>
     this.setState(prevState => {
@@ -133,13 +160,6 @@ export class Positions extends intervalMixin(Component) {
         expanded: on
           ? [...prevState.expanded, record.position.__id]
           : prevState.expanded.filter(__id => __id !== record.position.__id),
-      };
-    });
-
-  handleExpandAll = on =>
-    this.setState((prevState, props) => {
-      return {
-        expanded: on ? props.positions.map(({ __id }) => __id) : [],
       };
     });
 
@@ -161,6 +181,7 @@ export class Positions extends intervalMixin(Component) {
         change1h: p.__meta.percent_change_1h,
         change24h: p.__meta.percent_change_24h,
         change7d: p.__meta.percent_change_7d,
+        marketCapUSD: formatFloat(p.__meta.market_cap_usd, 0),
         position: p,
       };
     });
@@ -168,25 +189,21 @@ export class Positions extends intervalMixin(Component) {
     return (
       <Table
         // bordered={true}
-        columns={getTableColumns()}
+        columns={getTableColumns(this.state.currency)}
         dataSource={data}
         pagination={false}
         title={this.renderHeader}
         size="small"
         expandRowByClick={true}
-        expandedRowRender={record => (
-          <ChartContainer position={record.position} />
-        )}
-        // expandedRowKeys={this.state.expanded}
-        // onExpand={this.handleExpand}
+        expandedRowRender={this.renderExpandedRow}
+        expandedRowKeys={this.state.expanded}
+        onExpand={this.handleExpand}
         rowSelection={{
           selectedRowKeys: selected,
           onSelect: record => toggleSelected(record.key),
           onSelectAll: toggleSelectAll,
         }}
-        footer={() =>
-          `${positions.length} asset${positions.length > 1 ? 's' : ''}`
-        }
+        footer={this.renderFooter}
       />
     );
   }

@@ -17,7 +17,7 @@ export class App extends Component {
             <PositionsContainer />
             <EditorContainer />
           </TabPane>
-          <TabPane tab="Pie" key="2">
+          <TabPane tab="Pie Chart" key="2">
             <PieContainer />
           </TabPane>
           <TabPane tab="Watchlist" key="3">

@@ -91,7 +91,7 @@ const prices = (state = {}, action) => {
 const histo = (state = {}, action) => {
   switch (action.type) {
     case actions.GET_HISTO_SUCCESS:
-      return { [action.key]: action.data, ...state };
+      return { ...state, [action.key]: action.data };
     default:
       return state;
   }
