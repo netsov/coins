@@ -9,9 +9,12 @@ const positions = (state = [], action) => {
     // case actions.CREATE_POSITION:
     //   return [action.position, ...state];
     case actions.UPDATE_POSITION:
-      return state.map(
-        p => (p.__id === action.position.__id ? action.position : p)
-      );
+      const isNew = !state.find(p => p.__id === action.position.__id);
+      return isNew
+        ? [action.position, ...state]
+        : state.map(
+            p => (p.__id === action.position.__id ? action.position : p)
+          );
     case actions.GET_HISTO_REQUEST:
       return state.map(
         p => (p.__id === action.__id ? { ...p, loading: true } : p)

@@ -43,27 +43,13 @@ export class Positions extends intervalMixin(Component) {
   async componentDidMount() {
     this.props.getSettings();
     this.props.getPositions();
-    this.watchPrices(this.props.positions);
+    this.watchPrices();
   }
 
-  async componentWillReceiveProps(nextProps) {
-    if (
-      !isEqual(
-        this.props.positions.map(p => p.__id),
-        nextProps.positions.map(p => p.__id)
-      )
-    ) {
-      this.watchPrices(nextProps.positions, true);
-    }
-  }
-
-  watchPrices(positions, force) {
+  watchPrices(force) {
     if (force) this.resetInterval();
     this.props.getTickerData();
-    this.intervalID = setInterval(
-      () => this.props.getTickerData(),
-      this.interval
-    );
+    this.intervalID = setInterval(this.props.getTickerData, this.interval);
   }
 
   handleCurrencyChange = e => {
@@ -74,7 +60,10 @@ export class Positions extends intervalMixin(Component) {
 
   renderHeader = () => {
     const RadioTooltip = ({ children }) => (
-      <Tooltip title="Affects price and market value columns" placement="topLeft">
+      <Tooltip
+        title="Affects price and market value columns"
+        placement="topLeft"
+      >
         {children}
       </Tooltip>
     );

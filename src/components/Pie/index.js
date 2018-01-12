@@ -4,17 +4,10 @@ import './style.css';
 import isEqual from 'lodash.isequal';
 import ReactHighcharts from 'react-highcharts/ReactHighcharts.src';
 
-import { Radio } from 'antd';
-const RadioGroup = Radio.Group;
-
 export class Pie extends Component {
-  state = {
-    tsym: 'usd',
-  };
-
   shouldComponentUpdate(nextProps, nextState) {
     const propsKeys = ['positions'];
-    const stateKeys = ['tsym'];
+    const stateKeys = [];
 
     return (
       stateKeys.some(key => !isEqual(this.state[key], nextState[key])) ||
@@ -27,7 +20,7 @@ export class Pie extends Component {
   }
 
   render() {
-    const { tsym } = this.state;
+    const tsym = 'usd';
     const { positions } = this.props;
 
     if (positions.length === 0) return null;
@@ -89,13 +82,6 @@ export class Pie extends Component {
 
     return (
       <div className="pie-container">
-        <RadioGroup
-          onChange={e => this.setState({ tsym: e.target.value })}
-          value={tsym}
-        >
-          <Radio value={'usd'}>USD</Radio>
-          <Radio value={'btc'}>BTC</Radio>
-        </RadioGroup>
         <ReactHighcharts config={config} ref="chart" />
       </div>
     );

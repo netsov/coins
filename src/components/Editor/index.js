@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import './style.css';
 
-// import { InputField } from '../material/InputField';
-
 import { Modal, Select, Form, InputNumber } from 'antd';
-
-import { COIN_PRICE, TRADING_PAIRS, callApi } from '../../utils';
+import { fetchTickerAll } from '../../utils/coinmarketcap';
 
 const FormItem = Form.Item;
 
@@ -13,46 +10,19 @@ class _Editor extends Component {
   state = {
     toSymbols: [],
     position: null,
+    ticker: [],
+    isNew: true,
   };
 
   componentWillMount() {
-    this.setState({ position: this.props.position });
+    this.setState({
+      position: this.props.position,
+      new: !this.props.position.__id,
+    });
   }
 
   async componentDidMount() {
-    this.props.getTickerData();
-  }
-
-  async componentWillUpdate(nextProps, nextState) {
-    return;
-    const { position } = this.state;
-    const nextPosition = nextState.position;
-    if (nextPosition.symbol !== position.symbol && nextPosition.symbol) {
-      const response = await callApi(TRADING_PAIRS(nextPosition.symbol));
-      const toSymbols = response.Data.map(pair => pair.toSymbol);
-      this.setState({
-        position: {
-          ...nextPosition,
-          currency: '',
-          toSymbols: toSymbols,
-        },
-      });
-    }
-
-    if (
-      nextPosition.currency !== position.currency &&
-      nextPosition.currency &&
-      this.state.toSymbols.indexOf(nextPosition.currency) !== -1
-    ) {
-      const response = await callApi(
-        COIN_PRICE(nextPosition.symbol, nextPosition.currency)
-      );
-      const tradePrice = response[nextPosition.currency];
-      if (tradePrice)
-        this.setState({
-          position: { ...nextPosition, tradePrice },
-        });
-    }
+    this.setState({ ticker: await fetchTickerAll() });
   }
 
   handleChange = field => value => {
@@ -60,113 +30,16 @@ class _Editor extends Component {
   };
 
   handleSave = () => {
-    // const { coins } = this.props;
     const { position } = this.state;
-    if (!(position.__id || position.quantity)) return;
+    if (!(position.__id && position.quantity)) return;
 
     this.props.updatePosition(position);
 
-    this.props.closeEditor();
+    this.props.getTickerData();
   };
 
   renderForm = () => {
-    const { coins } = this.props;
-    const {
-      __id,
-      symbol,
-      // quantity,
-      // currency,
-      // tradeDate,
-      // tradePrice,
-    } = this.state.position;
-    return (
-      <form>
-        <fieldset>
-          <Select
-            showSearch
-            disabled={!!__id}
-            placeholder="Select a coin"
-            optionFilterProp="children"
-            onChange={this.handleChange('__id')}
-            filterOption={(input, option) =>
-              option.props.children
-                .toLowerCase()
-                .indexOf(input.toLowerCase()) >= 0
-            }
-            defaultValue={symbol || undefined}
-          >
-            {coins.map(coin => (
-              <Select.Option key={coin.Name} value={coin.Name}>
-                {coin.FullName}
-              </Select.Option>
-            ))}
-          </Select>
-        </fieldset>
-
-        <fieldset>
-          <InputNumber
-            min={0}
-            step={0.000001}
-            onChange={this.handleChange('quantity')}
-          />
-        </fieldset>
-        {/*<fieldset>*/}
-        {/*<InputField*/}
-        {/*required={true}*/}
-        {/*type="number"*/}
-        {/*step={0.00000001}*/}
-        {/*min={0}*/}
-        {/*initialValue={quantity}*/}
-        {/*handleChange={this.handleChange('quantity')}*/}
-        {/*name="Quantity"*/}
-        {/*placeholder="e.g. 0.001"*/}
-        {/*rtl={false}*/}
-        {/*/>*/}
-        {/*</fieldset>*/}
-        {/*<fieldset>*/}
-        {/*<datalist id="toSymbols">*/}
-        {/*{this.state.toSymbols.map(toSymbol => (*/}
-        {/*<option key={toSymbol} value={toSymbol}>*/}
-        {/*{toSymbol}*/}
-        {/*</option>*/}
-        {/*))}*/}
-        {/*</datalist>*/}
-        {/*<InputField*/}
-        {/*list="toSymbols"*/}
-        {/*required={true}*/}
-        {/*initialValue={currency}*/}
-        {/*handleChange={this.handleChange('currency')}*/}
-        {/*name="Currency"*/}
-        {/*placeholder="e.g. USD, BTC"*/}
-        {/*/>*/}
-        {/*</fieldset>*/}
-        {/*<fieldset>*/}
-        {/*<InputField*/}
-        {/*required={true}*/}
-        {/*type="number"*/}
-        {/*step={0.00000001}*/}
-        {/*min={0}*/}
-        {/*name="Trade Price"*/}
-        {/*initialValue={tradePrice}*/}
-        {/*handleChange={this.handleChange('tradePrice')}*/}
-        {/*placeholder="Trade Price"*/}
-        {/*rtl={false}*/}
-        {/*/>*/}
-        {/*</fieldset>*/}
-        {/*<fieldset>*/}
-        {/*<InputField*/}
-        {/*type="date"*/}
-        {/*initialValue={tradeDate}*/}
-        {/*handleChange={this.handleChange('tradeDate')}*/}
-        {/*name="Trade Date"*/}
-        {/*/>*/}
-        {/*</fieldset>*/}
-      </form>
-    );
-  };
-
-  renderForm2 = () => {
-    const { coins } = this.props;
+    const { ticker, isNew } = this.state;
     const { __id, quantity } = this.state.position;
 
     const { getFieldDecorator } = this.props.form;
@@ -186,12 +59,12 @@ class _Editor extends Component {
               },
             ],
             initialValue: __id
-              ? coins.find(i => i.id === __id).symbol
+              ? ticker.find(i => i.id === __id).symbol
               : undefined,
           })(
             <Select
               showSearch
-              disabled={!!__id}
+              disabled={!isNew}
               placeholder="Select a coin"
               optionFilterProp="children"
               onChange={this.handleChange('__id')}
@@ -202,7 +75,7 @@ class _Editor extends Component {
               }
               // defaultValue={symbol || undefined}
             >
-              {coins.map(coin => (
+              {ticker.map(coin => (
                 <Select.Option key={coin.id} value={coin.id}>
                   {`${coin.name} (${coin.symbol})`}
                 </Select.Option>
@@ -241,7 +114,7 @@ class _Editor extends Component {
         okText="Save"
         onCancel={this.props.closeEditor}
       >
-        {this.renderForm2()}
+        {this.renderForm()}
       </Modal>
     );
   }
