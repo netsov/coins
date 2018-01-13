@@ -118,14 +118,24 @@ const ticker = (state = [], action) => {
   }
 };
 
+const timestamp = (state = null, action) => {
+  switch (action.type) {
+    case actions.GET_TICKER:
+      return action.timestamp;
+    default:
+      return state;
+  }
+};
+
 export const reducers = {
   positions,
   position,
   selected,
   settings,
-  showSettings,
-  prices,
+  // showSettings,
+  // prices,
   histo,
-  coins,
+  // coins,
   ticker,
+  timestamp
 };

@@ -31,7 +31,13 @@ export class Positions extends intervalMixin(Component) {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const propsKeys = ['positions', 'selected', 'totalUSD', 'totalBTC'];
+    const propsKeys = [
+      'positions',
+      'selected',
+      'totalUSD',
+      'totalBTC',
+      'delta',
+    ];
     const stateKeys = ['expanded', 'currency'];
 
     return (
@@ -128,8 +134,20 @@ export class Positions extends intervalMixin(Component) {
   };
 
   renderFooter = () => {
-    const { positions } = this.props;
-    return `${positions.length} asset${positions.length === 1 ? '' : 's'}`;
+    const { positions, delta } = this.props;
+    const minutes = Math.ceil(delta / 60);
+    const updated =
+      delta > 60
+        ? `${minutes} minute${minutes > 1 ? 's' : ''} ago`
+        : 'just now';
+    return (
+      <div className="table-footer">
+        <span>
+          {positions.length}&nbsp;asset{positions.length === 1 ? '' : 's'}
+        </span>
+        <em>Updated:&nbsp;{updated}</em>
+      </div>
+    );
   };
 
   renderExpandedRow = record => {

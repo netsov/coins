@@ -14,6 +14,7 @@ export const getTickerData = (force = false) => async (dispatch, getState) => {
       dispatch({
         type: GET_TICKER,
         data,
+        timestamp,
       });
     }
 
@@ -21,15 +22,16 @@ export const getTickerData = (force = false) => async (dispatch, getState) => {
       (data, response) => [...data, ...response],
       []
     );
+    timestamp = getTimestamp();
     storage.updateTickerData({
-      data: data.filter(i => positions.find(({ __id }) => __id === i.id)),
-      // data,
-      timestamp: getTimestamp(),
+      data,
+      timestamp,
     });
   }
 
   dispatch({
     type: GET_TICKER,
     data,
+    timestamp,
   });
 };

@@ -13,7 +13,7 @@ import {
   getTickerData,
 } from '../actions';
 
-// import { calcTotalSum } from '../utils';
+import { getTimestamp} from '../utils';
 
 export function calcTotal(positions, tickerById, key) {
   return positions
@@ -36,6 +36,7 @@ const mapStateToProps = state => {
       __meta: tickerById[p.__id] || {},
     })),
     selected: state.selected,
+    delta: state.timestamp ? getTimestamp() - state.timestamp : null,
     totalUSD: calcTotal(state.positions, tickerById, 'price_usd').toFixed(2),
     totalBTC: calcTotal(state.positions, tickerById, 'price_btc').toFixed(6),
   };
