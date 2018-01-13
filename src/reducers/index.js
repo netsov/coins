@@ -60,32 +60,12 @@ const position = (state = null, action) => {
   }
 };
 
-const showSettings = (state = false, action) => {
-  switch (action.type) {
-    case actions.OPEN_SETTINGS:
-      return true;
-    case actions.CLOSE_SETTINGS:
-      return false;
-    default:
-      return state;
-  }
-};
-
 const settings = (state = {}, action) => {
   switch (action.type) {
     case actions.GET_SETTINGS:
       return action.settings;
     case actions.UPDATE_SETTINGS:
       return { ...state, [action.key]: action.value };
-    default:
-      return state;
-  }
-};
-
-const prices = (state = {}, action) => {
-  switch (action.type) {
-    case actions.GET_PRICES:
-      return action.prices;
     default:
       return state;
   }
@@ -100,19 +80,22 @@ const histo = (state = {}, action) => {
   }
 };
 
-const coins = (state = {}, action) => {
+const ticker = (state = [], action) => {
   switch (action.type) {
-    case actions.GET_COINS:
+    case actions.GET_TICKER:
       return action.data;
     default:
       return state;
   }
 };
 
-const ticker = (state = [], action) => {
+const tickerById = (state = {}, action) => {
   switch (action.type) {
     case actions.GET_TICKER:
-      return action.data;
+      return action.data.reduce(
+        (acc, next) => ({ ...acc, [next.id]: next }),
+        {}
+      );
     default:
       return state;
   }
@@ -132,10 +115,8 @@ export const reducers = {
   position,
   selected,
   settings,
-  // showSettings,
-  // prices,
   histo,
-  // coins,
   ticker,
-  timestamp
+  tickerById,
+  timestamp,
 };

@@ -13,7 +13,7 @@ import {
   getTickerData,
 } from '../actions';
 
-import { getTimestamp} from '../utils';
+import { getTimestamp } from '../utils';
 
 export function calcTotal(positions, tickerById, key) {
   return positions
@@ -26,19 +26,19 @@ export function calcTotal(positions, tickerById, key) {
 }
 
 const mapStateToProps = state => {
-  const tickerById = state.ticker.reduce(
-    (acc, next) => ({ ...acc, [next.id]: next }),
-    {}
-  );
   return {
     positions: state.positions.map(p => ({
       ...p,
-      __meta: tickerById[p.__id] || {},
+      __meta: state.tickerById[p.__id] || {},
     })),
     selected: state.selected,
     delta: state.timestamp ? getTimestamp() - state.timestamp : null,
-    totalUSD: calcTotal(state.positions, tickerById, 'price_usd').toFixed(2),
-    totalBTC: calcTotal(state.positions, tickerById, 'price_btc').toFixed(6),
+    totalUSD: calcTotal(state.positions, state.tickerById, 'price_usd').toFixed(
+      0
+    ),
+    totalBTC: calcTotal(state.positions, state.tickerById, 'price_btc').toFixed(
+      6
+    ),
   };
 };
 

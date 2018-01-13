@@ -26,7 +26,7 @@ export class Pie extends Component {
     if (positions.length === 0) return null;
 
     const tooltipFormatter = {
-      usd: '${point.y:.1f}',
+      usd: '${point.y:.1f}', // eslint-disable-line no-template-curly-in-string
       btc: '{point.y:.6f} BTC',
     };
     const config = {

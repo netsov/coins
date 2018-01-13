@@ -32,7 +32,7 @@ export class Positions extends intervalMixin(Component) {
 
   shouldComponentUpdate(nextProps, nextState) {
     const propsKeys = [
-      'positions',
+      // 'positions',
       'selected',
       'totalUSD',
       'totalBTC',
@@ -137,7 +137,7 @@ export class Positions extends intervalMixin(Component) {
     const { positions, delta } = this.props;
     const minutes = Math.ceil(delta / 60);
     const updated =
-      delta > 60
+      delta > 30
         ? `${minutes} minute${minutes > 1 ? 's' : ''} ago`
         : 'just now';
     return (
@@ -153,7 +153,7 @@ export class Positions extends intervalMixin(Component) {
   renderExpandedRow = record => {
     return (
       <ChartContainer
-        position={record.position}
+        positionId={record.position.__id}
         expanded={
           !!this.state.expanded.find(__id => __id === record.position.__id)
         }
@@ -174,7 +174,7 @@ export class Positions extends intervalMixin(Component) {
     const { positions, selected, toggleSelected, toggleSelectAll } = this.props;
     console.log('Positions rendered');
 
-    const data = positions.map(p => {
+    const dataSource = positions.map(p => {
       const USD = p.__meta.price_usd;
       const BTC = p.__meta.price_btc;
       return {
@@ -197,7 +197,7 @@ export class Positions extends intervalMixin(Component) {
       <Table
         // bordered={true}
         columns={getTableColumns(this.state.currency)}
-        dataSource={data}
+        dataSource={dataSource}
         pagination={false}
         title={this.renderHeader}
         size="small"

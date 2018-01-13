@@ -15,13 +15,13 @@ export const HISTO_DAY = (fsym, tsym, limit) =>
 
 export const COIN_LIST = `${BASE_URL}all/coinlist`;
 
-export const TRADING_PAIRS = fsym =>
-  `${BASE_URL}top/pairs?fsym=${fsym}&limit=100`;
-
-export const COIN_PRICE = (fsym, tsym) =>
-  `${BASE_URL}price?fsym=${fsym}&tsyms=${tsym}`;
-
-export const COIN_IMG_URL = url => `https://www.cryptocompare.com/${url}`;
+// export const TRADING_PAIRS = fsym =>
+//   `${BASE_URL}top/pairs?fsym=${fsym}&limit=100`;
+//
+// export const COIN_PRICE = (fsym, tsym) =>
+//   `${BASE_URL}price?fsym=${fsym}&tsyms=${tsym}`;
+//
+// export const COIN_IMG_URL = url => `https://www.cryptocompare.com/${url}`;
 
 const PRICE_MULTI = (fsyms, tsyms) =>
   `${BASE_URL}pricemultifull?fsyms=${fsyms}&tsyms=${tsyms}`;
@@ -101,11 +101,11 @@ export function getCoinPrice(fsym, tsym, prices) {
   return PRICE || 0;
 }
 
-export function getCoinChange(fsym, tsym, prices) {
-  let { [tsym]: { CHANGEPCT24HOUR } = {} } =
-    (prices[fsym] && prices[fsym]) || {};
-  return CHANGEPCT24HOUR ? CHANGEPCT24HOUR.toFixed(2) : 0;
-}
+// export function getCoinChange(fsym, tsym, prices) {
+//   let { [tsym]: { CHANGEPCT24HOUR } = {} } =
+//     (prices[fsym] && prices[fsym]) || {};
+//   return CHANGEPCT24HOUR ? CHANGEPCT24HOUR.toFixed(2) : 0;
+// }
 
 export function formatFloat(value, digits = 8) {
   if (!value) return 0;

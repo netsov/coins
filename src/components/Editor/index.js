@@ -17,7 +17,7 @@ class _Editor extends Component {
   componentWillMount() {
     this.setState({
       position: this.props.position,
-      new: !this.props.position.__id,
+      isNew: !this.props.position.__id,
     });
   }
 
@@ -49,6 +49,8 @@ class _Editor extends Component {
       wrapperCol: { span: 18 },
     };
 
+    const __meta = ticker.find(i => i.id === __id) || {};
+
     return (
       <Form onSubmit={() => {}}>
         <FormItem {...formItemLayout} label={'Name'}>
@@ -58,9 +60,7 @@ class _Editor extends Component {
                 required: true,
               },
             ],
-            initialValue: __id
-              ? ticker.find(i => i.id === __id).symbol
-              : undefined,
+            initialValue: __meta.symbol,
           })(
             <Select
               showSearch

@@ -187,6 +187,10 @@ export class Chart extends Component {
       chart: {
         zoomType: 'x',
       },
+      tooltip: {
+        shared: true,
+        split: false,
+      },
       exporting,
     };
 
