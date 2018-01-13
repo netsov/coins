@@ -67,10 +67,6 @@ export const ZOOM_CHOICES_INDEX = ZOOM_CHOICES.reduce(
   {}
 );
 
-export function calcTotal(quantity, price) {
-  return quantity * price;
-}
-
 export async function fetchHisto(fsym, tsym, zoom = '1d') {
   const { url, limit } = ZOOM_CHOICES_INDEX[zoom];
   const response = await callApi(url(fsym, tsym, limit));
@@ -96,29 +92,9 @@ export function isExpired(ts, minutes) {
   return ageMinutes > minutes;
 }
 
-export function getCoinPrice(fsym, tsym, prices) {
-  let { [tsym]: { PRICE } = {} } = (prices[fsym] && prices[fsym]) || {};
-  return PRICE || 0;
-}
-
-// export function getCoinChange(fsym, tsym, prices) {
-//   let { [tsym]: { CHANGEPCT24HOUR } = {} } =
-//     (prices[fsym] && prices[fsym]) || {};
-//   return CHANGEPCT24HOUR ? CHANGEPCT24HOUR.toFixed(2) : 0;
-// }
-
 export function formatFloat(value, digits = 8) {
   if (!value) return 0;
   value = parseFloat(value);
   value = digits ? value.toFixed(digits) : Math.floor(value);
   return value;
-}
-
-export function calcTotalSum(positions, prices, tsym, digits) {
-  const sum = positions.reduce(
-    (acc, next) =>
-      acc + calcTotal(next.quantity, getCoinPrice(next.symbol, tsym, prices)),
-    0
-  );
-  return formatFloat(sum, digits);
 }
