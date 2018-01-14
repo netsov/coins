@@ -1,19 +1,19 @@
 import * as actions from '../actions';
+import * as positionsModule from '../actions/positions';
+import * as watchlistModule from '../actions/watchlist';
 
-const positions = (state = [], action) => {
+const itemsReducerFactory = module => (state = [], action) => {
   switch (action.type) {
-    case actions.DELETE_POSITIONS:
-      return state.filter(p => !action.positionIds.includes(p.__id));
-    case actions.GET_POSITIONS:
-      return action.positions;
-    // case actions.CREATE_POSITION:
-    //   return [action.position, ...state];
-    case actions.UPDATE_POSITION:
-      const isNew = !state.find(p => p.__id === action.position.__id);
+    case module.DELETE_ITEMS:
+      return state.filter(p => !action.ids.includes(p.__id));
+    case module.GET_ITEMS:
+      return action.items;
+    case module.UPDATE_ITEM:
+      const isNew = !state.find(p => p.__id === action.item.__id);
       return isNew
-        ? [action.position, ...state]
+        ? [action.item, ...state]
         : state.map(
-            p => (p.__id === action.position.__id ? action.position : p)
+            p => (p.__id === action.item.__id ? action.item : p)
           );
     case actions.GET_HISTO_REQUEST:
       return state.map(
@@ -30,12 +30,10 @@ const positions = (state = [], action) => {
 
 const selected = (state = [], action) => {
   switch (action.type) {
-    case actions.DELETE_POSITIONS:
+    case actions.DELETE_ITEMS:
     case actions.CLOSE_EDITOR:
     case actions.CLEAR_SELECTED:
       return [];
-    // case actions.SELECT_ALL:
-    //   return state.length ===
     case actions.TOGGLE_SELECTED:
       const filtered = state.filter(
         positionId => !action.positionIds.includes(positionId)
@@ -53,23 +51,23 @@ const position = (state = null, action) => {
     case actions.OPEN_EDITOR:
       return action.position;
     case actions.CLOSE_EDITOR:
-    case actions.UPDATE_POSITION:
+    case actions.UPDATE_ITEM:
       return null;
     default:
       return state;
   }
 };
 
-const settings = (state = {}, action) => {
-  switch (action.type) {
-    case actions.GET_SETTINGS:
-      return action.settings;
-    case actions.UPDATE_SETTINGS:
-      return { ...state, [action.key]: action.value };
-    default:
-      return state;
-  }
-};
+// const settings = (state = {}, action) => {
+//   switch (action.type) {
+//     case actions.GET_SETTINGS:
+//       return action.settings;
+//     case actions.UPDATE_SETTINGS:
+//       return { ...state, [action.key]: action.value };
+//     default:
+//       return state;
+//   }
+// };
 
 const histo = (state = {}, action) => {
   switch (action.type) {
@@ -111,10 +109,11 @@ const timestamp = (state = null, action) => {
 };
 
 export const reducers = {
-  positions,
+  positions: itemsReducerFactory(positionsModule),
+  watchlist: itemsReducerFactory(watchlistModule),
   position,
   selected,
-  settings,
+  // settings,
   histo,
   ticker,
   tickerById,

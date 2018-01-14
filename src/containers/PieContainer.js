@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 
 import { Pie } from '../components/Pie';
 
-import { getPositions } from '../actions';
+import { getItems } from '../actions/positions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const tickerById = state.ticker.reduce(
     (acc, next) => ({ ...acc, [next.id]: next }),
     {}
@@ -18,5 +18,5 @@ const mapStateToProps = (state) => {
 };
 
 export const PieContainer = connect(mapStateToProps, {
-  getPositions
+  getPositions: getItems,
 })(Pie);

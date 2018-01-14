@@ -12,7 +12,7 @@ export const getHisto = (
   force
 ) => async dispatch => {
   const key = HISTO_KEY(fsym, tsym, zoom);
-  let { timestamp, data } = storage.getHisto(key);
+  let { timestamp, data } = storage.getFromLocalStorage(key) || {};
 
   if (force || !timestamp || isExpired(timestamp, 5)) {
     if (data) {

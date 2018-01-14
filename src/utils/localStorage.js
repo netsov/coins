@@ -1,5 +1,3 @@
-import { defaultSettings } from '../models';
-
 export function storeToLocalStorage(key, value) {
   const storage = window.localStorage;
   storage.setItem(key, JSON.stringify(value));
@@ -11,66 +9,34 @@ export function getFromLocalStorage(key) {
   return result && JSON.parse(result);
 }
 
-export function getPositions() {
-  return getFromLocalStorage('positions') || [];
+export const getItems = key => {
+  return getFromLocalStorage(key) || [];
 }
 
-export function getPosition(positionId) {
-  return getPositions().find(p => p.__id === positionId);
+export const getItem = key => (itemId) => {
+  return getItems(key).find(p => p.__id === itemId);
 }
 
-export const createPosition = position => {
-  storeToLocalStorage('positions', [position, ...getPositions()]);
-};
-
-export const updatePosition = position => {
+export const updateItem = key => item => {
   storeToLocalStorage(
-    'positions',
-    [...getPositions().filter(p => p.__id !== position.__id), position]
+    key,
+    [...getItems(key).filter(p => p.__id !== item.__id), item]
   );
 };
 
-export function deletePositions(positionIds) {
-  positionIds = Array.isArray(positionIds) ? positionIds : [positionIds];
-  let positions = getPositions();
-  positions = positions.filter(p => !positionIds.includes(p.__id));
-  storeToLocalStorage('positions', positions);
+export const deleteItems = key => (ids) => {
+  ids = Array.isArray(ids) ? ids : [ids];
+  let items = getItems(key);
+  items = items.filter(p => !ids.includes(p.__id));
+  storeToLocalStorage(key, items);
 }
 
-export const updateSettings = (key, value) => {
-  storeToLocalStorage('settings', { ...getSettings(), [key]: value });
-};
-
-export function getSettings() {
-  return getFromLocalStorage('settings') || defaultSettings;
-}
-
-export const getPrices = () => {
-  return getFromLocalStorage('prices') || {};
-};
-
-export const getCoins = () => {
-  return getFromLocalStorage('coins') || [];
-};
-
-export const updateCoins = coins => {
-  storeToLocalStorage('coins', coins);
-};
-
-export const updatePrices = prices => {
-  storeToLocalStorage('prices', prices);
-};
-
-export const getHisto = key => {
-  return getFromLocalStorage(key) || [];
-};
+// export const updateSettings = (key, value) => {
+//   storeToLocalStorage('settings', { ...getSettings(), [key]: value });
+// };
 
 export const updatHisto = (key, data) => {
   storeToLocalStorage(key, data);
-};
-
-export const getTickerData = () => {
-  return getFromLocalStorage('ticker') || [];
 };
 
 export const updateTickerData = coins => {

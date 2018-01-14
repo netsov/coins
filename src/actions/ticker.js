@@ -6,7 +6,7 @@ import { fetchTicker } from '../utils/coinmarketcap';
 export const GET_TICKER = 'GET_TICKER';
 
 export const getTickerData = (force = false) => async (dispatch, getState) => {
-  let { timestamp, data } = storage.getTickerData();
+  let { timestamp, data } = storage.getFromLocalStorage('ticker') || {};
   const { positions } = getState();
   const force = !isEqual(positions.map(p => p.__id), data.map(i => i.id));
   if (force || !timestamp || isExpired(timestamp, 5)) {

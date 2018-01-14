@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { Editor } from '../components/Editor';
 import {
-  updatePosition,
+  updateItem,
   closeEditor,
   getTickerData
 } from '../actions';
@@ -15,7 +15,7 @@ const mapStateToProps = state => {
 };
 
 export const EditorContainer = connect(mapStateToProps, {
-  updatePosition,
+  updatePosition: updateItem,
   closeEditor,
   getTickerData,
 })(props => (props.position ? <Editor {...props} /> : null));

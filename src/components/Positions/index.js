@@ -47,7 +47,6 @@ export class Positions extends intervalMixin(Component) {
   }
 
   async componentDidMount() {
-    this.props.getSettings();
     this.props.getPositions();
     this.watchPrices();
   }

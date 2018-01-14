@@ -1,0 +1,139 @@
+
+ul, li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    /*margin-top: 64px; !* toolbar offset *!*/
+}
+
+.positions-container {
+    display: flex;
+    flex-wrap: wrap;
+    /*align-items: center;*/
+    justify-content: flex-start;
+    /*padding: 5px;*/
+}
+
+.positions-container section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.position-zoom-container button {
+    margin-right: 5px;
+}
+
+.positions-container--compact li {
+    margin: 0 2px 2px 2px;
+    width: 100%;
+    /*max-width: 48%;*/
+}
+
+/*@media screen and (min-width: 1600px) {*/
+    /*.positions-container--compact li {*/
+        /*width: calc(95% / 3);*/
+    /*}*/
+/*}*/
+
+/*@media screen and (min-width: 1200px) and (max-width: 1800px){*/
+    /*.positions-container--compact li {*/
+        /*width: calc(48%);*/
+    /*}*/
+/*}*/
+
+/*@media screen and (max-width: 1200px) {*/
+    /*.positions-container--compact li {*/
+        /*width: 98%;*/
+    /*}*/
+/*}*/
+
+.select-all {
+    /*position: relative;*/
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 23px;
+    padding-top: 15px;
+}
+
+.select-all-icon {
+    /*position: absolute;*/
+    /*right: 15px;*/
+    /*top: 0;*/
+}
+
+.select-all svg {
+    fill: var(--custom-grey);
+}
+
+.select-all--fulfilled svg {
+    fill: var(--mdc-theme-primary);
+}
+
+
+/*table, tbody, tr, thead {*/
+    /*width: 100%;*/
+/*}*/
+/*td {*/
+    /*text-align:center;*/
+    /*vertical-align:middle;*/
+/*}*/
+
+.hovered-position {
+    background-color: #eee !important;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.change--positive data {
+    /*color: green;*/
+    color: #091;
+}
+
+
+.change--negative data {
+    color: tomato;
+}
+
+.table-header button {
+    margin-left: 5px;
+    width: 75px;
+}
+
+.column--right {
+    text-align: right !important;
+}
+
+.column--center {
+    text-align: center !important;
+}
+
+.column--align {
+    text-align: center !important;
+}
+
+tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
+    background-color: white;
+}
+
+.table-header--left {
+    display: flex;
+    align-items: center;
+}
+
+th {
+    /*border-right: 1px solid #e8e8e8;*/
+}
+
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,3 +1,4 @@
+/*
 import * as storage from '../utils/localStorage';
 
 export const GET_SETTINGS = 'GET_SETTINGS';
@@ -33,3 +34,4 @@ export const getSettings = () => {
     settings: storage.getSettings()
   };
 };
+*/

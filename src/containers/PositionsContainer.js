@@ -2,16 +2,12 @@ import { connect } from 'react-redux';
 
 import { Positions } from '../components/Positions';
 import {
-  getPositions,
-  updatePosition,
   toggleSelected,
   toggleSelectAll,
   openEditor,
-  getSettings,
-  // getPrices,
-  deletePositions,
   getTickerData,
 } from '../actions';
+import { getItems, updateItem, deleteItems } from '../actions/positions';
 
 import { getTimestamp } from '../utils';
 
@@ -43,12 +39,11 @@ const mapStateToProps = state => {
 };
 
 export const PositionsContainer = connect(mapStateToProps, {
-  getPositions,
-  updatePosition,
+  getPositions: getItems,
+  updatePosition: updateItem,
   toggleSelected,
   toggleSelectAll,
   openEditor,
-  getSettings,
   getTickerData,
-  deletePositions,
+  deletePositions: deleteItems,
 })(Positions);
