@@ -1,28 +1,17 @@
 import * as storage from '../utils/localStorage';
-import isEqual from 'lodash.isequal';
 import { isExpired, getTimestamp } from '../utils';
-import { fetchTicker } from '../utils/coinmarketcap';
+import { fetchTickerAll } from '../utils/coinmarketcap';
 
 export const GET_TICKER = 'GET_TICKER';
 
-export const getTickerData = (force = false) => async (dispatch, getState) => {
-  let { timestamp, data } = storage.getFromLocalStorage('ticker') || {};
-  const { positions } = getState();
-  const force = !isEqual(positions.map(p => p.__id), data.map(i => i.id));
-  if (force || !timestamp || isExpired(timestamp, 5)) {
-    if (data) {
-      dispatch({
-        type: GET_TICKER,
-        data,
-        timestamp,
-      });
-    }
-
-    data = (await Promise.all(positions.map(p => fetchTicker(p.__id)))).reduce(
-      (data, response) => [...data, ...response],
-      []
-    );
+export const getTickerData = () => async (dispatch, getState) => {
+  let { data, timestamp } = storage.getFromLocalStorage('ticker') || {};
+  const { ticker } = getState();
+  // const force = !isEqual(positions.map(p => p.__id), data.map(i => i.id));
+  if (!ticker || !timestamp || isExpired(timestamp, 5)) {
+    data = await fetchTickerAll();
     timestamp = getTimestamp();
+
     storage.updateTickerData({
       data,
       timestamp,

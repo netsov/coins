@@ -11,10 +11,7 @@ import { getItems, updateItem, deleteItems } from '../actions/watchlist';
 
 const mapStateToProps = state => {
   return {
-    items: state.watchlist.map(p => ({
-      ...p,
-      __meta: state.tickerById[p.__id] || {},
-    })),
+    items: state.watchlist,
     selected: state.selected,
   };
 };

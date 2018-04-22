@@ -2,6 +2,7 @@ import * as actions from '../actions';
 import * as positionsModule from '../actions/positions';
 import * as watchlistModule from '../actions/watchlist';
 
+
 const itemsReducerFactory = module => (state = [], action) => {
   switch (action.type) {
     case module.DELETE_ITEMS:
@@ -12,9 +13,7 @@ const itemsReducerFactory = module => (state = [], action) => {
       const isNew = !state.find(p => p.__id === action.item.__id);
       return isNew
         ? [action.item, ...state]
-        : state.map(
-            p => (p.__id === action.item.__id ? action.item : p)
-          );
+        : state.map(p => (p.__id === action.item.__id ? action.item : p));
     case actions.GET_HISTO_REQUEST:
       return state.map(
         p => (p.__id === action.__id ? { ...p, loading: true } : p)
@@ -23,6 +22,13 @@ const itemsReducerFactory = module => (state = [], action) => {
       return state.map(
         p => (p.__id === action.__id ? { ...p, loading: false } : p)
       );
+    case actions.GET_TICKER:
+      const tickerById = action.data.reduce(
+        (acc, next) => ({ ...acc, [next.id]: next }),
+        {}
+      );
+      return state.map(item => ({ ...item, __meta: tickerById[item.__id] }));
+
     default:
       return state;
   }
@@ -58,17 +64,6 @@ const position = (state = null, action) => {
   }
 };
 
-// const settings = (state = {}, action) => {
-//   switch (action.type) {
-//     case actions.GET_SETTINGS:
-//       return action.settings;
-//     case actions.UPDATE_SETTINGS:
-//       return { ...state, [action.key]: action.value };
-//     default:
-//       return state;
-//   }
-// };
-
 const histo = (state = {}, action) => {
   switch (action.type) {
     case actions.GET_HISTO_SUCCESS:
@@ -82,18 +77,6 @@ const ticker = (state = [], action) => {
   switch (action.type) {
     case actions.GET_TICKER:
       return action.data;
-    default:
-      return state;
-  }
-};
-
-const tickerById = (state = {}, action) => {
-  switch (action.type) {
-    case actions.GET_TICKER:
-      return action.data.reduce(
-        (acc, next) => ({ ...acc, [next.id]: next }),
-        {}
-      );
     default:
       return state;
   }
@@ -113,9 +96,7 @@ export const reducers = {
   watchlist: itemsReducerFactory(watchlistModule),
   position,
   selected,
-  // settings,
   histo,
   ticker,
-  tickerById,
   timestamp,
 };

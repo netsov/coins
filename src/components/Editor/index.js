@@ -10,7 +10,6 @@ class _Editor extends Component {
   state = {
     toSymbols: [],
     position: null,
-    ticker: [],
     isNew: true,
   };
 
@@ -21,25 +20,27 @@ class _Editor extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.setState({ ticker: await fetchTickerAll() });
-  }
+  // async componentDidMount() {
+  //   this.setState({ ticker: await fetchTickerAll() });
+  // }
 
   handleChange = field => value => {
     this.setState({ position: { ...this.state.position, [field]: value } });
   };
 
   handleSave = () => {
+    const { ticker } = this.props;
     const { position } = this.state;
     if (!(position.__id && position.quantity)) return;
+    const __meta = ticker.find(i => i.id === position.__id) || {};
 
-    this.props.updatePosition(position);
-
-    this.props.getTickerData();
+    this.props.updatePosition({ ...position, __meta });
+    // this.props.getTickerData();
   };
 
   renderForm = () => {
-    const { ticker, isNew } = this.state;
+    const { ticker } = this.props;
+    const { isNew } = this.state;
     const { __id, quantity } = this.state.position;
 
     const { getFieldDecorator } = this.props.form;

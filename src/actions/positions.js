@@ -4,7 +4,6 @@ export const GET_ITEMS = 'GET_POSITIONS';
 export const UPDATE_ITEM = 'UPDATE_POSITION';
 export const DELETE_ITEMS = 'DELETE_POSITIONS';
 
-
 export const getItems = () => {
   return {
     type: GET_ITEMS,
@@ -16,7 +15,7 @@ export const updateItem = item => {
   storage.updateItem('positions')(item);
   return {
     type: UPDATE_ITEM,
-    position: item,
+    item,
   };
 };
 

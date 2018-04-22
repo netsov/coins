@@ -26,12 +26,13 @@ const columns = [
     render: ({ symbol, name, id }) => (
       <span>
         <Tooltip title={`${name} (${symbol})`} placement="topLeft">
-          <img
-            src={`https://files.coinmarketcap.com/static/img/coins/32x32/${id}.png`}
-            height="24"
-            width="24"
-            alt=""
-          />&nbsp;&nbsp;
+          {/*<img*/}
+          {/*// src={`https://files.coinmarketcap.com/static/img/coins/32x32/${id}.png`}*/}
+          {/*src={`https://www.cryptocompare.com/media/19633/${id}.png`}*/}
+          {/*height="24"*/}
+          {/*width="24"*/}
+          {/*alt=""*/}
+          {/*/>&nbsp;&nbsp;*/}
           <span>{symbol}</span>
         </Tooltip>
       </span>
@@ -42,7 +43,7 @@ const columns = [
     dataIndex: 'position',
     sorter: sorter('balance'),
     // render: ({ quantity, __meta: { symbol } }) => `${quantity} ${symbol}`,
-    render: ({ quantity, __meta: { symbol } }) => quantity,
+    render: ({ quantity }) => quantity,
     className: 'column--align',
   },
   {

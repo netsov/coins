@@ -1,4 +1,4 @@
-// export * from './positions';
+export * from './positions';
 // export * from './watchlist';
 export * from './settings';
 export * from './histo';

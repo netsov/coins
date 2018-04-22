@@ -10,8 +10,9 @@ import {
 
 const mapStateToProps = state => {
   return {
-    position: state.position
-  };
+    position: state.position,
+    ticker: state.ticker,
+  }
 };
 
 export const EditorContainer = connect(mapStateToProps, {
