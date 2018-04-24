@@ -9,6 +9,13 @@ export const getTickerData = () => async (dispatch, getState) => {
   const { ticker, positions } = getState();
   // const force = !isEqual(positions.map(p => p.__id), data.map(i => i.id));
   if (!ticker || !timestamp || isExpired(timestamp, 5)) {
+    if (data)
+      dispatch({
+        type: GET_TICKER,
+        data,
+        timestamp,
+      });
+
     data = await fetchTickerAll();
     timestamp = getTimestamp();
 
