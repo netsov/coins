@@ -23,7 +23,7 @@ export class Pie extends Component {
     const tsym = 'usd';
     const { positions } = this.props;
 
-    if (positions.length === 0) return null;
+    if (positions.length === 0) return <p>No data</p>;
 
     const tooltipFormatter = {
       usd: '${point.y:.1f}', // eslint-disable-line no-template-curly-in-string

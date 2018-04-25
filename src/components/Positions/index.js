@@ -209,7 +209,7 @@ export class Positions extends intervalMixin(Component) {
           onSelect: record => toggleSelected(record.key),
           onSelectAll: toggleSelectAll,
         }}
-        footer={this.renderFooter}
+        footer={positions.length > 0 && this.renderFooter}
       />
     );
   }

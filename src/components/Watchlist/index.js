@@ -104,7 +104,7 @@ export class Watchlist extends Component {
 
   render() {
     const { items, selected, toggleSelected, toggleSelectAll } = this.props;
-    console.log('Watchlist rendered', items);
+    console.log('Watchlist rendered');
 
     const dataSource = items.map(p => {
       const USD = p.__meta.price_usd;
