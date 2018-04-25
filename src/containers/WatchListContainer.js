@@ -7,7 +7,11 @@ import {
   openEditor,
   getTickerData,
 } from '../actions';
-import { getItems, updateItem, deleteItems } from '../actions/watchlist';
+import {
+  getWatchlistItems,
+  updateWatchlistItem,
+  deleteWatchlistItems,
+} from '../actions/watchlist';
 
 const mapStateToProps = state => {
   return {
@@ -17,11 +21,11 @@ const mapStateToProps = state => {
 };
 
 export const WatchListContainer = connect(mapStateToProps, {
-  getItems,
-  updateItem,
+  getWatchlistItems,
+  updateWatchlistItem,
+  deleteWatchlistItems,
   toggleSelected,
   toggleSelectAll,
-  openEditor,
+  openEditor: openEditor('watchlist'),
   getTickerData,
-  deleteItems,
 })(Watchlist);

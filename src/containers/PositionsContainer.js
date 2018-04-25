@@ -7,7 +7,11 @@ import {
   openEditor,
   getTickerData,
 } from '../actions';
-import { getItems, updateItem, deleteItems } from '../actions/positions';
+import {
+  getPositions,
+  updatePosition,
+  deletePositions,
+} from '../actions/positions';
 
 import { getTimestamp } from '../utils';
 
@@ -29,11 +33,11 @@ const mapStateToProps = state => {
 };
 
 export const PositionsContainer = connect(mapStateToProps, {
-  getPositions: getItems,
-  updatePosition: updateItem,
+  getPositions,
+  updatePosition,
+  deletePositions,
   toggleSelected,
   toggleSelectAll,
-  openEditor,
+  openEditor: openEditor('positions'),
   getTickerData,
-  deletePositions: deleteItems,
 })(Positions);

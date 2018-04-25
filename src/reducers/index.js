@@ -2,7 +2,6 @@ import * as actions from '../actions';
 import * as positionsModule from '../actions/positions';
 import * as watchlistModule from '../actions/watchlist';
 
-
 const itemsReducerFactory = module => (state = [], action) => {
   switch (action.type) {
     case module.DELETE_ITEMS:
@@ -36,7 +35,8 @@ const itemsReducerFactory = module => (state = [], action) => {
 
 const selected = (state = [], action) => {
   switch (action.type) {
-    case actions.DELETE_ITEMS:
+    case positionsModule.DELETE_ITEMS:
+    case watchlistModule.DELETE_ITEMS:
     case actions.CLOSE_EDITOR:
     case actions.CLEAR_SELECTED:
       return [];
@@ -55,9 +55,10 @@ const selected = (state = [], action) => {
 const position = (state = null, action) => {
   switch (action.type) {
     case actions.OPEN_EDITOR:
-      return action.position;
+      return action.item;
     case actions.CLOSE_EDITOR:
-    case actions.UPDATE_ITEM:
+    case positionsModule.UPDATE_ITEM:
+    case watchlistModule.UPDATE_ITEM:
       return null;
     default:
       return state;

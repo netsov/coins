@@ -2,21 +2,23 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Editor } from '../components/Editor';
-import {
-  updateItem,
-  closeEditor,
-  getTickerData
-} from '../actions';
+import { closeEditor } from '../actions';
+
+import { updatePosition } from '../actions/positions';
+import { updateWatchlistItem } from '../actions/watchlist';
 
 const mapStateToProps = state => {
   return {
-    position: state.position,
+    item: state.position,
     ticker: state.ticker,
-  }
+  };
 };
 
-export const EditorContainer = connect(mapStateToProps, {
-  updatePosition: updateItem,
-  closeEditor,
-  getTickerData,
-})(props => (props.position ? <Editor {...props} /> : null));
+const EditorContainer = updateItem =>
+  connect(mapStateToProps, {
+    updateItem,
+    closeEditor,
+  })(props => (props.item ? <Editor {...props} /> : null));
+
+export const PositionEditorContainer = EditorContainer(updatePosition);
+export const WatchlistEditorContainer = EditorContainer(updateWatchlistItem);

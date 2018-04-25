@@ -2,21 +2,21 @@ import React, { Component } from 'react';
 import './style.css';
 
 import { Modal, Select, Form, InputNumber } from 'antd';
-import { fetchTickerAll } from '../../utils/coinmarketcap';
+// import { fetchTickerAll } from '../../utils/coinmarketcap';
 
 const FormItem = Form.Item;
 
 class _Editor extends Component {
   state = {
     toSymbols: [],
-    position: null,
+    item: null,
     isNew: true,
   };
 
   componentWillMount() {
     this.setState({
-      position: this.props.position,
-      isNew: !this.props.position.__id,
+      item: this.props.item,
+      isNew: !this.props.item.__id,
     });
   }
 
@@ -25,23 +25,23 @@ class _Editor extends Component {
   // }
 
   handleChange = field => value => {
-    this.setState({ position: { ...this.state.position, [field]: value } });
+    this.setState({ item: { ...this.state.item, [field]: value } });
   };
 
   handleSave = () => {
     const { ticker } = this.props;
-    const { position } = this.state;
-    if (!(position.__id && position.quantity)) return;
-    const __meta = ticker.find(i => i.id === position.__id) || {};
+    const { item } = this.state;
+    if (!(item.__id && item.quantity)) return;
+    const __meta = ticker.find(i => i.id === item.__id) || {};
 
-    this.props.updatePosition({ ...position, __meta });
+    this.props.updateItem({ ...item, __meta });
     // this.props.getTickerData();
   };
 
   renderForm = () => {
     const { ticker } = this.props;
     const { isNew } = this.state;
-    const { __id, quantity } = this.state.position;
+    const { __id, quantity } = this.state.item;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -109,7 +109,7 @@ class _Editor extends Component {
     console.log('editor rendered');
     return (
       <Modal
-        title={this.props.position.__id ? 'Edit' : 'Add new position'}
+        title={this.props.item.__id ? 'Edit' : 'Add new item'}
         visible={true}
         onOk={this.handleSave}
         okText="Save"

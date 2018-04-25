@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Chart } from '../components/Chart';
 import { HISTO_KEY } from '../utils';
 
-import { getHisto, updateItem } from '../actions';
+import { getHisto } from '../actions';
+import { updatePosition } from '../actions/positions';
 
 const mapStateToProps = (state, ownProps) => {
   const { positionId } = ownProps;
@@ -20,5 +21,5 @@ const mapStateToProps = (state, ownProps) => {
 
 export const ChartContainer = connect(mapStateToProps, {
   getHisto,
-  updatePosition: updateItem,
+  updatePosition: updatePosition,
 })(Chart);

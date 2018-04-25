@@ -3,7 +3,7 @@ import isEqual from 'lodash.isequal';
 
 import { ChartContainer } from '../../containers/ChartContainer';
 import { getTableColumns } from './utils';
-import { intervalMixin } from '../../utils/mixins';
+// import { intervalMixin } from '../../utils/mixins';
 
 import './style.css';
 
@@ -12,28 +12,22 @@ import { formatFloat } from '../../utils';
 import {
   Table,
   Button,
-  Divider,
+  // Divider,
   Popconfirm,
   message,
   // Switch,
   // Form,
-  Radio,
-  Tooltip,
+  // Radio,
+  // Tooltip,
 } from 'antd';
 
-export class Watchlist extends intervalMixin(Component) {
+export class Watchlist extends Component {
   state = {
     expanded: [],
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const propsKeys = [
-      // 'items',
-      'selected',
-      'totalUSD',
-      'totalBTC',
-      'delta',
-    ];
+    const propsKeys = ['items', 'selected', 'totalUSD', 'totalBTC'];
     const stateKeys = ['expanded', 'currency'];
 
     return (
@@ -43,7 +37,7 @@ export class Watchlist extends intervalMixin(Component) {
   }
 
   async componentDidMount() {
-    this.props.getItems();
+    this.props.getWatchlistItems();
   }
 
   renderHeader = () => {
@@ -58,7 +52,7 @@ export class Watchlist extends intervalMixin(Component) {
               this.props.selected.length > 1 ? 's' : ''
             }?`}
             onConfirm={() => {
-              this.props.deleteWatchlist();
+              this.props.deleteWatchlistItems();
               message.info('Deleted');
             }}
             okText="Yes"
@@ -90,23 +84,6 @@ export class Watchlist extends intervalMixin(Component) {
     );
   };
 
-  renderFooter = () => {
-    const { items, delta } = this.props;
-    const minutes = Math.ceil(delta / 60);
-    const updated =
-      delta > 30
-        ? `${minutes} minute${minutes > 1 ? 's' : ''} ago`
-        : 'just now';
-    return (
-      <div className="table-footer">
-        <span>
-          {items.length}&nbsp;asset{items.length === 1 ? '' : 's'}
-        </span>
-        <em>Updated:&nbsp;{updated}</em>
-      </div>
-    );
-  };
-
   renderExpandedRow = record => {
     return (
       <ChartContainer
@@ -127,7 +104,7 @@ export class Watchlist extends intervalMixin(Component) {
 
   render() {
     const { items, selected, toggleSelected, toggleSelectAll } = this.props;
-    console.log('Watchlist rendered');
+    console.log('Watchlist rendered', items);
 
     const dataSource = items.map(p => {
       const USD = p.__meta.price_usd;

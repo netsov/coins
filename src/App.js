@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PositionsContainer } from './containers/PositionsContainer';
-import { EditorContainer } from './containers/EditorContainer';
+import { PositionEditorContainer, WatchlistEditorContainer } from './containers/EditorContainer';
 import { PieContainer } from './containers/PieContainer';
 import { WatchListContainer } from './containers/WatchListContainer';
 
@@ -13,14 +13,14 @@ export const App = () => (
     <Tabs type="card">
       <TabPane tab="Assets" key="1">
         <PositionsContainer />
-        <EditorContainer />
+        <PositionEditorContainer />
       </TabPane>
       <TabPane tab="Pie Chart" key="2">
         <PieContainer />
       </TabPane>
       <TabPane tab="Watchlist" key="3">
         <WatchListContainer />
-        <EditorContainer />
+        <WatchlistEditorContainer />
       </TabPane>
       <TabPane tab="Settings" key="4">
         {/*<SettingsContainer />*/}
