@@ -1,12 +1,25 @@
 import React from 'react';
 
-import { PositionsContainer } from './containers/PositionsContainer';
-import { PositionEditorContainer, WatchlistEditorContainer } from './containers/EditorContainer';
-import { PieContainer } from './containers/PieContainer';
-import { WatchListContainer } from './containers/WatchListContainer';
+import Loadable from 'react-loadable';
 
-import { Tabs } from 'antd';
+import { PositionsContainer } from './containers/PositionsContainer';
+import {
+  PositionEditorContainer,
+  WatchlistEditorContainer,
+} from './containers/EditorContainer';
+
+import Tabs from 'antd/lib/tabs';
 const TabPane = Tabs.TabPane;
+
+const LoadablePieContainer = Loadable({
+  loader: () => import('./containers/PieContainer'),
+  loading: () => <p>Loading...</p>,
+});
+
+const LoadableWatchListContainer = Loadable({
+  loader: () => import('./containers/WatchListContainer'),
+  loading: () => <p>Loading...</p>,
+});
 
 export const App = () => (
   <main>
@@ -16,10 +29,10 @@ export const App = () => (
         <PositionEditorContainer />
       </TabPane>
       <TabPane tab="Pie Chart" key="2">
-        <PieContainer />
+        <LoadablePieContainer />
       </TabPane>
       <TabPane tab="Watchlist" key="3">
-        <WatchListContainer />
+        <LoadableWatchListContainer />
         <WatchlistEditorContainer />
       </TabPane>
       <TabPane tab="Settings" key="4">

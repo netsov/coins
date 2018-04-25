@@ -1,4 +1,5 @@
-import { message } from 'antd';
+import message from 'antd/lib/message';
+
 
 const BASE_URL = 'https://min-api.cryptocompare.com/data/';
 

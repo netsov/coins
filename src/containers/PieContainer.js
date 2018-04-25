@@ -6,10 +6,12 @@ import { getPositions } from '../actions/positions';
 
 const mapStateToProps = state => {
   return {
-    positions: state.positions
+    positions: state.positions,
   };
 };
 
-export const PieContainer = connect(mapStateToProps, {
+const PieContainer = connect(mapStateToProps, {
   getPositions: getPositions,
 })(Pie);
+
+export default PieContainer;

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 import DocumentTitle from 'react-document-title';
+import Loadable from 'react-loadable';
 
-import { ChartContainer } from '../../containers/ChartContainer';
 import { getTableColumns } from './utils';
 import { intervalMixin } from '../../utils/mixins';
 
@@ -10,19 +10,20 @@ import './style.css';
 
 import { formatFloat } from '../../utils';
 
-import {
-  Table,
-  Button,
-  Divider,
-  Popconfirm,
-  message,
-  // Switch,
-  // Form,
-  Radio,
-  Tooltip,
-} from 'antd';
+import Table from 'antd/lib/table';
+import Button from 'antd/lib/button';
+import Popconfirm from 'antd/lib/popconfirm';
+import message from 'antd/lib/message';
+import Radio from 'antd/lib/radio';
+import Divider from 'antd/lib/divider';
+import Tooltip from 'antd/lib/tooltip';
 
 const RadioGroup = Radio.Group;
+
+const LoadableChartContainer = Loadable({
+  loader: () => import('../../containers/ChartContainer'),
+  loading: () => <p>Loading...</p>,
+});
 
 export class Positions extends intervalMixin(Component) {
   state = {
@@ -151,7 +152,7 @@ export class Positions extends intervalMixin(Component) {
 
   renderExpandedRow = record => {
     return (
-      <ChartContainer
+      <LoadableChartContainer
         positionId={record.position.__id}
         expanded={
           !!this.state.expanded.find(__id => __id === record.position.__id)
@@ -209,7 +210,7 @@ export class Positions extends intervalMixin(Component) {
           onSelect: record => toggleSelected(record.key),
           onSelectAll: toggleSelectAll,
         }}
-        footer={positions.length > 0 && this.renderFooter}
+        footer={positions.length > 0 ? this.renderFooter : undefined}
       />
     );
   }

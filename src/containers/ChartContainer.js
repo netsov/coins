@@ -23,3 +23,5 @@ export const ChartContainer = connect(mapStateToProps, {
   getHisto,
   updatePosition: updatePosition,
 })(Chart);
+
+export default ChartContainer;

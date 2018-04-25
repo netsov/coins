@@ -20,7 +20,7 @@ const mapStateToProps = state => {
   };
 };
 
-export const WatchListContainer = connect(mapStateToProps, {
+const WatchListContainer = connect(mapStateToProps, {
   getWatchlistItems,
   updateWatchlistItem,
   deleteWatchlistItems,
@@ -29,3 +29,5 @@ export const WatchListContainer = connect(mapStateToProps, {
   openEditor: openEditor('watchlist'),
   getTickerData,
 })(Watchlist);
+
+export default WatchListContainer;

@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Tooltip } from 'antd';
+import Tooltip from 'antd/lib/tooltip';
 
 const change = change =>
   change ? (

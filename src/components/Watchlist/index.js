@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
+import Loadable from 'react-loadable';
 
-import { ChartContainer } from '../../containers/ChartContainer';
 import { getTableColumns } from './utils';
 // import { intervalMixin } from '../../utils/mixins';
 
@@ -9,17 +9,15 @@ import './style.css';
 
 import { formatFloat } from '../../utils';
 
-import {
-  Table,
-  Button,
-  // Divider,
-  Popconfirm,
-  message,
-  // Switch,
-  // Form,
-  // Radio,
-  // Tooltip,
-} from 'antd';
+import Table from 'antd/lib/table';
+import Button from 'antd/lib/button';
+import Popconfirm from 'antd/lib/popconfirm';
+import message from 'antd/lib/message';
+
+const LoadableChartContainer = Loadable({
+  loader: () => import('../../containers/ChartContainer'),
+  loading: () => <p>Loading...</p>,
+});
 
 export class Watchlist extends Component {
   state = {
@@ -86,7 +84,7 @@ export class Watchlist extends Component {
 
   renderExpandedRow = record => {
     return (
-      <ChartContainer
+      <LoadableChartContainer
         itemId={record.item.__id}
         expanded={!!this.state.expanded.find(__id => __id === record.item.__id)}
       />

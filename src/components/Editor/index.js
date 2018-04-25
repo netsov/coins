@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import './style.css';
 
-import { Modal, Select, Form, InputNumber } from 'antd';
+import InputNumber from 'antd/lib/input-number';
+import Modal from 'antd/lib/modal';
+import Select from 'antd/lib/select';
+import Form from 'antd/lib/form';
+
 // import { fetchTickerAll } from '../../utils/coinmarketcap';
 
 const FormItem = Form.Item;
