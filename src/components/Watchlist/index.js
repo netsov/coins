@@ -15,7 +15,7 @@ import Popconfirm from 'antd/lib/popconfirm';
 import message from 'antd/lib/message';
 
 const LoadableChartContainer = Loadable({
-  loader: () => import('../../containers/ChartContainer'),
+  loader: () => import('../../containers/WatchlistChartContainer'),
   loading: () => <p>Loading...</p>,
 });
 
@@ -85,7 +85,7 @@ export class Watchlist extends Component {
   renderExpandedRow = record => {
     return (
       <LoadableChartContainer
-        itemId={record.item.__id}
+        item={record.item}
         expanded={!!this.state.expanded.find(__id => __id === record.item.__id)}
       />
     );

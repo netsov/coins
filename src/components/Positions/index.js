@@ -21,7 +21,7 @@ import Tooltip from 'antd/lib/tooltip';
 const RadioGroup = Radio.Group;
 
 const LoadableChartContainer = Loadable({
-  loader: () => import('../../containers/ChartContainer'),
+  loader: () => import('../../containers/PositionChartContainer'),
   loading: () => <p>Loading...</p>,
 });
 
@@ -153,7 +153,7 @@ export class Positions extends intervalMixin(Component) {
   renderExpandedRow = record => {
     return (
       <LoadableChartContainer
-        positionId={record.position.__id}
+        item={record.position}
         expanded={
           !!this.state.expanded.find(__id => __id === record.position.__id)
         }

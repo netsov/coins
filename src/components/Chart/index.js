@@ -53,8 +53,8 @@ export class Chart extends Component {
   }
 
   componentDidMount() {
-    this.getData(this.props.position.zoom);
-    this.handleLoading(this.props.position);
+    this.getData(this.props.item.zoom);
+    this.handleLoading(this.props.item);
   }
 
   showLoading = () =>
@@ -63,11 +63,11 @@ export class Chart extends Component {
   hideLoading = () =>
     this.refs.chart && this.refs.chart.getChart().hideLoading();
 
-  handleLoading = position =>
-    (position.loading ? this.showLoading : this.hideLoading)();
+  handleLoading = item =>
+    (item.loading ? this.showLoading : this.hideLoading)();
 
   getData(zoom, force) {
-    const { position: { __meta: { symbol }, __id }, usd, btc } = this.props;
+    const { item: { __meta: { symbol }, __id }, usd, btc } = this.props;
     if (!symbol) return;
     if (!(usd.length || btc.length)) this.showLoading();
     this.props.getHisto(symbol, 'USD', zoom, __id, force);
@@ -75,17 +75,17 @@ export class Chart extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.handleLoading(nextProps.position);
+    this.handleLoading(nextProps.item);
 
     if (!this.props.expanded && nextProps.expanded) {
-      this.getData(nextProps.position.zoom);
+      this.getData(nextProps.item.zoom);
     }
   }
 
   handleZoom = zoom => () => {
     // https://github.com/highcharts/highcharts/issues/2775
     setTimeout(async () => {
-      this.props.updatePosition({ ...this.props.position, zoom });
+      this.props.updateItem({ ...this.props.item, zoom });
       this.getData(zoom);
       // await this.fetchData();
     }, 1);
