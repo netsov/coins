@@ -15,12 +15,13 @@ import {
 
 const mapStateToProps = state => {
   return {
+    editorIsOpened: !!state.position,
     items: state.watchlist,
     selected: state.selected,
   };
 };
 
-const WatchListContainer = connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getWatchlistItems,
   updateWatchlistItem,
   deleteWatchlistItems,
@@ -29,5 +30,3 @@ const WatchListContainer = connect(mapStateToProps, {
   openEditor: openEditor('watchlist'),
   getTickerData,
 })(Watchlist);
-
-export default WatchListContainer;

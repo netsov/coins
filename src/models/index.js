@@ -4,7 +4,3 @@ export const defaultPosition = {
   zoom: '1d',
   loading: false,
 };
-
-export const defaultSettings = {
-  showCharts: false,
-};

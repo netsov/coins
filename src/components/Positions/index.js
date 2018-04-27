@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import isEqual from 'lodash.isequal';
 import DocumentTitle from 'react-document-title';
 import Loadable from 'react-loadable';
@@ -25,6 +25,11 @@ const LoadableChartContainer = Loadable({
   loading: () => <p>Loading...</p>,
 });
 
+const LoadableEditorContainer = Loadable({
+  loader: () => import('../../containers/PositionEditorContainer'),
+  loading: () => <div />,
+});
+
 export class Positions extends intervalMixin(Component) {
   state = {
     expanded: [],
@@ -34,6 +39,7 @@ export class Positions extends intervalMixin(Component) {
   shouldComponentUpdate(nextProps, nextState) {
     const propsKeys = [
       // 'positions',
+      'editorIsOpened',
       'selected',
       'totalUSD',
       'totalBTC',
@@ -194,24 +200,28 @@ export class Positions extends intervalMixin(Component) {
     });
 
     return (
-      <Table
-        // bordered={true}
-        columns={getTableColumns(this.state.currency)}
-        dataSource={dataSource}
-        pagination={false}
-        title={this.renderHeader}
-        size="small"
-        expandRowByClick={true}
-        expandedRowRender={this.renderExpandedRow}
-        expandedRowKeys={this.state.expanded}
-        onExpand={this.handleExpand}
-        rowSelection={{
-          selectedRowKeys: selected,
-          onSelect: record => toggleSelected(record.key),
-          onSelectAll: toggleSelectAll,
-        }}
-        footer={positions.length > 0 ? this.renderFooter : undefined}
-      />
+      <Fragment>
+        <Table
+          // bordered={true}
+          columns={getTableColumns(this.state.currency)}
+          dataSource={dataSource}
+          pagination={false}
+          title={this.renderHeader}
+          size="small"
+          expandRowByClick={true}
+          expandedRowRender={this.renderExpandedRow}
+          expandedRowKeys={this.state.expanded}
+          onExpand={this.handleExpand}
+          rowSelection={{
+            selectedRowKeys: selected,
+            onSelect: record => toggleSelected(record.key),
+            onSelectAll: toggleSelectAll,
+          }}
+          footer={positions.length > 0 ? this.renderFooter : undefined}
+        />
+
+        {this.props.editorIsOpened && <LoadableEditorContainer />}
+      </Fragment>
     );
   }
 }

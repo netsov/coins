@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import isEqual from 'lodash.isequal';
 import Loadable from 'react-loadable';
 
@@ -17,6 +17,11 @@ import message from 'antd/lib/message';
 const LoadableChartContainer = Loadable({
   loader: () => import('../../containers/WatchlistChartContainer'),
   loading: () => <p>Loading...</p>,
+});
+
+const LoadableEditorContainer = Loadable({
+  loader: () => import('../../containers/WatchlistEditorContainer'),
+  loading: () => <div />,
 });
 
 export class Watchlist extends Component {
@@ -121,23 +126,26 @@ export class Watchlist extends Component {
     });
 
     return (
-      <Table
-        // bordered={true}
-        columns={getTableColumns(this.state.currency)}
-        dataSource={dataSource}
-        pagination={false}
-        title={this.renderHeader}
-        size="small"
-        expandRowByClick={true}
-        expandedRowRender={this.renderExpandedRow}
-        expandedRowKeys={this.state.expanded}
-        onExpand={this.handleExpand}
-        rowSelection={{
-          selectedRowKeys: selected,
-          onSelect: record => toggleSelected(record.key),
-          onSelectAll: toggleSelectAll,
-        }}
-      />
+      <Fragment>
+        <Table
+          // bordered={true}
+          columns={getTableColumns(this.state.currency)}
+          dataSource={dataSource}
+          pagination={false}
+          title={this.renderHeader}
+          size="small"
+          expandRowByClick={true}
+          expandedRowRender={this.renderExpandedRow}
+          expandedRowKeys={this.state.expanded}
+          onExpand={this.handleExpand}
+          rowSelection={{
+            selectedRowKeys: selected,
+            onSelect: record => toggleSelected(record.key),
+            onSelectAll: toggleSelectAll,
+          }}
+        />
+        {this.props.editorIsOpened && <LoadableEditorContainer />}
+      </Fragment>
     );
   }
 }

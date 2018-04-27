@@ -24,6 +24,7 @@ export function calcTotal(positions, key) {
 
 const mapStateToProps = state => {
   return {
+    editorIsOpened: !!state.position,
     positions: state.positions,
     selected: state.selected,
     delta: state.timestamp ? getTimestamp() - state.timestamp : null,
@@ -32,7 +33,7 @@ const mapStateToProps = state => {
   };
 };
 
-export const PositionsContainer = connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   getPositions,
   updatePosition,
   deletePositions,
