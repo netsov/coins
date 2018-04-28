@@ -30,7 +30,13 @@ export class Watchlist extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const propsKeys = ['items', 'selected', 'totalUSD', 'totalBTC'];
+    const propsKeys = [
+      'items',
+      'selected',
+      'totalUSD',
+      'totalBTC',
+      'editorIsOpened',
+    ];
     const stateKeys = ['expanded', 'currency'];
 
     return (

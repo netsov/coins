@@ -19,7 +19,7 @@ export const deleteItems = (type, reducerName) => () => (
   dispatch,
   getState
 ) => {
-  const { selected: ids } = getState();
+  const { [reducerName]: { selected: ids } } = getState();
   storage.deleteItems(reducerName)(ids);
   dispatch({
     type,

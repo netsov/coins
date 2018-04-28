@@ -1,17 +1,16 @@
 import { connect } from 'react-redux';
 
 import { Editor } from '../components/Editor';
-import { closeEditor } from '../actions';
 
-const mapStateToProps = state => {
+const mapStateToProps = reducerName => state => {
   return {
-    item: state.position,
+    item: state[reducerName].formItem,
     ticker: state.ticker,
   };
 };
 
-export const EditorContainerHOC = updateItem =>
-  connect(mapStateToProps, {
+export const EditorContainerHOC = (updateItem, closeEditor, reducerName) =>
+  connect(mapStateToProps(reducerName), {
     updateItem,
     closeEditor,
   })(Editor);

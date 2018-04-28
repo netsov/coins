@@ -6,7 +6,7 @@ import { getPositions } from '../actions/positions';
 
 const mapStateToProps = state => {
   return {
-    positions: state.positions,
+    positions: state.positions.items,
   };
 };
 

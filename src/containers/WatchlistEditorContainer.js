@@ -1,4 +1,11 @@
 import { EditorContainerHOC } from './EditorContainer';
-import { updateWatchlistItem } from '../actions/watchlist';
+import {
+  updateWatchlistItem,
+  closeWatchlistItemEditor,
+} from '../actions/watchlist';
 
-export default EditorContainerHOC(updateWatchlistItem);
+export default EditorContainerHOC(
+  updateWatchlistItem,
+  closeWatchlistItemEditor,
+  'watchlist'
+);

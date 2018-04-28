@@ -1,16 +1,14 @@
 import { connect } from 'react-redux';
 
 import { Positions } from '../components/Positions';
-import {
-  toggleSelected,
-  toggleSelectAll,
-  openEditor,
-  getTickerData,
-} from '../actions';
+import { getTickerData } from '../actions';
 import {
   getPositions,
   updatePosition,
   deletePositions,
+  toggleSelectAlldPositions,
+  toggleSelectedPositions,
+  openPositionEditor,
 } from '../actions/positions';
 
 import { getTimestamp } from '../utils';
@@ -24,12 +22,12 @@ export function calcTotal(positions, key) {
 
 const mapStateToProps = state => {
   return {
-    editorIsOpened: !!state.position,
-    positions: state.positions,
-    selected: state.selected,
+    editorIsOpened: !!state.positions.formItem,
+    positions: state.positions.items,
+    selected: state.positions.selected,
     delta: state.timestamp ? getTimestamp() - state.timestamp : null,
-    totalUSD: calcTotal(state.positions, 'price_usd').toFixed(0),
-    totalBTC: calcTotal(state.positions, 'price_btc').toFixed(6),
+    totalUSD: calcTotal(state.positions.items, 'price_usd').toFixed(0),
+    totalBTC: calcTotal(state.positions.items, 'price_btc').toFixed(6),
   };
 };
 
@@ -37,8 +35,8 @@ export default connect(mapStateToProps, {
   getPositions,
   updatePosition,
   deletePositions,
-  toggleSelected,
-  toggleSelectAll,
-  openEditor: openEditor('positions'),
+  toggleSelected: toggleSelectedPositions,
+  toggleSelectAll: toggleSelectAlldPositions,
+  openEditor: openPositionEditor,
   getTickerData,
 })(Positions);

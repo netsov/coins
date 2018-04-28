@@ -1,4 +1,8 @@
 import { EditorContainerHOC } from './EditorContainer';
-import { updatePosition } from '../actions/positions';
+import { updatePosition, closePositionEditor } from '../actions/positions';
 
-export default EditorContainerHOC(updatePosition);
+export default EditorContainerHOC(
+  updatePosition,
+  closePositionEditor,
+  'positions'
+);

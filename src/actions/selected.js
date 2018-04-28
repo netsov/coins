@@ -1,24 +1,24 @@
-export const TOGGLE_SELECTED = 'TOGGLE_SELECTED';
-export const CLEAR_SELECTED = 'CLEAR_SELECTED';
-
-export const toggleSelected = positionId => {
+export const toggleSelected = type => itemId => {
   return {
-    type: TOGGLE_SELECTED,
-    positionIds: [positionId],
+    type,
+    itemIds: [itemId],
   };
 };
 
-export const toggleSelectAll = () => (dispatch, getState) => {
-  const { positions, selected } = getState();
-  if (selected.length === positions.length) {
+export const toggleSelectAll = (typeClear, typeToggle, reducerName) => () => (
+  dispatch,
+  getState
+) => {
+  const { [reducerName]: {items, selected} } = getState();
+  if (selected.length === items.length) {
     dispatch({
-      type: CLEAR_SELECTED,
+      type: typeClear,
     });
   } else {
     dispatch({
-      type: TOGGLE_SELECTED,
-      positionIds: positions
-        .filter(p => !selected.includes(p.__id))
+      type: typeToggle,
+      itemIds: items
+        .filter(item => !selected.includes(item.__id))
         .map(p => p.__id),
     });
   }
