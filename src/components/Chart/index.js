@@ -135,7 +135,7 @@ export class Chart extends Component {
       },
     ];
 
-    if (btc) {
+    if (btc && btc.length) {
       series.push({
         yAxis: 1,
         name: 'Price (BTC)',

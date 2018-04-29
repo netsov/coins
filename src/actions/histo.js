@@ -1,4 +1,4 @@
-import * as storage from '../utils/localStorage';
+import * as storage from '../utils/indexedDB';
 import { fetchHisto, isExpired, getTimestamp, HISTO_KEY } from '../utils';
 
 export const GET_HISTO_REQUEST = 'GET_HISTO_REQUEST';
@@ -12,7 +12,7 @@ export const getHisto = (
   force
 ) => async dispatch => {
   const key = HISTO_KEY(fsym, tsym, zoom);
-  let { timestamp, data } = storage.getFromLocalStorage(key) || {};
+  let { timestamp, data } = (await storage.getFromIndexedDB(key)) || {};
 
   if (force || !timestamp || isExpired(timestamp, 5)) {
     if (data) {
@@ -30,7 +30,7 @@ export const getHisto = (
     });
 
     data = await fetchHisto(fsym, tsym, zoom);
-    storage.updatHisto(key, {
+    await storage.updatHisto(key, {
       timestamp: getTimestamp(),
       data,
     });
