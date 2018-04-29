@@ -4,7 +4,6 @@ import DocumentTitle from 'react-document-title';
 import Loadable from 'react-loadable';
 
 import { getTableColumns } from './utils';
-import { intervalMixin } from '../../utils/mixins';
 
 import './style.css';
 
@@ -33,7 +32,7 @@ const LoadableEditorContainer = Loadable({
   loading: () => <div />,
 });
 
-export class Positions extends intervalMixin(Component) {
+export class Positions extends Component {
   state = {
     expanded: [],
     currency: 'USD',
@@ -58,13 +57,6 @@ export class Positions extends intervalMixin(Component) {
 
   async componentDidMount() {
     this.props.getPositions();
-    this.watchPrices();
-  }
-
-  watchPrices(force) {
-    if (force) this.resetInterval();
-    this.props.getTickerData();
-    this.intervalID = setInterval(this.props.getTickerData, this.interval);
   }
 
   handleCurrencyChange = e => {

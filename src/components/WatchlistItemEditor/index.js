@@ -35,7 +35,6 @@ class _Editor extends Component {
     const __meta = ticker.find(i => i.id === item.__id) || {};
 
     this.props.updateItem({ ...item, __meta });
-    // this.props.getTickerData();
   };
 
   renderForm = () => {

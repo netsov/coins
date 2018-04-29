@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { App } from './App';
+import AppContainer from './containers/AppContainer';
+import AppContainer from './containers/AppContainer';
 
 import { Provider } from 'react-redux';
 // import registerServiceWorker from './registerServiceWorker';
@@ -10,15 +11,15 @@ import { store } from './store';
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <AppContainer />
   </Provider>,
   document.getElementById('root')
 );
 // registerServiceWorker();
 
 if (module.hot) {
-  module.hot.accept('./App', () => {
-    const NextRoot = require('./App').App;
+  module.hot.accept('./containers/AppContainer', () => {
+    const NextRoot = require('./containers/AppContainer').default;
     ReactDOM.render(
       <Provider store={store}>
         <NextRoot />

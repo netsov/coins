@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 
 import { Positions } from '../components/Positions';
-import { getTickerData } from '../actions';
 import {
   getPositions,
   updatePosition,
@@ -38,5 +37,4 @@ export default connect(mapStateToProps, {
   toggleSelected: toggleSelectedPositions,
   toggleSelectAll: toggleSelectAlldPositions,
   openEditor: openPositionEditor,
-  getTickerData,
 })(Positions);
