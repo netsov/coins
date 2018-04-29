@@ -17,7 +17,8 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export const ChartContainer = updateItem => connect(mapStateToProps, {
-  getHisto,
-  updateItem,
-})(Chart);
+export const ChartContainer = updateItem =>
+  connect(mapStateToProps, {
+    getHisto,
+    updateItem,
+  })(Chart);
