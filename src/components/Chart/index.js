@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 import isEqual from 'lodash.isequal';
-import ReactHighstock from 'react-highcharts/ReactHighstock.src';
-import HighchartsExporting from 'highcharts-exporting';
-
-HighchartsExporting(ReactHighstock.Highcharts);
 
 const colors = {
   // btc: '#8884d8',
@@ -42,9 +38,19 @@ const buttons = [
 ];
 
 export class Chart extends Component {
+  state = {
+    Highstock: null,
+  };
+
+  componentWillMount() {
+    import('../highstock').then(module => {
+      this.setState({ Highstock: module.default });
+    });
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const propsKeys = ['zoom', 'usd', 'btc', 'expanded'];
-    const stateKeys = [];
+    const stateKeys = ['Highstock'];
 
     return (
       stateKeys.some(key => !isEqual(this.state[key], nextState[key])) ||
@@ -93,6 +99,7 @@ export class Chart extends Component {
 
   render() {
     const { usd, btc, zoom } = this.props;
+    const { Highstock } = this.state;
     // if (!(usd || btc)) return null;
 
     const ts = list => list.map(([time, price]) => [time * 1000, price]);
@@ -196,6 +203,10 @@ export class Chart extends Component {
 
     console.log('Chart rendered');
 
-    return <ReactHighstock config={config} ref="chart" />;
+    return Highstock ? (
+      <Highstock config={config} ref="chart" />
+    ) : (
+      <p>Loading...</p>
+    );
   }
 }

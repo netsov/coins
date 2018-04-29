@@ -14,10 +14,7 @@ import Button from 'antd/lib/button';
 import Popconfirm from 'antd/lib/popconfirm';
 import message from 'antd/lib/message';
 
-const LoadableChartContainer = Loadable({
-  loader: () => import('../../containers/WatchlistChartContainer'),
-  loading: () => <p>Loading...</p>,
-});
+import WatchlistChartContainer from '../../containers/WatchlistChartContainer';
 
 const LoadableEditorContainer = Loadable({
   loader: () => import('../../containers/WatchlistEditorContainer'),
@@ -99,7 +96,7 @@ export class Watchlist extends Component {
 
   renderExpandedRow = record => {
     return (
-      <LoadableChartContainer
+      <WatchlistChartContainer
         item={record.item}
         expanded={!!this.state.expanded.find(__id => __id === record.item.__id)}
       />

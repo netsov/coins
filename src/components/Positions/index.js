@@ -18,6 +18,8 @@ import Radio from 'antd/lib/radio';
 import Divider from 'antd/lib/divider';
 import Tooltip from 'antd/lib/tooltip';
 
+import PositionChartContainer from '../../containers/PositionChartContainer';
+
 const RadioGroup = Radio.Group;
 
 const RadioTooltip = ({ children }) => (
@@ -25,11 +27,6 @@ const RadioTooltip = ({ children }) => (
     {children}
   </Tooltip>
 );
-
-const LoadableChartContainer = Loadable({
-  loader: () => import('../../containers/PositionChartContainer'),
-  loading: () => <p>Loading...</p>,
-});
 
 const LoadableEditorContainer = Loadable({
   loader: () => import('../../containers/PositionEditorContainer'),
@@ -157,7 +154,7 @@ export class Positions extends intervalMixin(Component) {
 
   renderExpandedRow = record => {
     return (
-      <LoadableChartContainer
+      <PositionChartContainer
         item={record.position}
         expanded={
           !!this.state.expanded.find(__id => __id === record.position.__id)
