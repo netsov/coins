@@ -36,6 +36,7 @@ export class Watchlist extends Component {
       'totalUSD',
       'totalBTC',
       'editorIsOpened',
+      'delta',
     ];
     const stateKeys = ['expanded', 'currency'];
 
@@ -51,10 +52,8 @@ export class Watchlist extends Component {
 
   renderHeader = () => {
     return (
-      <div className="table-header">
-        <span />
-
-        <div className="table-header--left">
+      <div className="watchlist-table-header">
+        <div className="watchlist-table-header--right">
           <Popconfirm
             placement="topRight"
             title={`Delete ${this.props.selected.length} item${
@@ -75,20 +74,25 @@ export class Watchlist extends Component {
               Delete
             </Button>
           </Popconfirm>
-
-          <Button
-            disabled={this.props.selected.length !== 1}
-            onClick={this.props.openEditor}
-            type="primary"
-            // ghost={this.props.selected.length !== 1}
-            ghost
-          >
-            Edit
-          </Button>
           <Button onClick={this.props.openEditor} type="primary" ghost>
             Add
           </Button>
         </div>
+      </div>
+    );
+  };
+
+  renderFooter = () => {
+    const { items, delta } = this.props;
+    if (!items.length || !delta) return;
+    const minutes = Math.ceil(delta / 60);
+    const updated =
+      delta > 30
+        ? `${minutes} minute${minutes > 1 ? 's' : ''} ago`
+        : 'just now';
+    return (
+      <div className="watchlist-table-footer">
+        <em>Updated:&nbsp;{updated}</em>
       </div>
     );
   };
@@ -149,6 +153,7 @@ export class Watchlist extends Component {
             onSelect: record => toggleSelected(record.key),
             onSelectAll: toggleSelectAll,
           }}
+          footer={this.renderFooter}
         />
         {this.props.editorIsOpened && <LoadableEditorContainer />}
       </Fragment>

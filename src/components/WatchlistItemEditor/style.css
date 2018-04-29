@@ -1,0 +1,14 @@
+form {
+  padding: 20px 10px 0 10px;
+}
+
+form fieldset input {
+  margin: auto 5px;
+}
+
+
+form fieldset {
+  margin: 0 0 50px 0;
+  padding: 0;
+  border: none;
+}

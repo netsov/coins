@@ -6,8 +6,7 @@ export const GET_TICKER = 'GET_TICKER';
 
 export const getTickerData = () => async (dispatch, getState) => {
   let { data, timestamp } = storage.getFromLocalStorage('ticker') || {};
-  const { ticker, positions: { items } } = getState();
-  // const force = !isEqual(positions.map(p => p.__id), data.map(i => i.id));
+  const { ticker } = getState();
   if (!ticker || !timestamp || isExpired(timestamp, 5)) {
     if (data)
       dispatch({
@@ -23,16 +22,6 @@ export const getTickerData = () => async (dispatch, getState) => {
       data,
       timestamp,
     });
-
-    const tickerById = data.reduce(
-      (acc, next) => ({ ...acc, [next.id]: next }),
-      {}
-    );
-
-    storage.storeToLocalStorage(
-      'positions',
-      items.map(p => ({ ...p, __meta: tickerById[p.__id] }))
-    );
   }
 
   dispatch({

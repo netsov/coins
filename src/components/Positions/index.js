@@ -20,6 +20,12 @@ import Tooltip from 'antd/lib/tooltip';
 
 const RadioGroup = Radio.Group;
 
+const RadioTooltip = ({ children }) => (
+  <Tooltip title="Affects price and market value columns" placement="topLeft">
+    {children}
+  </Tooltip>
+);
+
 const LoadableChartContainer = Loadable({
   loader: () => import('../../containers/PositionChartContainer'),
   loading: () => <p>Loading...</p>,
@@ -71,24 +77,16 @@ export class Positions extends intervalMixin(Component) {
   };
 
   renderHeader = () => {
-    const RadioTooltip = ({ children }) => (
-      <Tooltip
-        title="Affects price and market value columns"
-        placement="topLeft"
-      >
-        {children}
-      </Tooltip>
-    );
     return (
       <DocumentTitle title={`$${this.props.totalUSD} · Crypto Assets`}>
-        <div className="table-header">
+        <div className="positions-table-header">
           <span>
             Total:&nbsp;${this.props.totalUSD}
             <Divider type="vertical" />
             {this.props.totalBTC}&nbsp;BTC
           </span>
 
-          <div className="table-header--left">
+          <div className="positions-table-header--right">
             <RadioGroup
               onChange={this.handleCurrencyChange}
               value={this.state.currency}
@@ -141,13 +139,14 @@ export class Positions extends intervalMixin(Component) {
 
   renderFooter = () => {
     const { positions, delta } = this.props;
+    if (!positions.length || !delta) return;
     const minutes = Math.ceil(delta / 60);
     const updated =
       delta > 30
         ? `${minutes} minute${minutes > 1 ? 's' : ''} ago`
         : 'just now';
     return (
-      <div className="table-footer">
+      <div className="positions-table-footer">
         <span>
           {positions.length}&nbsp;asset{positions.length === 1 ? '' : 's'}
         </span>
@@ -217,7 +216,7 @@ export class Positions extends intervalMixin(Component) {
             onSelect: record => toggleSelected(record.key),
             onSelectAll: toggleSelectAll,
           }}
-          footer={positions.length > 0 ? this.renderFooter : undefined}
+          footer={this.renderFooter}
         />
 
         {this.props.editorIsOpened && <LoadableEditorContainer />}

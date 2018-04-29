@@ -10,9 +10,11 @@ import {
   toggleSelectedWatchlistItems,
   openWatchlistItemEditor,
 } from '../actions/watchlist';
+import { getTimestamp } from '../utils';
 
 const mapStateToProps = state => {
   return {
+    delta: state.timestamp ? getTimestamp() - state.timestamp : null,
     editorIsOpened: !!state.watchlist.formItem,
     items: state.watchlist.items,
     selected: state.watchlist.selected,

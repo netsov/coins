@@ -39,3 +39,13 @@ main {
     /*max-width: 1920px;*/
     padding-top: 10px;
 }
+
+
+.change--positive data {
+    color: #091;
+}
+
+
+.change--negative data {
+    color: tomato;
+}

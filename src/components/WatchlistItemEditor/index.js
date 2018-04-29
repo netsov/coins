@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
 
-import InputNumber from 'antd/lib/input-number';
 import Modal from 'antd/lib/modal';
 import Select from 'antd/lib/select';
 import Form from 'antd/lib/form';
@@ -12,15 +11,12 @@ const FormItem = Form.Item;
 
 class _Editor extends Component {
   state = {
-    toSymbols: [],
     item: null,
-    isNew: true,
   };
 
   componentWillMount() {
     this.setState({
       item: this.props.item,
-      isNew: !this.props.item.__id,
     });
   }
 
@@ -35,7 +31,7 @@ class _Editor extends Component {
   handleSave = () => {
     const { ticker } = this.props;
     const { item } = this.state;
-    if (!(item.__id && item.quantity)) return;
+    if (!item.__id) return;
     const __meta = ticker.find(i => i.id === item.__id) || {};
 
     this.props.updateItem({ ...item, __meta });
@@ -44,8 +40,7 @@ class _Editor extends Component {
 
   renderForm = () => {
     const { ticker } = this.props;
-    const { isNew } = this.state;
-    const { __id, quantity } = this.state.item;
+    const { __id } = this.state.item;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -69,7 +64,6 @@ class _Editor extends Component {
           })(
             <Select
               showSearch
-              disabled={!isNew}
               placeholder="Select a coin"
               optionFilterProp="children"
               onChange={this.handleChange('__id')}
@@ -88,29 +82,12 @@ class _Editor extends Component {
             </Select>
           )}
         </FormItem>
-
-        <FormItem {...formItemLayout} label={'Quantity'}>
-          {getFieldDecorator('Quantity', {
-            rules: [
-              {
-                required: true,
-              },
-            ],
-            initialValue: quantity,
-          })(
-            <InputNumber
-              min={0}
-              step={0.000001}
-              onChange={this.handleChange('quantity')}
-            />
-          )}
-        </FormItem>
       </Form>
     );
   };
 
   render() {
-    console.log('editor rendered');
+    console.log('watchlist editor rendered');
     return (
       <Modal
         title={this.props.item.__id ? 'Edit' : 'Add new item'}

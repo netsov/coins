@@ -1,10 +1,20 @@
 import * as storage from '../utils/localStorage';
 
-export const getItems = (type, reducerName) => () => {
-  return {
+export const getItems = (type, reducerName) => () => (dispatch, getState) => {
+  const { ticker } = getState();
+
+  const tickerById = ticker.reduce(
+    (acc, next) => ({ ...acc, [next.id]: next }),
+    {}
+  );
+  const items = storage
+    .getItems(reducerName)
+    .map(item => ({ ...item, __meta: tickerById[item.__id] || {} }));
+
+  dispatch({
     type,
-    items: storage.getItems(reducerName),
-  };
+    items,
+  });
 };
 
 export const updateItem = (type, reducerName) => item => {
