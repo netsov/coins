@@ -11,6 +11,6 @@ export async function getFromIndexedDB(key, deserialize = true) {
   return result;
 }
 
-export async function updatHisto(key, data) {
+export async function updateHisto(key, data) {
   await storeToIndexedDB(key, data);
 }

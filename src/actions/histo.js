@@ -30,7 +30,7 @@ export const getHisto = (
     });
 
     data = await fetchHisto(fsym, tsym, zoom);
-    await storage.updatHisto(key, {
+    await storage.updateHisto(key, {
       timestamp: getTimestamp(),
       data,
     });

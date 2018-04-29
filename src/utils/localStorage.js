@@ -33,14 +33,6 @@ export const deleteItems = key => ids => {
   storeToLocalStorage(key, items);
 };
 
-// export const updateSettings = (key, value) => {
-//   storeToLocalStorage('settings', { ...getSettings(), [key]: value });
-// };
-
-export const updatHisto = (key, data) => {
-  storeToLocalStorage(key, data);
-};
-
 export const updateTickerData = coins => {
   storeToLocalStorage('ticker', coins);
 };
