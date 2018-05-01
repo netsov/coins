@@ -32,6 +32,7 @@ export class App extends intervalMixin(Component) {
   }
 
   render() {
+    console.log('App rendered');
     return (
       <main>
         <Tabs type="card">

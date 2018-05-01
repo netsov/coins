@@ -15,6 +15,7 @@ import Popconfirm from 'antd/lib/popconfirm';
 import message from 'antd/lib/message';
 
 import WatchlistChartContainer from '../../containers/WatchlistChartContainer';
+import { DeltaContainer } from '../../containers/DeltaContainer';
 
 const LoadableEditorContainer = Loadable({
   loader: () => import('../../containers/WatchlistEditorContainer'),
@@ -33,7 +34,6 @@ export class Watchlist extends Component {
       'totalUSD',
       'totalBTC',
       'editorIsOpened',
-      'delta',
     ];
     const stateKeys = ['expanded', 'currency'];
 
@@ -80,16 +80,11 @@ export class Watchlist extends Component {
   };
 
   renderFooter = () => {
-    const { items, delta } = this.props;
-    if (!items.length || !delta) return;
-    const minutes = Math.ceil(delta / 60);
-    const updated =
-      delta > 30
-        ? `${minutes} minute${minutes > 1 ? 's' : ''} ago`
-        : 'just now';
+    const { items } = this.props;
+    if (!items.length) return;
     return (
       <div className="watchlist-table-footer">
-        <em>Updated:&nbsp;{updated}</em>
+        <DeltaContainer />
       </div>
     );
   };
@@ -97,7 +92,7 @@ export class Watchlist extends Component {
   renderExpandedRow = record => {
     return (
       <WatchlistChartContainer
-        item={record.item}
+        itemId={record.item.__id}
         expanded={!!this.state.expanded.find(__id => __id === record.item.__id)}
       />
     );

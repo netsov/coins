@@ -5,8 +5,9 @@ import { HISTO_KEY } from '../utils';
 
 import { getHisto } from '../actions';
 
-const mapStateToProps = (state, ownProps) => {
-  const { item } = ownProps;
+const mapStateToProps = reducerName => (state, ownProps) => {
+  const { itemId } = ownProps;
+  const item = state[reducerName].items.find(item => item.__id === itemId);
   const { zoom, __meta: { symbol } = {} } = item;
   return {
     zoom,
@@ -17,8 +18,8 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export const ChartContainer = updateItem =>
-  connect(mapStateToProps, {
+export const ChartContainer = (updateItem, reducerName) =>
+  connect(mapStateToProps(reducerName), {
     getHisto,
     updateItem,
   })(Chart);

@@ -18,6 +18,7 @@ import Divider from 'antd/lib/divider';
 import Tooltip from 'antd/lib/tooltip';
 
 import PositionChartContainer from '../../containers/PositionChartContainer';
+import { DeltaContainer } from '../../containers/DeltaContainer';
 
 const RadioGroup = Radio.Group;
 
@@ -45,7 +46,6 @@ export class Positions extends Component {
       'selected',
       'totalUSD',
       'totalBTC',
-      'delta',
     ];
     const stateKeys = ['expanded', 'currency'];
 
@@ -67,13 +67,22 @@ export class Positions extends Component {
 
   renderHeader = () => {
     return (
-      <DocumentTitle title={`$${this.props.totalUSD} · Crypto Assets`}>
+      <DocumentTitle
+        title={
+          (this.props.positions.length ? `$${this.props.totalUSD} · ` : '') +
+          'Crypto Assets'
+        }
+      >
         <div className="positions-table-header">
-          <span>
-            Total:&nbsp;${this.props.totalUSD}
-            <Divider type="vertical" />
-            {this.props.totalBTC}&nbsp;BTC
-          </span>
+          {this.props.positions.length ? (
+            <span>
+              Total:&nbsp;${this.props.totalUSD}
+              <Divider type="vertical" />
+              {this.props.totalBTC}&nbsp;BTC
+            </span>
+          ) : (
+            <span />
+          )}
 
           <div className="positions-table-header--right">
             <RadioGroup
@@ -127,19 +136,14 @@ export class Positions extends Component {
   };
 
   renderFooter = () => {
-    const { positions, delta } = this.props;
-    if (!positions.length || !delta) return;
-    const minutes = Math.ceil(delta / 60);
-    const updated =
-      delta > 30
-        ? `${minutes} minute${minutes > 1 ? 's' : ''} ago`
-        : 'just now';
+    const { positions } = this.props;
+    if (!positions.length) return;
     return (
       <div className="positions-table-footer">
         <span>
           {positions.length}&nbsp;asset{positions.length === 1 ? '' : 's'}
         </span>
-        <em>Updated:&nbsp;{updated}</em>
+        <DeltaContainer />
       </div>
     );
   };
@@ -147,7 +151,7 @@ export class Positions extends Component {
   renderExpandedRow = record => {
     return (
       <PositionChartContainer
-        item={record.position}
+        itemId={record.position.__id}
         expanded={
           !!this.state.expanded.find(__id => __id === record.position.__id)
         }

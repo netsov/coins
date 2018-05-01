@@ -201,7 +201,7 @@ export class Chart extends Component {
       exporting,
     };
 
-    console.log('Chart rendered');
+    console.log('Chart rendered', this.props.item.__id);
 
     return Highstock ? (
       <Highstock config={config} ref="chart" />

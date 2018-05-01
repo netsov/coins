@@ -10,7 +10,6 @@ import {
   openPositionEditor,
 } from '../actions/positions';
 
-import { getTimestamp } from '../utils';
 
 export function calcTotal(positions, key) {
   return positions.reduce(
@@ -24,7 +23,6 @@ const mapStateToProps = state => {
     editorIsOpened: !!state.positions.formItem,
     positions: state.positions.items,
     selected: state.positions.selected,
-    delta: state.timestamp ? getTimestamp() - state.timestamp : null,
     totalUSD: calcTotal(state.positions.items, 'price_usd').toFixed(0),
     totalBTC: calcTotal(state.positions.items, 'price_btc').toFixed(6),
   };
