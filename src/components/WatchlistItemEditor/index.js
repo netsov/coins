@@ -29,12 +29,9 @@ class _Editor extends Component {
   };
 
   handleSave = () => {
-    const { ticker } = this.props;
     const { item } = this.state;
     if (!item.__id) return;
-    const __meta = ticker.find(i => i.id === item.__id) || {};
-
-    this.props.updateItem({ ...item, __meta });
+    this.props.updateItem({ ...item });
   };
 
   renderForm = () => {

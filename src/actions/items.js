@@ -1,20 +1,11 @@
 import * as storage from '../utils/localStorage';
+import { firebaseDB } from '../utils/firebase';
 
-export const getItems = (type, reducerName) => () => (dispatch, getState) => {
-  const { ticker } = getState();
-
-  const tickerById = ticker.reduce(
-    (acc, next) => ({ ...acc, [next.id]: next }),
-    {}
-  );
-  const items = storage
-    .getItems(reducerName)
-    .map(item => ({ ...item, __meta: tickerById[item.__id] || {} }));
-
-  dispatch({
+export const getItems = (type, reducerName) => () => {
+  return {
     type,
-    items,
-  });
+    items: storage.getItems(reducerName),
+  };
 };
 
 export const updateItem = (type, reducerName) => item => {

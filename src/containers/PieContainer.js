@@ -7,6 +7,7 @@ import { getPositions } from '../actions/positions';
 const mapStateToProps = state => {
   return {
     positions: state.positions.items,
+    tickerById: state.tickerById,
   };
 };
 

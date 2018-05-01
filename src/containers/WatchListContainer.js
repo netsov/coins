@@ -14,6 +14,7 @@ const mapStateToProps = state => {
   return {
     editorIsOpened: !!state.watchlist.formItem,
     items: state.watchlist.items,
+    tickerById: state.tickerById,
     selected: state.watchlist.selected,
   };
 };

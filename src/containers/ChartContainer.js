@@ -8,13 +8,16 @@ import { getHisto } from '../actions';
 const mapStateToProps = reducerName => (state, ownProps) => {
   const { itemId } = ownProps;
   const item = state[reducerName].items.find(item => item.__id === itemId);
-  const { zoom, __meta: { symbol } = {} } = item;
+  const __meta = state.tickerById[itemId];
+  const { zoom } = item;
+  const { symbol } = __meta;
   return {
     zoom,
     usd: state.histo[HISTO_KEY(symbol, 'USD', zoom)] || [],
     btc:
       (symbol !== 'BTC' && state.histo[HISTO_KEY(symbol, 'BTC', zoom)]) || [],
     item,
+    __meta
   };
 };
 

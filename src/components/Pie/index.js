@@ -21,7 +21,7 @@ export class Pie extends Component {
 
   render() {
     const tsym = 'usd';
-    const { positions } = this.props;
+    const { positions, tickerById } = this.props;
 
     if (positions.length === 0) return <p>No data</p>;
 
@@ -71,10 +71,13 @@ export class Pie extends Component {
         {
           name: 'Holdings',
           colorByPoint: true,
-          data: positions.map(p => ({
-            name: `${p.__meta.name} (${p.__meta.symbol})`,
-            y: p.quantity * parseFloat(p.__meta[`price_${tsym}`]),
-          })),
+          data: positions.map(item => {
+            const __meta = tickerById[item.__id];
+            return {
+              name: `${__meta.name} (${__meta.symbol})`,
+              y: item.quantity * parseFloat(__meta[`price_${tsym}`]),
+            };
+          }),
         },
       ],
     };

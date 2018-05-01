@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^3.4.4",
     "classnames": "^2.2.5",
+    "firebase": "^4.13.1",
     "highcharts-exporting": "^0.1.7",
     "localforage": "^1.7.1",
     "lodash.isequal": "^4.5.0",

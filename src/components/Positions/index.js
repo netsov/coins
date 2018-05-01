@@ -169,25 +169,32 @@ export class Positions extends Component {
     });
 
   render() {
-    const { positions, selected, toggleSelected, toggleSelectAll } = this.props;
+    const {
+      positions,
+      selected,
+      toggleSelected,
+      toggleSelectAll,
+      tickerById,
+    } = this.props;
     console.log('Positions rendered');
 
-    const dataSource = positions.map(p => {
-      const USD = p.__meta.price_usd;
-      const BTC = p.__meta.price_btc;
+    const dataSource = positions.map(item => {
+      const __meta = tickerById[item.__id];
+      const USD = __meta.price_usd;
+      const BTC = __meta.price_btc;
       return {
-        key: p.__id,
-        name: p.__meta,
-        balance: p.quantity,
-        usdValue: formatFloat(USD * p.quantity, 0),
-        btcValue: formatFloat(BTC * p.quantity),
+        key: item.__id,
+        name: __meta,
+        balance: item.quantity,
+        usdValue: formatFloat(USD * item.quantity, 0),
+        btcValue: formatFloat(BTC * item.quantity),
         priceBTC: formatFloat(BTC),
         priceUSD: formatFloat(USD, 2),
-        change1h: p.__meta.percent_change_1h,
-        change24h: p.__meta.percent_change_24h,
-        change7d: p.__meta.percent_change_7d,
-        marketCapUSD: formatFloat(p.__meta.market_cap_usd, 0),
-        position: p,
+        change1h: __meta.percent_change_1h,
+        change24h: __meta.percent_change_24h,
+        change7d: __meta.percent_change_7d,
+        marketCapUSD: formatFloat(__meta.market_cap_usd, 0),
+        position: item,
       };
     });
 

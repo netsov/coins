@@ -21,6 +21,18 @@ const ticker = (state = [], action) => {
   }
 };
 
+const tickerById = (state = {}, action) => {
+  switch (action.type) {
+    case actions.GET_TICKER:
+      return action.data.reduce(
+        (acc, next) => ({ ...acc, [next.id]: next }),
+        {}
+      );
+    default:
+      return state;
+  }
+};
+
 const timestamp = (state = null, action) => {
   switch (action.type) {
     case actions.GET_TICKER:
@@ -35,5 +47,6 @@ export const reducers = {
   watchlist,
   histo,
   ticker,
+  tickerById,
   timestamp,
 };

@@ -19,12 +19,6 @@ export const itemsReducerCreator = module => (state = [], action) => {
       return state.map(
         p => (p.__id === action.__id ? { ...p, loading: false } : p)
       );
-    case actions.GET_TICKER:
-      const tickerById = action.data.reduce(
-        (acc, next) => ({ ...acc, [next.id]: next }),
-        {}
-      );
-      return state.map(item => ({ ...item, __meta: tickerById[item.__id] }));
 
     default:
       return state;
