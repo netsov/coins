@@ -28,8 +28,8 @@ export const LoginWarningText = ({ maxWidth }) => (
   </p>
 );
 
-export const LoginWarning = ({ user }) => {
-  if (user) return null;
+export const LoginWarning = ({ user, authWarningFlag }) => {
+  if (user || authWarningFlag) return null;
   return (
     <div className="login-warning">
       <Alert

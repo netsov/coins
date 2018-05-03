@@ -2,6 +2,6 @@
     margin-right: 3px;
 }
 
-.auth-avatar i:hover {
+.auth-avatar:hover {
     cursor: pointer;
 }

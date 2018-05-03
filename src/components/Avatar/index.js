@@ -11,30 +11,35 @@ import { signOut } from '../../utils/firebase';
 
 // const LoggedOutContent = () => <p>test</p>;
 
-export const LoggedOutAvatar = () => (
-  <Popover
-    content={<Login />}
-    trigger="click"
-    // title={<LoginWarningText maxWidth={300} />}
-  >
-    <div className="auth-avatar">
-      <Badge dot>
-        <Avatar icon="user" />
-      </Badge>
-    </div>
-  </Popover>
-);
+export const LoggedOutAvatar = ({ authWarningFlag }) => {
+  if (!authWarningFlag) return null;
+  return (
+    <Popover
+      content={<Login />}
+      trigger="click"
+      // title={<LoginWarningText maxWidth={300} />}
+    >
+      <div className="auth-avatar">
+        <Badge dot>
+          <Avatar icon="user" />
+        </Badge>
+      </div>
+    </Popover>
+  );
+};
 
 const LoggedInContent = () => {
   return <Button onClick={signOut}>Logout</Button>;
 };
 
-export const LoggedInAvatar = ({ user }) => (
-  <Popover content={<LoggedInContent />} trigger="click" title={user.email}>
-    <div className="auth-avatar">
-      <Badge>
-        <Avatar icon="user" />
-      </Badge>
-    </div>
-  </Popover>
-);
+export const LoggedInAvatar = ({ user }) => {
+  return (
+    <Popover content={<LoggedInContent />} trigger="click" title={user.email}>
+      <div className="auth-avatar">
+        <Badge>
+          <Avatar src={user.photoURL} />
+        </Badge>
+      </div>
+    </Popover>
+  );
+};

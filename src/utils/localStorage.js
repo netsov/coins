@@ -36,3 +36,11 @@ export const deleteItems = key => ids => {
 export const updateTickerData = coins => {
   storeToLocalStorage('ticker', coins);
 };
+
+export const getAuthWarningFlag = () => {
+  return getFromLocalStorage('authWarningFlag', false);
+};
+
+export const setAuthWarningFlag = value => {
+  return storeToLocalStorage('authWarningFlag', value, false);
+};

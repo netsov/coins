@@ -23,10 +23,13 @@ export function formatFloat(value, digits = 8) {
 export const normalize = items =>
   items.reduce((result, item) => ({ ...result, [item.__id]: item }), {});
 
-export async function syncLocalStorageWithFirebase() {
+export async function syncLocalStorageWithFirebase(user) {
   console.log('syncing with firebase');
-  await firebaseDB.ref().set({
-    watchlist: normalize(storage.getItems('watchlist')),
-    positions: normalize(storage.getItems('positions')),
-  });
+  await Promise.all(
+    ['watchlist', 'positions'].map(reducerName =>
+      firebaseDB
+        .ref(`${user.uid}/${reducerName}`)
+        .set(normalize(storage.getItems(reducerName)))
+    )
+  );
 }
