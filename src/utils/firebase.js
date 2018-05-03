@@ -18,3 +18,16 @@ export const firebaseDB = firebase.database();
 //
 //   console.log('value', snapshot.val());
 // })();
+
+export async function signInWithGoogle() {
+  // Using a popup.
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('profile');
+  provider.addScope('email');
+  await firebase.auth().signInWithPopup(provider);
+}
+
+export async function signOut() {
+  // Using a popup.
+  await firebase.auth().signOut();
+}

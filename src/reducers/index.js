@@ -42,6 +42,15 @@ const timestamp = (state = null, action) => {
   }
 };
 
+const user = (state = null, action) => {
+  switch (action.type) {
+    case actions.GET_USER:
+      return action.user;
+    default:
+      return state;
+  }
+};
+
 export const reducers = {
   positions,
   watchlist,
@@ -49,4 +58,5 @@ export const reducers = {
   ticker,
   tickerById,
   timestamp,
+  user,
 };

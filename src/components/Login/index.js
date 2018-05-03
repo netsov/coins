@@ -4,10 +4,12 @@ import Alert from 'antd/lib/alert';
 
 import './index.css';
 
+import {signInWithGoogle} from '../../utils/firebase'
+
 export const Login = () => {
   return (
     <div className="login-container">
-      <Button type="primary" icon="google">
+      <Button type="primary" icon="google" onClick={signInWithGoogle}>
         Login with Google
       </Button>
       <Button type="primary" icon="twitter">
@@ -26,7 +28,8 @@ export const LoginWarningText = ({ maxWidth }) => (
   </p>
 );
 
-export const LoginWarning = () => {
+export const LoginWarning = ({ user }) => {
+  if (user) return null;
   return (
     <div className="login-warning">
       <Alert

@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import Tabs from 'antd/lib/tabs';
 import { intervalMixin } from '../utils/mixins';
-import { LoggedOutAvatar } from '../components/Avatar';
-import { LoginWarning } from '../components/Login';
+import { LoginWarningContainer } from '../containers/LoginWarningContainer';
+import { LoginAvatarContainer } from '../containers/LoginAvatarContainer';
 
 const LoadablePositionsContainer = Loadable({
   loader: () => import('../containers/PositionsContainer'),
@@ -23,6 +23,7 @@ const LoadableWatchListContainer = Loadable({
 
 export class App extends intervalMixin(Component) {
   componentDidMount() {
+    this.props.getUser();
     this.watchPrices();
   }
 
@@ -35,8 +36,8 @@ export class App extends intervalMixin(Component) {
     console.log('App rendered');
     return (
       <main>
-        <LoginWarning />
-        <Tabs type="card" tabBarExtraContent={<LoggedOutAvatar />}>
+        <LoginWarningContainer />
+        <Tabs type="card" tabBarExtraContent={<LoginAvatarContainer />}>
           <Tabs.TabPane tab="Assets" key="1">
             <LoadablePositionsContainer />
           </Tabs.TabPane>
