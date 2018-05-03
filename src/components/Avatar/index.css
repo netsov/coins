@@ -1,0 +1,7 @@
+.auth-avatar {
+    margin-right: 3px;
+}
+
+.auth-avatar i:hover {
+    cursor: pointer;
+}

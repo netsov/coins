@@ -12,3 +12,9 @@ const config = {
 firebase.initializeApp(config);
 
 export const firebaseDB = firebase.database();
+
+// (async function f() {
+//   const snapshot = await firebaseDB.ref().once('value');
+//
+//   console.log('value', snapshot.val());
+// })();

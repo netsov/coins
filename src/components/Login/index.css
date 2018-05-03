@@ -1,0 +1,16 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.login-container button {
+    margin-bottom: 3px;
+    /*max-width: 300px;*/
+    width: 300px;
+}
+
+.login-warning {
+    margin-bottom: 10px;
+}

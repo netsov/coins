@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
 import Loadable from 'react-loadable';
-
 import Tabs from 'antd/lib/tabs';
-
 import { intervalMixin } from '../utils/mixins';
+import { LoggedOutAvatar } from '../components/Avatar';
+import { LoginWarning } from '../components/Login';
 
 const LoadablePositionsContainer = Loadable({
   loader: () => import('../containers/PositionsContainer'),
@@ -35,7 +35,8 @@ export class App extends intervalMixin(Component) {
     console.log('App rendered');
     return (
       <main>
-        <Tabs type="card">
+        <LoginWarning />
+        <Tabs type="card" tabBarExtraContent={<LoggedOutAvatar />}>
           <Tabs.TabPane tab="Assets" key="1">
             <LoadablePositionsContainer />
           </Tabs.TabPane>

@@ -1,3 +1,6 @@
+import * as storage from '../utils/localStorage';
+import { firebaseDB } from '../utils/firebase';
+
 export * from './cryptocompare';
 
 export function getTimestamp() {
@@ -15,4 +18,15 @@ export function formatFloat(value, digits = 8) {
   value = parseFloat(value);
   value = digits ? value.toFixed(digits) : Math.floor(value);
   return value;
+}
+
+export const normalize = items =>
+  items.reduce((result, item) => ({ ...result, [item.__id]: item }), {});
+
+export async function syncLocalStorageWithFirebase() {
+  console.log('syncing with firebase');
+  await firebaseDB.ref().set({
+    watchlist: normalize(storage.getItems('watchlist')),
+    positions: normalize(storage.getItems('positions')),
+  });
 }

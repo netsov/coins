@@ -10,6 +10,9 @@ export const getItems = (type, reducerName) => () => {
 
 export const updateItem = (type, reducerName) => item => {
   storage.updateItem(reducerName)(item);
+
+  firebaseDB.ref(reducerName).update({ [item.__id]: item });
+
   return {
     type,
     item,
@@ -22,6 +25,11 @@ export const deleteItems = (type, reducerName) => () => (
 ) => {
   const { [reducerName]: { selected: ids } } = getState();
   storage.deleteItems(reducerName)(ids);
+
+  firebaseDB
+    .ref(reducerName)
+    .update(ids.reduce((acc, next) => ({ ...acc, [next]: null }), {}));
+
   dispatch({
     type,
     ids,
