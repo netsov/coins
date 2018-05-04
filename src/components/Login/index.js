@@ -4,22 +4,20 @@ import Alert from 'antd/lib/alert';
 
 import './index.css';
 
-import {signInWithGoogle} from '../../utils/firebase'
-
-export const Login = () => {
+export const Login = ({ signIn }) => {
   return (
     <div className="login-container">
-      <Button type="primary" icon="google" onClick={signInWithGoogle}>
+      <Button type="primary" icon="google" onClick={signIn('google')}>
         Login with Google
       </Button>
-      <Button type="primary" icon="twitter">
+      <Button type="primary" icon="twitter" onClick={signIn('twitter')}>
         Login with Twitter
       </Button>
     </div>
   );
 };
 
-export const LoginWarningText = ({ maxWidth }) => (
+export const AuthNotificationText = ({ maxWidth }) => (
   <p style={{ maxWidth }}>
     All your data is stored in the browser and no one except you has excess to
     it. <br />
@@ -28,20 +26,25 @@ export const LoginWarningText = ({ maxWidth }) => (
   </p>
 );
 
-export const LoginWarning = ({ user, authWarningFlag }) => {
-  if (user || authWarningFlag) return null;
+export const AuthNotification = ({
+  user,
+  authNotificationFlag,
+  dismissAuthNotification,
+  signIn,
+}) => {
+  if (user || authNotificationFlag) return null;
   return (
-    <div className="login-warning">
+    <div className="auth-notification">
       <Alert
         message={
           <div>
-            <LoginWarningText />
-            <Login />
+            <AuthNotificationText />
+            <Login signIn={signIn} />
           </div>
         }
         type="info"
         // closeText="Dismiss"
-        onClose={() => {}}
+        onClose={dismissAuthNotification}
         closable
         banner
       />

@@ -5,19 +5,18 @@ import Button from 'antd/lib/button';
 import Badge from 'antd/lib/badge';
 import { Login } from '../Login';
 import './index.css';
-import { signOut } from '../../utils/firebase';
 
-// import { LoginWarningText } from '../Login';
+// import { LoginNotificationText } from '../Login';
 
 // const LoggedOutContent = () => <p>test</p>;
 
-export const LoggedOutAvatar = ({ authWarningFlag }) => {
-  if (!authWarningFlag) return null;
+export const LoggedOutAvatar = ({ authNotificationFlag, signIn }) => {
+  if (!authNotificationFlag) return null;
   return (
     <Popover
-      content={<Login />}
+      content={<Login  signIn={signIn}/>}
       trigger="click"
-      // title={<LoginWarningText maxWidth={300} />}
+      // title={<LoginNotificationText maxWidth={300} />}
     >
       <div className="auth-avatar">
         <Badge dot>
@@ -28,13 +27,17 @@ export const LoggedOutAvatar = ({ authWarningFlag }) => {
   );
 };
 
-const LoggedInContent = () => {
+const LoggedInContent = ({signOut}) => {
   return <Button onClick={signOut}>Logout</Button>;
 };
 
-export const LoggedInAvatar = ({ user }) => {
+export const LoggedInAvatar = ({ user, signOut }) => {
   return (
-    <Popover content={<LoggedInContent />} trigger="click" title={user.email}>
+    <Popover
+      content={<LoggedInContent signOut={signOut}/>}
+      trigger="click"
+      title={user.displayName || user.email}
+    >
       <div className="auth-avatar">
         <Badge>
           <Avatar src={user.photoURL} />

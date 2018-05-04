@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import Tooltip  from 'antd/lib/tooltip';
+import Tooltip from 'antd/lib/tooltip';
 
 const change = change =>
   change ? (
@@ -106,6 +106,7 @@ const columns = [
     render: s => `$${s.toLocaleString()}`,
     sorter: sorter('marketCapUSD'),
     className: 'column--align',
+    defaultSortOrder: 'descend',
   },
 ];
 

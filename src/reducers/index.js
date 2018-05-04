@@ -1,4 +1,5 @@
 import * as actions from '../actions';
+import { getAuthNotificationFlag } from '../utils/localStorage';
 
 import positions from './positions';
 import watchlist from './watchlist';
@@ -44,11 +45,15 @@ const timestamp = (state = null, action) => {
 
 const user = (state = null, action) => {
   switch (action.type) {
-    case actions.GET_USER:
+    case actions.USER_CHANGED:
       return action.user;
     default:
       return state;
   }
+};
+
+const authNotificationFlag = () => {
+  return getAuthNotificationFlag();
 };
 
 export const reducers = {
@@ -59,4 +64,5 @@ export const reducers = {
   tickerById,
   timestamp,
   user,
+  authNotificationFlag,
 };

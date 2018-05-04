@@ -37,10 +37,10 @@ export const updateTickerData = coins => {
   storeToLocalStorage('ticker', coins);
 };
 
-export const getAuthWarningFlag = () => {
-  return getFromLocalStorage('authWarningFlag', false);
+export const getAuthNotificationFlag = () => {
+  return getFromLocalStorage('authNotificationFlag', false);
 };
 
-export const setAuthWarningFlag = value => {
-  return storeToLocalStorage('authWarningFlag', value, false);
+export const setAuthNotificationFlag = value => {
+  return storeToLocalStorage('authNotificationFlag', value, false);
 };

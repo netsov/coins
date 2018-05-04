@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
-import { setAuthWarningFlag } from './localStorage';
-import { syncLocalStorageWithFirebase } from './index';
+// import { setAuthNotificationFlag } from './localStorage';
+// import { syncLocalStorageWithFirebase } from './index';
 
 const config = {
   apiKey: 'AIzaSyBC1UBbwjkx-_hOVAR5NTk70JsdW3WfXso',
@@ -21,25 +21,33 @@ export const firebaseDB = firebase.database();
 //   console.log('value', snapshot.val());
 // })();
 
-async function onLogin(user) {
-  setAuthWarningFlag(true);
-  await syncLocalStorageWithFirebase(user);
-}
+// async function onLogin(user) {
+//   setAuthNotificationFlag(true);
+//   await syncLocalStorageWithFirebase(user);
+// }
 
 export async function signInWithGoogle() {
-  // Using a popup.
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope('profile');
   provider.addScope('email');
   const result = await firebase.auth().signInWithPopup(provider);
 
-  if (result && result.user) {
-    await onLogin(result.user);
-  }
+  // if (result && result.user) {
+  //   await onLogin(result.user);
+  // }
 }
 
-export async function signOut() {
-  // Using a popup.
+export async function signInWithTwitter() {
+  const provider = new firebase.auth.TwitterAuthProvider();
+  // provider.addScope('profile');
+  // provider.addScope('email');
+  const result = await firebase.auth().signInWithPopup(provider);
+
+  // if (result && result.user) {
+  //   await onLogin(result.user);
+  // }
+}
+
+export async function firebaseSignOut() {
   await firebase.auth().signOut();
-  setAuthWarningFlag('');
 }

@@ -79,6 +79,7 @@ const columns = [
     render: s => `$${s.toLocaleString()}`,
     sorter: sorter('marketCapUSD'),
     className: 'column--align',
+    defaultSortOrder: 'descend',
   },
 ];
 
