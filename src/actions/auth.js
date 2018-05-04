@@ -4,6 +4,7 @@ import {
   firebaseSignOut,
   signInWithGoogle,
   signInWithTwitter,
+  signInWithGithub,
 } from '../utils/firebase';
 
 import { getPositions } from './positions';
@@ -38,6 +39,10 @@ export const signIn = provider => async dispatch => {
     await signInWithTwitter();
   } else if (provider === 'google') {
     await signInWithGoogle();
+  } else if (provider === 'github') {
+    await signInWithGithub();
+  // } else if (provider === 'facebook') {
+  //   await signInWithFacebook();
   } else {
     throw new Error('unknown provider');
   }

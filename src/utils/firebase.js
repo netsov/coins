@@ -14,18 +14,6 @@ const config = {
 firebase.initializeApp(config);
 
 export const firebaseDB = firebase.database();
-
-// (async function f() {
-//   const snapshot = await firebaseDB.ref().once('value');
-//
-//   console.log('value', snapshot.val());
-// })();
-
-// async function onLogin(user) {
-//   setAuthNotificationFlag(true);
-//   await syncLocalStorageWithFirebase(user);
-// }
-
 export async function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope('profile');
@@ -47,6 +35,28 @@ export async function signInWithTwitter() {
   //   await onLogin(result.user);
   // }
 }
+
+export async function signInWithGithub() {
+  const provider = new firebase.auth.GithubAuthProvider();
+  // provider.addScope('profile');
+  // provider.addScope('email');
+  const result = await firebase.auth().signInWithPopup(provider);
+
+  // if (result && result.user) {
+  //   await onLogin(result.user);
+  // }
+}
+
+// export async function signInWithFacebook() {
+//   const provider = new firebase.auth.FacebookAuthProvider();
+//   // provider.addScope('profile');
+//   // provider.addScope('email');
+//   const result = await firebase.auth().signInWithPopup(provider);
+//
+//   // if (result && result.user) {
+//   //   await onLogin(result.user);
+//   // }
+// }
 
 export async function firebaseSignOut() {
   await firebase.auth().signOut();
