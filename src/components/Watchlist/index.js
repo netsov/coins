@@ -43,9 +43,9 @@ export class Watchlist extends Component {
     );
   }
 
-  async componentDidMount() {
-    this.props.getWatchlistItems();
-  }
+  // async componentDidMount() {
+  //   this.props.getWatchlistItems();
+  // }
 
   renderHeader = () => {
     return (

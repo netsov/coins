@@ -55,9 +55,9 @@ export class Positions extends Component {
     );
   }
 
-  async componentDidMount() {
-    this.props.getPositions();
-  }
+  // async componentDidMount() {
+  //   this.props.getPositions();
+  // }
 
   handleCurrencyChange = e => {
     this.setState({

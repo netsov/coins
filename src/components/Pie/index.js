@@ -15,9 +15,9 @@ export class Pie extends Component {
     );
   }
 
-  componentDidMount() {
-    this.props.getPositions();
-  }
+  // componentDidMount() {
+  //   this.props.getPositions();
+  // }
 
   render() {
     const tsym = 'usd';

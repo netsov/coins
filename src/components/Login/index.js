@@ -7,10 +7,10 @@ import './index.css';
 export const Login = ({ signIn }) => {
   return (
     <div className="login-container">
-      <Button type="primary" icon="google" onClick={signIn('google')}>
+      <Button type="primary" icon="google" onClick={() => signIn('google')}>
         Login with Google
       </Button>
-      <Button type="primary" icon="twitter" onClick={signIn('twitter')}>
+      <Button type="primary" icon="twitter" onClick={() => signIn('twitter')}>
         Login with Twitter
       </Button>
     </div>

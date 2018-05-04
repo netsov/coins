@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { Positions } from '../components/Positions';
 import {
-  getPositions,
+  // getPositions,
   updatePosition,
   deletePositions,
   toggleSelectAlldPositions,
@@ -37,7 +37,7 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  getPositions,
+  // getPositions,
   updatePosition,
   deletePositions,
   toggleSelected: toggleSelectedPositions,

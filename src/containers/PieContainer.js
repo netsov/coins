@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { Pie } from '../components/Pie';
 
-import { getPositions } from '../actions/positions';
+// import { getPositions } from '../actions/positions';
 
 const mapStateToProps = state => {
   return {
@@ -11,8 +11,6 @@ const mapStateToProps = state => {
   };
 };
 
-const PieContainer = connect(mapStateToProps, {
-  getPositions: getPositions,
-})(Pie);
+const PieContainer = connect(mapStateToProps)(Pie);
 
 export default PieContainer;

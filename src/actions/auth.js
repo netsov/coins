@@ -6,6 +6,9 @@ import {
   signInWithTwitter,
 } from '../utils/firebase';
 
+import { getPositions } from './positions';
+import { getWatchlistItems } from './watchlist';
+
 export const USER_CHANGED = 'USER_CHANGED';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
@@ -17,6 +20,9 @@ export const getUser = () => dispatch => {
       type: USER_CHANGED,
       user,
     });
+
+    dispatch(getPositions());
+    dispatch(getWatchlistItems());
   });
 };
 

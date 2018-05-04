@@ -14,7 +14,7 @@ export const LoggedOutAvatar = ({ authNotificationFlag, signIn }) => {
   if (!authNotificationFlag) return null;
   return (
     <Popover
-      content={<Login  signIn={signIn}/>}
+      content={<Login signIn={signIn}/>}
       trigger="click"
       // title={<LoginNotificationText maxWidth={300} />}
     >

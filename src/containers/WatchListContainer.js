@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { Watchlist } from '../components/Watchlist';
 import {
-  getWatchlistItems,
+  // getWatchlistItems,
   updateWatchlistItem,
   deleteWatchlistItems,
   toggleSelectAlldWatchlistItems,
@@ -20,7 +20,7 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  getWatchlistItems,
+  // getWatchlistItems,
   updateWatchlistItem,
   deleteWatchlistItems,
   toggleSelected: toggleSelectedWatchlistItems,
