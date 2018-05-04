@@ -3,12 +3,12 @@ import * as firebase from 'firebase';
 // import { syncLocalStorageWithFirebase } from './index';
 
 const config = {
-  apiKey: 'AIzaSyBC1UBbwjkx-_hOVAR5NTk70JsdW3WfXso',
-  authDomain: 'coins-dev-97fb1.firebaseapp.com',
-  databaseURL: 'https://coins-dev-97fb1.firebaseio.com',
-  projectId: 'coins-dev-97fb1',
-  storageBucket: 'coins-dev-97fb1.appspot.com',
-  messagingSenderId: '297026674925',
+  apiKey: process.env.REACT_APP_apiKey,
+  authDomain: process.env.REACT_APP_authDomain,
+  databaseURL: process.env.REACT_APP_databaseURL,
+  projectId: process.env.REACT_APP_projectId,
+  storageBucket: process.env.REACT_APP_storageBucket,
+  messagingSenderId: process.env.REACT_APP_messagingSenderId,
 };
 
 firebase.initializeApp(config);
