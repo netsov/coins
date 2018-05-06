@@ -1,5 +1,5 @@
-import * as storage from '../utils/localStorage';
-import { firebaseDB } from '../utils/firebase';
+// import * as storage from '../utils/localStorage';
+// import { firebaseDB } from '../utils/firebase';
 
 export * from './cryptocompare';
 
@@ -23,13 +23,13 @@ export function formatFloat(value, digits = 8) {
 export const normalize = items =>
   items.reduce((result, item) => ({ ...result, [item.__id]: item }), {});
 
-export async function syncLocalStorageWithFirebase(user) {
-  console.log('syncing with firebase');
-  await Promise.all(
-    ['watchlist', 'positions'].map(reducerName =>
-      firebaseDB
-        .ref(`${user.uid}/${reducerName}`)
-        .set(normalize(storage.getItems(reducerName)))
-    )
-  );
-}
+// export async function syncLocalStorageWithFirebase(user) {
+//   console.log('syncing with firebase');
+//   await Promise.all(
+//     ['watchlist', 'positions'].map(reducerName =>
+//       firebaseDB
+//         .ref(`${user.uid}/${reducerName}`)
+//         .set(normalize(storage.getItems(reducerName)))
+//     )
+//   );
+// }

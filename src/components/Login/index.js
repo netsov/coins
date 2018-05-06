@@ -13,12 +13,9 @@ export const Login = ({ signIn }) => {
       <Button type="primary" icon="twitter" onClick={() => signIn('twitter')}>
         Login with Twitter
       </Button>
-      <Button type="primary" icon="twitter" onClick={() => signIn('github')}>
+      <Button type="primary" icon="github" onClick={() => signIn('github')}>
         Login with Github
       </Button>
-      {/*<Button type="primary" icon="twitter" onClick={() => signIn('facebook')}>*/}
-        {/*Login with Facebook*/}
-      {/*</Button>*/}
     </div>
   );
 };
