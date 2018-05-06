@@ -1,11 +1,13 @@
 {
-  "name": "my-app",
+  "name": "coins",
+  "homepage": "https://netsov.github.io/coins/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "antd": "^3.4.4",
     "classnames": "^2.2.5",
     "firebase": "^4.13.1",
+    "gh-pages": "^1.1.0",
     "highcharts-exporting": "^0.1.7",
     "localforage": "^1.7.1",
     "lodash.isequal": "^4.5.0",
@@ -24,7 +26,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
