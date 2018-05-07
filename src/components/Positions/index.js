@@ -4,6 +4,7 @@ import DocumentTitle from 'react-document-title';
 import Loadable from 'react-loadable';
 
 import { getTableColumns } from './utils';
+import { trackGA } from '../../utils';
 
 import './style.css';
 
@@ -55,9 +56,9 @@ export class Positions extends Component {
     );
   }
 
-  // async componentDidMount() {
-  //   this.props.getPositions();
-  // }
+  componentDidMount() {
+    trackGA('positions')
+  }
 
   handleCurrencyChange = e => {
     this.setState({

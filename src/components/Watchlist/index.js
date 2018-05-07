@@ -3,7 +3,7 @@ import isEqual from 'lodash.isequal';
 import Loadable from 'react-loadable';
 
 import { getTableColumns } from './utils';
-// import { intervalMixin } from '../../utils/mixins';
+import { trackGA } from '../../utils';
 
 import './style.css';
 
@@ -43,9 +43,9 @@ export class Watchlist extends Component {
     );
   }
 
-  // async componentDidMount() {
-  //   this.props.getWatchlistItems();
-  // }
+  componentDidMount() {
+    trackGA('watchlist')
+  }
 
   renderHeader = () => {
     return (

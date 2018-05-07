@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './style.css';
 import isEqual from 'lodash.isequal';
 import ReactHighcharts from 'react-highcharts/ReactHighcharts.src';
+import { trackGA } from '../../utils';
 
 export class Pie extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -15,9 +16,9 @@ export class Pie extends Component {
     );
   }
 
-  // componentDidMount() {
-  //   this.props.getPositions();
-  // }
+  componentDidMount() {
+    trackGA('pie');
+  }
 
   render() {
     const tsym = 'usd';

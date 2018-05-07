@@ -1,12 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import AppContainer from './containers/AppContainer';
-
 import { Provider } from 'react-redux';
+import Raven from 'raven-js';
+import ReactGA from 'react-ga';
+
+import AppContainer from './containers/AppContainer';
+import { store } from './store';
+
+import './index.css';
+
 // import registerServiceWorker from './registerServiceWorker';
 
-import { store } from './store';
+if (process.env.NODE_ENV === 'production') {
+  Raven.config(process.env.REACT_APP_SENTRY_URL).install();
+  ReactGA.initialize(process.env.REACT_APP_GA);
+}
 
 ReactDOM.render(
   <Provider store={store}>

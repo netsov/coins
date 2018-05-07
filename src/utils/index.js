@@ -1,7 +1,12 @@
-// import * as storage from '../utils/localStorage';
-// import { firebaseDB } from '../utils/firebase';
+import ReactGA from 'react-ga';
 
 export * from './cryptocompare';
+
+export function trackGA(page) {
+  if (process.env.NODE_ENV === 'production') {
+    ReactGA.pageview(window.location.pathname + page);
+  }
+}
 
 export function getTimestamp() {
   return Math.ceil(new Date().valueOf() * 0.001);
