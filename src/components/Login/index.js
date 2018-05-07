@@ -22,8 +22,8 @@ export const Login = ({ signIn }) => {
 
 export const AuthNotificationText = ({ maxWidth }) => (
   <p style={{ maxWidth }}>
-    All your data is stored in the browser and no one except you has excess to
-    it. <br />
+    All your data is stored in the browser and only you have access to it.
+    <br />
     If you would like to use this app on multiple devices/browsers you can log
     in using one of the options below and keep it in sync.
   </p>
