@@ -9,7 +9,7 @@ import { store } from './store';
 
 import './index.css';
 
-// import registerServiceWorker from './registerServiceWorker';
+import { register as registerServiceWorker } from './registerServiceWorker';
 
 if (process.env.NODE_ENV === 'production') {
   Raven.config(process.env.REACT_APP_SENTRY_URL).install();
@@ -22,7 +22,8 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-// registerServiceWorker();
+
+registerServiceWorker();
 
 if (module.hot) {
   module.hot.accept('./containers/AppContainer', () => {

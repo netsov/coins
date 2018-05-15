@@ -1,30 +1,26 @@
 import React, { Component } from 'react';
 
-import Loadable from 'react-loadable';
 import Tabs from 'antd/lib/tabs';
 import { intervalMixin } from '../utils/mixins';
 import { AuthNotificationContainer } from '../containers/AuthNotificationContainer';
 import { AvatarContainer } from '../containers/AvatarContainer';
-
-const LoadablePositionsContainer = Loadable({
-  loader: () => import('../containers/PositionsContainer'),
-  loading: () => <p>Loading...</p>,
-});
-
-const LoadablePieContainer = Loadable({
-  loader: () => import('../containers/PieContainer'),
-  loading: () => <p>Loading...</p>,
-});
-
-const LoadableWatchListContainer = Loadable({
-  loader: () => import('../containers/WatchListContainer'),
-  loading: () => <p>Loading...</p>,
-});
+import {
+  LoadablePieContainer,
+  LoadablePositionsContainer,
+  LoadableWatchListContainer,
+  LoadableWatchlistEditorContainer,
+  LoadablePositionEditorContainer,
+} from '../loadables';
 
 export class App extends intervalMixin(Component) {
   componentDidMount() {
-    this.props.getUser();
+    this.props.getUserAndItems();
     this.watchPrices();
+
+    LoadablePieContainer.preload();
+    LoadableWatchListContainer.preload();
+    LoadableWatchlistEditorContainer.preload();
+    LoadablePositionEditorContainer.preload();
   }
 
   watchPrices() {

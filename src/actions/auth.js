@@ -15,7 +15,7 @@ export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const DISMISS_AUTH_NOTIFICATION = 'DISMISS_AUTH_NOTIFICATION';
 
-export const getUser = () => dispatch => {
+export const getUserAndItems = () => dispatch => {
   firebase.auth().onAuthStateChanged(function(user) {
     dispatch({
       type: USER_CHANGED,

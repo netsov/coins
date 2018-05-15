@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import isEqual from 'lodash.isequal';
-import Loadable from 'react-loadable';
 
 import { getTableColumns } from './utils';
 import { trackGA } from '../../utils';
@@ -17,10 +16,7 @@ import message from 'antd/lib/message';
 import WatchlistChartContainer from '../../containers/WatchlistChartContainer';
 import { DeltaContainer } from '../../containers/DeltaContainer';
 
-const LoadableEditorContainer = Loadable({
-  loader: () => import('../../containers/WatchlistEditorContainer'),
-  loading: () => <div />,
-});
+import { LoadableWatchlistEditorContainer } from '../../loadables';
 
 export class Watchlist extends Component {
   state = {
@@ -44,7 +40,7 @@ export class Watchlist extends Component {
   }
 
   componentDidMount() {
-    trackGA('watchlist')
+    trackGA('watchlist');
   }
 
   renderHeader = () => {
@@ -108,7 +104,13 @@ export class Watchlist extends Component {
     });
 
   render() {
-    const { items, selected, toggleSelected, toggleSelectAll, tickerById } = this.props;
+    const {
+      items,
+      selected,
+      toggleSelected,
+      toggleSelectAll,
+      tickerById,
+    } = this.props;
     console.log('Watchlist rendered');
 
     const dataSource = items.map(item => {
@@ -148,7 +150,7 @@ export class Watchlist extends Component {
           }}
           footer={this.renderFooter}
         />
-        {this.props.editorIsOpened && <LoadableEditorContainer />}
+        {this.props.editorIsOpened && <LoadableWatchlistEditorContainer />}
       </Fragment>
     );
   }

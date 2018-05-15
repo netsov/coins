@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import isEqual from 'lodash.isequal';
 import DocumentTitle from 'react-document-title';
-import Loadable from 'react-loadable';
 
 import { getTableColumns } from './utils';
 import { trackGA } from '../../utils';
@@ -21,6 +20,8 @@ import Tooltip from 'antd/lib/tooltip';
 import PositionChartContainer from '../../containers/PositionChartContainer';
 import { DeltaContainer } from '../../containers/DeltaContainer';
 
+import { LoadablePositionEditorContainer } from '../../loadables';
+
 const RadioGroup = Radio.Group;
 
 const RadioTooltip = ({ children }) => (
@@ -28,11 +29,6 @@ const RadioTooltip = ({ children }) => (
     {children}
   </Tooltip>
 );
-
-const LoadableEditorContainer = Loadable({
-  loader: () => import('../../containers/PositionEditorContainer'),
-  loading: () => <div />,
-});
 
 export class Positions extends Component {
   state = {
@@ -57,7 +53,7 @@ export class Positions extends Component {
   }
 
   componentDidMount() {
-    trackGA('positions')
+    trackGA('positions');
   }
 
   handleCurrencyChange = e => {
@@ -220,7 +216,7 @@ export class Positions extends Component {
           footer={this.renderFooter}
         />
 
-        {this.props.editorIsOpened && <LoadableEditorContainer />}
+        {this.props.editorIsOpened && <LoadablePositionEditorContainer />}
       </Fragment>
     );
   }
