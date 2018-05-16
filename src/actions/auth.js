@@ -10,15 +10,20 @@ import {
 import { getPositions } from './positions';
 import { getWatchlistItems } from './watchlist';
 
-export const USER_CHANGED = 'USER_CHANGED';
+export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST';
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const DISMISS_AUTH_NOTIFICATION = 'DISMISS_AUTH_NOTIFICATION';
 
 export const getUserAndItems = () => dispatch => {
+  dispatch({
+    type: FETCH_USER_REQUEST,
+  });
+
   firebase.auth().onAuthStateChanged(function(user) {
     dispatch({
-      type: USER_CHANGED,
+      type: FETCH_USER_SUCCESS,
       user,
     });
 
@@ -41,8 +46,8 @@ export const signIn = provider => async dispatch => {
     await signInWithGoogle();
   } else if (provider === 'github') {
     await signInWithGithub();
-  // } else if (provider === 'facebook') {
-  //   await signInWithFacebook();
+    // } else if (provider === 'facebook') {
+    //   await signInWithFacebook();
   } else {
     throw new Error('unknown provider');
   }

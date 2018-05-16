@@ -7,8 +7,8 @@ import { signIn, signOut } from '../actions';
 
 const mapStateToProps = state => {
   return {
-    user: state.user,
-    authNotificationFlag: state.authNotificationFlag,
+    user: state.auth.user,
+    authNotificationFlag: state.auth.authNotificationFlag,
   };
 };
 

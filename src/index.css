@@ -31,3 +31,7 @@ main {
         display: none;
     }
 }
+
+:root {
+    --mdc-theme-primary: #1890ff;
+}

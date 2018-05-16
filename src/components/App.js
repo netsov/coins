@@ -12,6 +12,8 @@ import {
   LoadablePositionEditorContainer,
 } from '../loadables';
 
+import Progress from '../containers/ProgressContainer';
+
 export class App extends intervalMixin(Component) {
   componentDidMount() {
     this.props.getUserAndItems();
@@ -35,6 +37,7 @@ export class App extends intervalMixin(Component) {
     return (
       <main>
         <AuthNotificationContainer />
+        <Progress />
         <Tabs type="card" tabBarExtraContent={<AvatarContainer />}>
           <Tabs.TabPane tab="Assets" key="1">
             <LoadablePositionsContainer />

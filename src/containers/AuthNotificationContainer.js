@@ -6,8 +6,8 @@ import { AuthNotification } from '../components/Login';
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
-    authNotificationFlag: state.authNotificationFlag
+    user: state.auth.user,
+    authNotificationFlag: state.auth.authNotificationFlag
   };
 };
 
