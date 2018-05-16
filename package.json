@@ -4,18 +4,18 @@
   "private": true,
   "dependencies": {
     "@material/linear-progress": "^0.35.0",
-    "antd": "^3.5.0",
+    "antd": "^3.5.2",
     "classnames": "^2.2.5",
-    "firebase": "^4.13.1",
+    "firebase": "^5.0.2",
     "gh-pages": "^1.1.0",
     "highcharts-exporting": "^0.1.7",
     "localforage": "^1.7.1",
     "lodash.isequal": "^4.5.0",
-    "raven-js": "^3.24.2",
+    "raven-js": "^3.25.1",
     "react": "^16.3.2",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.3.2",
-    "react-ga": "^2.5.0",
+    "react-ga": "^2.5.2",
     "react-highcharts": "^16.0.2",
     "react-loadable": "^5.4.0",
     "react-redux": "^5.0.7",
@@ -37,7 +37,7 @@
     "eslint-plugin-flowtype": "^2.46.3",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
-    "webpack-bundle-analyzer": "^2.11.1"
+    "eslint-plugin-react": "^7.8.2",
+    "webpack-bundle-analyzer": "^2.12.0"
   }
 }
