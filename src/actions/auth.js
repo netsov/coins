@@ -1,12 +1,10 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-
 import { setAuthNotificationFlag } from '../utils/localStorage';
 import {
   firebaseSignOut,
   signInWithGoogle,
   signInWithTwitter,
   signInWithGithub,
+  importFirebase,
 } from '../utils/firebase';
 
 import { getPositions } from './positions';
@@ -18,10 +16,12 @@ export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const DISMISS_AUTH_NOTIFICATION = 'DISMISS_AUTH_NOTIFICATION';
 
-export const getUserAndItems = () => dispatch => {
+export const getUserAndItems = () => async dispatch => {
   dispatch({
     type: FETCH_USER_REQUEST,
   });
+
+  const firebase = await importFirebase();
 
   firebase.auth().onAuthStateChanged(function(user) {
     dispatch({

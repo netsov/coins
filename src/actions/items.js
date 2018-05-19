@@ -6,13 +6,13 @@ export const getItems = (typeRequest, typeSuccess, reducerName) => () => async (
   getState
 ) => {
   let items;
-  const { auth : {user} } = getState();
+  const { auth: { user } } = getState();
 
   if (user) {
     dispatch({
       type: typeRequest,
     });
-    const snapshot = await firebaseDB
+    const snapshot = await (await firebaseDB())
       .ref(`${user.uid}/${reducerName}`)
       .once('value');
     const itemsById = snapshot.val();
@@ -32,13 +32,13 @@ export const updateItem = (
   typeSuccess,
   reducerName
 ) => item => async (dispatch, getState) => {
-  const { auth : {user} } = getState();
+  const { auth: { user } } = getState();
 
   if (user) {
     dispatch({
       type: typeRequest,
     });
-    await firebaseDB
+    await (await firebaseDB())
       .ref(`${user.uid}/${reducerName}`)
       .update({ [item.__id]: item });
   } else {
@@ -56,13 +56,13 @@ export const deleteItems = (
   typeSuccess,
   reducerName
 ) => () => async (dispatch, getState) => {
-  const { [reducerName]: { selected: ids }, auth : {user} } = getState();
+  const { [reducerName]: { selected: ids }, auth: { user } } = getState();
 
   if (user) {
     dispatch({
       type: typeRequest,
     });
-    await firebaseDB
+    await (await firebaseDB())
       .ref(`${user.uid}/${reducerName}`)
       .update(ids.reduce((acc, next) => ({ ...acc, [next]: null }), {}));
   } else {
