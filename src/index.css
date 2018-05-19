@@ -27,7 +27,7 @@ main {
 }
 
 @media all and (max-width: 1000px) {
-    td:nth-child(n + 9), th:nth-child(n + 9) {
+    td:nth-child(n + 6), th:nth-child(n + 6) {
         display: none;
     }
 }
