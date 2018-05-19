@@ -43,7 +43,7 @@ export class Chart extends Component {
   };
 
   componentWillMount() {
-    import('../highstock').then(module => {
+    import(/* webpackChunkName: "highstock" */ '../highstock').then(module => {
       this.setState({ Highstock: module.default });
     });
   }

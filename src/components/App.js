@@ -24,7 +24,7 @@ export class App extends intervalMixin(Component) {
     LoadableWatchlistEditorContainer.preload();
     LoadablePositionEditorContainer.preload();
 
-    import('./highstock');
+    import(/* webpackChunkName: "highstock" */ './highstock');
   }
 
   watchPrices() {
