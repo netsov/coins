@@ -8,3 +8,5 @@ build
 deploy.sh
 
 .env.production
+
+.serverless

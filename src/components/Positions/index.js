@@ -173,27 +173,29 @@ export class Positions extends Component {
       toggleSelectAll,
       tickerById,
     } = this.props;
-    console.log('Positions rendered');
+    console.log('Positions rendered', positions);
 
-    const dataSource = positions.map(item => {
-      const __meta = tickerById[item.__id];
-      const USD = __meta.price_usd;
-      const BTC = __meta.price_btc;
-      return {
-        key: item.__id,
-        name: __meta,
-        balance: item.quantity,
-        usdValue: formatFloat(USD * item.quantity, 0),
-        btcValue: formatFloat(BTC * item.quantity),
-        priceBTC: formatFloat(BTC),
-        priceUSD: formatFloat(USD, 2),
-        change1h: __meta.percent_change_1h,
-        change24h: __meta.percent_change_24h,
-        change7d: __meta.percent_change_7d,
-        marketCapUSD: formatFloat(__meta.market_cap_usd, 0),
-        position: item,
-      };
-    });
+    const dataSource = positions
+      .filter(item => !!tickerById[item.__id])
+      .map(item => {
+        const __meta = tickerById[item.__id];
+        const USD = __meta.price_usd;
+        const BTC = __meta.price_btc;
+        return {
+          key: item.__id,
+          name: __meta,
+          balance: item.quantity,
+          usdValue: formatFloat(USD * item.quantity, 0),
+          btcValue: formatFloat(BTC * item.quantity),
+          priceBTC: formatFloat(BTC),
+          priceUSD: formatFloat(USD, 2),
+          change1h: __meta.percent_change_1h,
+          change24h: __meta.percent_change_24h,
+          change7d: __meta.percent_change_7d,
+          marketCapUSD: formatFloat(__meta.market_cap_usd, 0),
+          position: item,
+        };
+      });
 
     return (
       <Fragment>

@@ -74,6 +74,7 @@ export class Pie extends Component {
           colorByPoint: true,
           data: positions.map(item => {
             const __meta = tickerById[item.__id];
+            if (!__meta) return null;
             return {
               name: `${__meta.name} (${__meta.symbol})`,
               y: item.quantity * parseFloat(__meta[`price_${tsym}`]),

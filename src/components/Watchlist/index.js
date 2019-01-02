@@ -113,22 +113,24 @@ export class Watchlist extends Component {
     } = this.props;
     console.log('Watchlist rendered');
 
-    const dataSource = items.map(item => {
-      const __meta = tickerById[item.__id];
-      const USD = __meta.price_usd;
-      const BTC = __meta.price_btc;
-      return {
-        key: item.__id,
-        name: __meta,
-        priceBTC: formatFloat(BTC),
-        priceUSD: formatFloat(USD, 2),
-        change1h: __meta.percent_change_1h,
-        change24h: __meta.percent_change_24h,
-        change7d: __meta.percent_change_7d,
-        marketCapUSD: formatFloat(__meta.market_cap_usd, 0),
-        item: item,
-      };
-    });
+    const dataSource = items
+      .filter(item => !!tickerById[item.__id])
+      .map(item => {
+        const __meta = tickerById[item.__id];
+        const USD = __meta.price_usd;
+        const BTC = __meta.price_btc;
+        return {
+          key: item.__id,
+          name: __meta,
+          priceBTC: formatFloat(BTC),
+          priceUSD: formatFloat(USD, 2),
+          change1h: __meta.percent_change_1h,
+          change24h: __meta.percent_change_24h,
+          change7d: __meta.percent_change_7d,
+          marketCapUSD: formatFloat(__meta.market_cap_usd, 0),
+          item: item,
+        };
+      });
 
     return (
       <Fragment>

@@ -17,7 +17,7 @@ import Progress from '../containers/ProgressContainer';
 export class App extends intervalMixin(Component) {
   componentDidMount() {
     this.props.getUserAndItems();
-    this.watchPrices();
+    // this.watchPrices();
 
     LoadablePieContainer.preload();
     LoadableWatchListContainer.preload();

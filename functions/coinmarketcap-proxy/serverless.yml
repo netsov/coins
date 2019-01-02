@@ -1,0 +1,18 @@
+service: coinmarketcap-proxy
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-east-2
+
+functions:
+  proxy:
+    handler: handler.proxy
+    events:
+      - http:
+          path: /
+          method: get
+          request:
+           parameters:
+            querystrings:
+              symbol: true

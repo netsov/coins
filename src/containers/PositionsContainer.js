@@ -12,7 +12,10 @@ import {
 
 function calcTotal(tickerById, positions, key) {
   return positions.reduce(
-    (acc, next) => acc + next.quantity * parseFloat(tickerById[next.__id][key]),
+    (acc, next) =>
+      acc + tickerById[next.__id]
+        ? next.quantity * parseFloat(tickerById[next.__id][key])
+        : 0,
     0
   );
 }
